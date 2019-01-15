@@ -2,15 +2,24 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import 'normalize.css/normalize.css';
-import 'react-dates/lib/css/_datepicker.css';
 import AppRouter, { history } from './routers/AppRouter';
 import configureStore from './store/configureStore';
 import { login, logout } from './actions/auth';
 import './styles/styles.scss';
 import { firebase } from './firebase/firebase';
 import LoadingPage from './components/LoadingPage';
+import { testCard1, testCard2 } from './gameData/cardList';
+import { setHand, setDeck, drawCard, discardCard } from './actions/cards';
 
 const store = configureStore();
+
+store.subscribe(() => {
+	console.log(store.getState());
+});
+
+store.dispatch(setHand([testCard1, testCard2]));
+store.dispatch(setDeck([testCard1, testCard2, testCard2, testCard2, testCard2, testCard2]));
+
 
 const jsx = (
 	<Provider store={store}>
@@ -24,6 +33,7 @@ const renderApp = () => {
 		hasRendered = true;
 	}
 };
+
 
 ReactDOM.render(<LoadingPage />, document.getElementById('app'));
 
