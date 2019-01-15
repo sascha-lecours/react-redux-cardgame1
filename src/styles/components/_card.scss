@@ -1,0 +1,20 @@
+.card {
+	background-color: rgb(192, 215, 223);
+	border: 1px solid black;
+	margin: 2em;
+	max-width: 200px;
+	padding: 5px;
+}
+
+.card__name {
+	font-weight: 700;
+} 
+
+.card__special-text {
+	font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.card__flavour-text {
+	font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+	font-style: italic;
+}
