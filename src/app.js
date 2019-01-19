@@ -9,7 +9,7 @@ import './styles/styles.scss';
 import { firebase } from './firebase/firebase';
 import LoadingPage from './components/LoadingPage';
 import { testCard1, testCard2 } from './gameData/cardList';
-import { setHand, setDeck, drawCard, discardCard } from './actions/cards';
+import { setHand, setDeck, drawCard, discardCard, reshuffleDiscards } from './actions/cards';
 
 const store = configureStore();
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import HandDisplay from './HandDisplay';
 import DeckButton from './DeckButton';
+import DiscardPileButton from './DiscardPileButton';
 import { testCard1, testCard2 } from '../gameData/cardList';
 
 const EnemyArea = (props) => {
@@ -15,12 +16,6 @@ const PlayerStatus = (props) => {
 	);
 };
 
-const DiscardButton = (props) => {
-	return (
-		<div>Discard</div>
-	);
-};
-
 export default () => {
 	return (
 		<div>
@@ -28,7 +23,7 @@ export default () => {
 			<div>
 				<DeckButton />
 				<PlayerStatus />
-				<DiscardButton />
+				<DiscardPileButton />
 			</div>
 			<HandDisplay />
 		</div>

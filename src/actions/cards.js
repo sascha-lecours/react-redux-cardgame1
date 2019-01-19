@@ -11,7 +11,7 @@ export const drawCard = () => {
 // PLAY_CARD
 
 // DISCARD_CARD
-// (Discards from hand only. A different method will be needed to discard from deck or play)
+// Note: Discards from hand only. A different method will be needed to discard from deck or play.
 export const discardCard = ({ id }) => {
 	console.log(`discard card ${id}`);
 	return {
@@ -41,5 +41,11 @@ export const setDeck = (cards) => {
 };
 
 // RESHUFFLE_DISCARDS
+
+export const reshuffleDiscards = () => {
+	return {
+		type: 'RESHUFFLE_DISCARDS',
+	};
+};
 
 // BANISH
