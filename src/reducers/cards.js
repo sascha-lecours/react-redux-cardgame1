@@ -55,7 +55,7 @@ export default (state = cardsReducerDefaultState, action) => {
 				discard: [],
 				hand: [...reshuffledState.hand, reshuffledcardDrawn],
 			};
-		} 
+		}
 		const deckCopy = state.deck.slice();
 		const cardDrawn = deckCopy.shift();
 		return {

@@ -10,16 +10,16 @@ import { firebase } from './firebase/firebase';
 import LoadingPage from './components/LoadingPage';
 import { testCard1, testCard2 } from './gameData/cardList';
 import { setHand, setDeck, drawCard, discardCard, reshuffleDiscards } from './actions/cards';
+import { setEnemies, setNewMove } from './actions/enemies';
+import { testEnemy1, testEnemy2 } from './gameData/enemyList';
 
 const store = configureStore();
 
-store.subscribe(() => {
-	console.log(store.getState());
-});
-
 store.dispatch(setHand([testCard1, testCard2]));
 store.dispatch(setDeck([testCard1, testCard2, testCard2, testCard2, testCard2, testCard2]));
+store.dispatch(setEnemies([testEnemy1, testEnemy2]));
 
+console.log('app running');
 
 const jsx = (
 	<Provider store={store}>

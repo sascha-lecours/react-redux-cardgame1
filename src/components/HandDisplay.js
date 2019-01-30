@@ -5,7 +5,7 @@ import RenderCard from './RenderCard';
 
 export const HandDisplay = (props) => {
 	return (
-		<div>
+		<div className="hand">
 			{
 				props.hand.length === 0 ? (
 					<div>

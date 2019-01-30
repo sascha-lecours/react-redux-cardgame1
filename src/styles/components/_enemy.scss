@@ -1,20 +1,25 @@
-.card {
-	background-color: rgb(192, 215, 223);
+.enemy {
+	background-color: rgb(187, 112, 42);
 	border: 1px solid black;
 	margin: $s-size;
 	max-width: 200px;
 	padding: 5px;
 }
 
-.card__name {
+.enemy__name {
 	font-weight: 700;
 } 
 
-.card__special-text {
+.enemy__hp {
 	font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
-.card__flavour-text {
+.enemy__defense {
+	font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+	font-style: italic;
+}
+
+.enemy__next-move {
 	font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 	font-style: italic;
 }
