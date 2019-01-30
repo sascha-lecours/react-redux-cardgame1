@@ -1,10 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { discardCard } from '../actions/cards';
+import { discardCard, banishCard } from '../actions/cards';
 
 export class RenderCard extends React.Component {
-	onClick = () => {
+	discardOnClick = () => {
 		this.props.discardCard(this.props.card);
+	}
+	banishOnClick = () => {
+		this.props.banishCard(this.props.card);
 	}
 
 	render() {
@@ -16,7 +19,8 @@ export class RenderCard extends React.Component {
 				{this.props.card.stats.defense && <div>{`Defense: ${this.props.card.stats.defense}`}</div>}
 				{this.props.card.specialText && <div className="card__special-text">{this.props.card.specialText}</div>}
 				{this.props.card.flavourText && <div className="card__flavour-text">{this.props.card.flavourText}</div>}
-				<button onClick={this.onClick}> Discard </button>
+				<button onClick={this.discardOnClick}> Discard </button>
+				<button onClick={this.banishOnClick}> Banish </button>
 			</div>
 		);
 	}
@@ -24,6 +28,7 @@ export class RenderCard extends React.Component {
 
 const mapDispatchToProps = (dispatch, props) => ({
 	discardCard: ({ id }) => dispatch(discardCard({ id })),
+	banishCard: ({ id }) => dispatch(banishCard({ id })),
 });
 
 export default connect(undefined, mapDispatchToProps)(RenderCard);

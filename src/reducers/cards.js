@@ -8,6 +8,7 @@ const cardsReducerDefaultState = {
 	hand: [],
 	deck: [],
 	discard: [],
+	banished: [],
 };
 
 // Cards functions
@@ -77,6 +78,18 @@ export default (state = cardsReducerDefaultState, action) => {
 			...state,
 			hand: action.hand,
 		};
+	case 'BANISH_CARD': {
+		const cardBanished = state.hand.slice().filter(({ id }) => id == action.id);
+		const newHand = state.hand.slice().filter(({ id }) => id !== action.id);
+		const newBanished = state.banished.slice();
+		newBanished.unshift(cardBanished[0]);
+
+		return {
+			...state,
+			hand: newHand,
+			banished: newBanished,
+		};
+	}
 	default:
 		return state;
 	}
