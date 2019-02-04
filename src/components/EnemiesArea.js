@@ -30,7 +30,6 @@ const mapStateToProps = (state) => {
 	};
 };
 
-//This function is a work in progress, not currently wired up to dispatch correctly
 const mapDispatchToProps = (dispatch, props) => ({
 	setNewMoves: (enemyGroup) => { enemyGroup.forEach(element => {
 			console.log(element);

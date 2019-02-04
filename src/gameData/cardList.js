@@ -1,4 +1,16 @@
 
+export const cardDefault = {
+	id: null,
+	name: '',
+	stats: {
+		attack: null,
+		defense: null,
+	},
+	portrait: null,
+	specialText: null,
+	flavourText: null,
+};
+
 export const testCard1 = {
 	id: 'placeholder1',
 	name: 'Test Card 1',

@@ -1,29 +1,10 @@
 import uuid from 'uuid';
-
-
-const defaultMove = {
-	type: 'attack',
-	name: 'Default Move',
-	baseDamage: 1,
-	varianceDamage: 0,
-	numberOfHits: 1,
-};
-
-const defaultEnemy = {
-	id: 'uninitialized',
-	name: 'uninitialized',
-	stats: {
-		maxHp: 1,
-		hp: 1,
-		armour: 0,
-		actions: [defaultMove],
-	},
-};
+import { enemyDefault, moveDefault } from '../gameData/enemyList';
 
 // SET_ENEMIES
 export const setEnemies = (enemies) => {
 	const initializedEnemies = enemies.slice(0).map((enemy) => ({
-		...defaultEnemy,
+		...enemyDefault,
 		...enemy,
 		id: uuid(),
 		stats: {
@@ -31,11 +12,7 @@ export const setEnemies = (enemies) => {
 			hp: enemy.stats.maxHp,
 		},
 		nextMove: {
-			type: 'attack',
-			name: 'Quick Strikes',
-			baseDamage: 2,
-			varianceDamage: 0,
-			numberOfHits: 3,
+			moveDefault,
 		},
 	}));
 	return {

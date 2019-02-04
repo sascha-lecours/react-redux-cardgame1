@@ -3,6 +3,7 @@ import thunk from 'redux-thunk';
 import authReducer from '../reducers/auth';
 import cardsReducer from '../reducers/cards';
 import enemiesReducer from '../reducers/enemies';
+import playerReducer from '../reducers/player';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
@@ -12,6 +13,7 @@ export default () => {
 			auth: authReducer,
 			cards: cardsReducer,
 			enemies: enemiesReducer,
+			player: playerReducer,
 		}),
 		composeEnhancers(applyMiddleware(thunk))
 	);

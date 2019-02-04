@@ -14,6 +14,24 @@ const bigStrike = {
 	numberOfHits: 1,
 };
 
+export const moveDefault = {
+	type: undefined,
+	name: undefined,
+	baseDamage: 0,
+	varianceDamage: 0,
+	numberOfHits: 1,
+};
+
+export const enemyDefault = {
+	id: undefined,
+	name: undefined,
+	stats: {
+		maxHp: 1,
+		armour: 0,
+		actions: [quickStrikes, bigStrike],
+	},
+};
+
 export const testEnemy1 = {
 	id: 'placeholder1',
 	name: "Lil' Gobster",

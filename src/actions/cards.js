@@ -1,5 +1,6 @@
 import uuid from 'uuid';
 import shuffle from 'shuffle-array';
+import { cardDefault } from '../gameData/cardList';
 
 // DRAW_CARD
 export const drawCard = () => {
@@ -22,7 +23,9 @@ export const discardCard = ({ id }) => {
 
 // SET_HAND
 export const setHand = (cards) => {
-	const cardsWithIds = cards.slice(0).map((card) => ({...card, id: uuid()}));
+	const cardsWithIds = cards.slice(0).map((card) => {
+		return { ...cardDefault, ...card, id: uuid.v4() };
+	});
 	return {
 		type: 'SET_HAND',
 		hand: cardsWithIds,
@@ -32,7 +35,9 @@ export const setHand = (cards) => {
 
 // SET_DECK
 export const setDeck = (cards) => {
-	const cardsWithIds = cards.slice(0).map((card) => ({...card, id: uuid()}));
+	const cardsWithIds = cards.slice(0).map((card) => {
+		return { ...cardDefault, ...card, id: uuid.v4() };
+	});
 	const shuffledCards = shuffle(cardsWithIds);
 	return {
 		type: 'SET_DECK',

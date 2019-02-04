@@ -4,13 +4,7 @@ import DeckButton from './DeckButton';
 import DiscardPileButton from './DiscardPileButton';
 import { testCard1, testCard2 } from '../gameData/cardList';
 import EnemiesArea from './EnemiesArea';
-
-
-const PlayerStatus = (props) => {
-	return (
-		<div>{'HP: 5/5 Armor: 3'}</div>
-	);
-};
+import RenderPlayer from './RenderPlayer';
 
 export default () => {
 	return (
@@ -18,7 +12,7 @@ export default () => {
 			<EnemiesArea />
 			<div>
 				<DeckButton />
-				<PlayerStatus />
+				<RenderPlayer />
 				<DiscardPileButton />
 			</div>
 			<HandDisplay />
