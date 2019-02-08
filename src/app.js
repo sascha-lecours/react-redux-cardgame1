@@ -8,17 +8,17 @@ import { login, logout } from './actions/auth';
 import './styles/styles.scss';
 import { firebase } from './firebase/firebase';
 import LoadingPage from './components/LoadingPage';
-import { testCard1, testCard2 } from './gameData/cardList';
-import { setHand, setDeck, drawCard, discardCard, reshuffleDiscards } from './actions/cards';
+import { testCard1, testCard2, testCard3 } from './gameData/cardList';
+import { setHand, setDeck } from './actions/cards';
 import { initializePlayer } from './actions/player';
-import { setEnemies, setNewMove } from './actions/enemies';
+import { setEnemies } from './actions/enemies';
 import { testEnemy1, testEnemy2 } from './gameData/enemyList';
 import { warrior } from './gameData/playerList';
 
 const store = configureStore();
 
 store.dispatch(initializePlayer(warrior));
-store.dispatch(setHand([testCard1, testCard2]));
+store.dispatch(setHand([testCard1, testCard2, testCard3]));
 store.dispatch(setDeck([testCard1, testCard2, testCard2, testCard2, testCard2, testCard2]));
 store.dispatch(setEnemies([testEnemy1, testEnemy2]));
 

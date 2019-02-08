@@ -11,6 +11,14 @@ export const drawCard = () => {
 
 // PLAY_CARD
 
+export const playCard = (card) => {
+	console.log(`playing card ${card.id}`);
+	return {
+		type: 'PLAY_CARD',
+		card,
+	};
+};
+
 // DISCARD_CARD
 // Note: Discards from hand only. A different method will be needed to discard from deck or play.
 export const discardCard = ({ id }) => {

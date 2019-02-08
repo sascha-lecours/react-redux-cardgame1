@@ -6,7 +6,7 @@ const RenderPlayer = (props) => {
 		<div className="player">
 			<div className="player__name">{`${props.player.name}`}</div>
 			{props.player.hp && <div className="player__hp">{`HP: ${props.player.hp}/${props.player.maxHp}`}</div>}
-			<div className="enemy_defense">{`Defense: ${props.player.defense}`}</div>
+			<div className="player_defense">{`Defense: ${props.player.defense}`}</div>
 		</div>
 	);
 };

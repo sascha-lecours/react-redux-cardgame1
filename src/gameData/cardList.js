@@ -1,3 +1,4 @@
+import { drawCard } from '../actions/cards';
 
 export const cardDefault = {
 	id: null,
@@ -9,6 +10,7 @@ export const cardDefault = {
 	portrait: null,
 	specialText: null,
 	flavourText: null,
+	effects: [],
 };
 
 export const testCard1 = {
@@ -31,4 +33,14 @@ export const testCard2 = {
 	stats: {
 		defense: 200,
 	},
+};
+
+export const testCard3 = {
+	id: 'placeholder3',
+	name: 'Test Draw Card',
+	type: 'Test',
+	effects: [
+		(card, dispatch) => { dispatch(drawCard()); },
+	],
+	specialText: 'Draw 1 card',
 };

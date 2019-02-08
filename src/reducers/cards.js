@@ -1,6 +1,5 @@
 import * as _ from 'lodash';
 import shuffle from 'shuffle-array';
-import { testCard1, testCard2 } from '../gameData/cardList';
 
 // Cards Reducer
 
@@ -23,6 +22,10 @@ const reshuffleDiscards = (state) => {
 		deck: deckCopy,
 		discard: [],
 	};
+};
+
+const playCard = (card) => {
+
 };
 
 // Reducer
