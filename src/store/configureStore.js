@@ -13,7 +13,6 @@ export default () => {
 			auth: authReducer,
 			cards: cardsReducer,
 			enemies: enemiesReducer,
-			player: playerReducer,
 		}),
 		composeEnhancers(applyMiddleware(thunk))
 	);

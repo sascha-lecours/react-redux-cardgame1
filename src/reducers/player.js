@@ -1,4 +1,4 @@
-import { playerDefault, warrior } from '../gameData/playerList';
+import { playerDefault } from '../gameData/playerList';
 
 // Player Reducer
 
@@ -11,12 +11,7 @@ const playerReducerDefaultState = {
 
 export default (state = playerReducerDefaultState, action) => {
 	switch (action.type) {
-	case 'INITIALIZE_PLAYER':
-		return {
-			...state,
-			...action.player,
-			hp: action.player.maxHp,
-		};
+
 	default:
 		return state;
 	}

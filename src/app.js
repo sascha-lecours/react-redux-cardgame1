@@ -9,13 +9,12 @@ import './styles/styles.scss';
 import { firebase } from './firebase/firebase';
 import LoadingPage from './components/LoadingPage';
 import { testCard1, testCard2, testCard3 } from './gameData/cardList';
-import { setHand, setDeck } from './actions/cards';
-import { initializePlayer } from './actions/player';
+import { setHand, setDeck, initializePlayer } from './actions/cards';
 import { setEnemies } from './actions/enemies';
 import { testEnemy1, testEnemy2 } from './gameData/enemyList';
 import { warrior } from './gameData/playerList';
 
-const store = configureStore();
+export const store = configureStore();
 
 store.dispatch(initializePlayer(warrior));
 store.dispatch(setHand([testCard1, testCard2, testCard3]));

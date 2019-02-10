@@ -1,5 +1,6 @@
 import * as _ from 'lodash';
 import shuffle from 'shuffle-array';
+import { playerDefault } from '../gameData/playerList';
 
 // Cards Reducer
 
@@ -8,6 +9,7 @@ const cardsReducerDefaultState = {
 	deck: [],
 	discard: [],
 	banished: [],
+	player: { ...playerDefault },
 };
 
 // Cards functions
@@ -24,14 +26,19 @@ const reshuffleDiscards = (state) => {
 	};
 };
 
-const playCard = (card) => {
-
-};
-
 // Reducer
 
 export default (state = cardsReducerDefaultState, action) => {
 	switch (action.type) {
+	case 'INITIALIZE_PLAYER':
+		return {
+			...state,
+			player: {
+				...state.player,
+				...action.player,
+				hp: action.player.maxHp,
+			},
+		};
 	case 'DISCARD_CARD': {
 		const cardDiscarded = state.hand.slice().filter(({ id }) => id == action.id);
 		const newHand = state.hand.slice().filter(({ id }) => id !== action.id);
@@ -92,6 +99,13 @@ export default (state = cardsReducerDefaultState, action) => {
 			hand: newHand,
 			banished: newBanished,
 		};
+	}
+	case 'RAISE_DEFENSE': {
+		const newdefense = Math.min((state.player.defense + action.defense), state.player.maxDefense);
+		return {
+			...state,
+			defense: newdefense,
+		}
 	}
 	default:
 		return state;

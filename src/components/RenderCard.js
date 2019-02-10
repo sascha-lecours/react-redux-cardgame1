@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { discardCard, banishCard } from '../actions/cards';
+import playCard from '../gameData/playCard';
 
 export class RenderCard extends React.Component {
 	discardOnClick = () => {
@@ -8,6 +9,9 @@ export class RenderCard extends React.Component {
 	}
 	banishOnClick = () => {
 		this.props.banishCard(this.props.card);
+	}
+	playOnClick = () => {
+		playCard(this.props.card);
 	}
 
 	render() {
@@ -19,6 +23,7 @@ export class RenderCard extends React.Component {
 				{this.props.card.stats.defense && <div>{`Defense: ${this.props.card.stats.defense}`}</div>}
 				{this.props.card.specialText && <div className="card__special-text">{this.props.card.specialText}</div>}
 				{this.props.card.flavourText && <div className="card__flavour-text">{this.props.card.flavourText}</div>}
+				<button onClick={this.playOnClick}> Play </button>
 				<button onClick={this.discardOnClick}> Discard </button>
 				<button onClick={this.banishOnClick}> Banish </button>
 			</div>

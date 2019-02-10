@@ -1,4 +1,16 @@
-import { drawCard } from '../actions/cards';
+import { drawCard, discardCard } from '../actions/cards';
+
+// Action generators - these will be moved to the cards/actions folder later in development. 
+// Here for now for ease of reference.
+
+export const raiseDefense = (defense) => {
+	return {
+		type: 'RAISE_DEFENSE',
+		defense,
+	};
+};
+
+// List of all cards in game
 
 export const cardDefault = {
 	id: null,
@@ -33,6 +45,9 @@ export const testCard2 = {
 	stats: {
 		defense: 200,
 	},
+	effects: [
+		card => raiseDefense(card.stats.defense),
+	]
 };
 
 export const testCard3 = {
@@ -40,7 +55,11 @@ export const testCard3 = {
 	name: 'Test Draw Card',
 	type: 'Test',
 	effects: [
-		(card, dispatch) => { dispatch(drawCard()); },
+		() => drawCard(),
+		() => drawCard(),
+		card => discardCard(card),
 	],
-	specialText: 'Draw 1 card',
+	specialText: 'Draw 2 cards',
 };
+
+

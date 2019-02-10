@@ -14,7 +14,7 @@ const RenderPlayer = (props) => {
 
 const mapStateToProps = (state) => {
 	return {
-		player: state.player,
+		player: state.cards.player,
 	};
 };
 

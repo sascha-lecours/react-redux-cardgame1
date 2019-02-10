@@ -32,7 +32,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, props) => ({
 	setNewMoves: (enemyGroup) => { enemyGroup.forEach(element => {
-			console.log(element);
 			dispatch(setNewMove(element));
 		}); 
 	},
