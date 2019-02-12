@@ -23,7 +23,7 @@ export const HandDisplay = (props) => {
 
 const mapStateToProps = (state) => {
 	return {
-		hand: state.cards.hand,
+		hand: state.game.hand,
 	};
 };
 

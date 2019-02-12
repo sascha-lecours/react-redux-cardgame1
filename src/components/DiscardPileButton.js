@@ -11,7 +11,7 @@ export const DiscardPileButton = (props) => {
 
 const mapStateToProps = (state) => {
 	return {
-		discard: state.cards.discard,
+		discard: state.game.discard,
 	};
 };
 

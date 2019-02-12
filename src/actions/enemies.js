@@ -7,10 +7,7 @@ export const setEnemies = (enemies) => {
 		...enemyDefault,
 		...enemy,
 		id: uuid(),
-		stats: {
-			...enemy.stats,
-			hp: enemy.stats.maxHp,
-		},
+		hp: enemy.maxHp,
 		nextMove: {
 			moveDefault,
 		},

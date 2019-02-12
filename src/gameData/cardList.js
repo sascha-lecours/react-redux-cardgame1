@@ -1,11 +1,19 @@
 import { drawCard, discardCard } from '../actions/cards';
 
-// Action generators - these will be moved to the cards/actions folder later in development. 
+// Helper functions - probably to be moved to another file later
+
+export const dealDamage = (target, damage) => {
+
+};
+
+// Action generators - these will be moved to the cards/actions folder later in development.
 // Here for now for ease of reference.
 
-export const raiseDefense = (defense) => {
+export const raiseDefense = (target, defense) => {
+	console.log(`Target: ${target}, Defense: ${defense}`);
 	return {
 		type: 'RAISE_DEFENSE',
+		target,
 		defense,
 	};
 };
@@ -40,14 +48,14 @@ export const testCard1 = {
 
 export const testCard2 = {
 	id: 'placeholder2',
-	name: 'Other Test Card',
+	name: 'Defensive stance',
 	type: 'Test',
 	stats: {
-		defense: 200,
+		defense: 10,
 	},
 	effects: [
-		card => raiseDefense(card.stats.defense),
-	]
+		(player, card) => raiseDefense(player, card.stats.defense),
+	],
 };
 
 export const testCard3 = {
@@ -57,9 +65,8 @@ export const testCard3 = {
 	effects: [
 		() => drawCard(),
 		() => drawCard(),
-		card => discardCard(card),
+		(player, card) => discardCard(card),
 	],
 	specialText: 'Draw 2 cards',
 };
-
 

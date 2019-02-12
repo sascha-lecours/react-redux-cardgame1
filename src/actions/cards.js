@@ -61,7 +61,6 @@ export const reshuffleDiscards = () => {
 // BANISH
 
 export const banishCard = ({ id }) => {
-	console.log(`banish card ${id}`);
 	return {
 		type: 'BANISH_CARD',
 		id,

@@ -26,7 +26,7 @@ export const EnemiesDisplay = (props) => {
 
 const mapStateToProps = (state) => {
 	return {
-		enemyGroup: state.enemies.enemyGroup,
+		enemyGroup: state.game.enemyGroup,
 	};
 };
 

@@ -11,7 +11,7 @@ export class RenderCard extends React.Component {
 		this.props.banishCard(this.props.card);
 	}
 	playOnClick = () => {
-		playCard(this.props.card);
+		playCard(this.props.player, this.props.card);
 	}
 
 	render() {
@@ -31,9 +31,15 @@ export class RenderCard extends React.Component {
 	}
 }
 
+const mapStateToProps = (state) => {
+	return {
+		player: state.game.player,
+	};
+};
+
 const mapDispatchToProps = (dispatch, props) => ({
 	discardCard: ({ id }) => dispatch(discardCard({ id })),
 	banishCard: ({ id }) => dispatch(banishCard({ id })),
 });
 
-export default connect(undefined, mapDispatchToProps)(RenderCard);
+export default connect(mapStateToProps, mapDispatchToProps)(RenderCard);

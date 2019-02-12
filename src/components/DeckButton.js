@@ -12,7 +12,7 @@ export const DeckButton = (props) => {
 
 const mapStateToProps = (state) => {
 	return {
-		deck: state.cards.deck,
+		deck: state.game.deck,
 	};
 };
 

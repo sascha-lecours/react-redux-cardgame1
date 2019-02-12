@@ -25,29 +25,24 @@ export const moveDefault = {
 export const enemyDefault = {
 	id: undefined,
 	name: undefined,
-	stats: {
-		maxHp: 1,
-		armour: 0,
-		actions: [quickStrikes, bigStrike],
-	},
+	maxHp: 1,
+	defense: 0,
+	maxDefense: 999,
+	actions: [quickStrikes, bigStrike],
 };
 
 export const testEnemy1 = {
 	id: 'placeholder1',
 	name: "Lil' Gobster",
-	stats: {
-		maxHp: 10,
-		armour: 0,
-		actions: [quickStrikes, quickStrikes, bigStrike],
-	},
+	maxHp: 10,
+	defense: 0,
+	actions: [quickStrikes, quickStrikes, bigStrike],
 };
 
 export const testEnemy2 = {
 	id: 'placeholder2',
 	name: 'Big Beefo',
-	stats: {
-		maxHp: 20,
-		armour: 1,
-		actions: [quickStrikes, bigStrike, bigStrike],
-	},
+	maxHp: 20,
+	defense: 1,
+	actions: [quickStrikes, bigStrike, bigStrike],
 };
