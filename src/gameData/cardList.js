@@ -1,9 +1,18 @@
 import { drawCard, discardCard } from '../actions/cards';
+import { store } from '../app';
 
 // Helper functions - probably to be moved to another file later
 
-export const dealDamage = (target, damage) => {
+export const dealDamage = (target, source, damage) => {
 
+};
+
+export const makeAttack = (target, source, baseDamage, numberOfHits) => {
+	const adjustedDamage = baseDamage + source.strength;
+	let i;
+	for (i = 0; i < numberOfHits; i += 1) {
+		dealDamage(target, source, adjustedDamage);
+	}
 };
 
 // Action generators - these will be moved to the cards/actions folder later in development.
@@ -54,7 +63,7 @@ export const testCard2 = {
 		defense: 10,
 	},
 	effects: [
-		(player, card) => raiseDefense(player, card.stats.defense),
+		(player, card) => store.dispatch(raiseDefense(player, card.stats.defense)),
 	],
 };
 
@@ -63,9 +72,9 @@ export const testCard3 = {
 	name: 'Test Draw Card',
 	type: 'Test',
 	effects: [
-		() => drawCard(),
-		() => drawCard(),
-		(player, card) => discardCard(card),
+		() => store.dispatch(drawCard()),
+		() => store.dispatch(drawCard()),
+		(player, card) => store.dispatch(discardCard(card)),
 	],
 	specialText: 'Draw 2 cards',
 };
