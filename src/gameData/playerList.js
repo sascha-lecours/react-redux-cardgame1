@@ -4,6 +4,8 @@ export const playerDefault = {
 	defense: 0,
 	maxDefense: 999,
 	mindefense: 0,
+	strength: 0,
+	toughness: 1,
 };
 
 export const warrior = {

@@ -140,6 +140,32 @@ export default (state = gameReducerDefaultState, action) => {
 			},
 		};
 	}
+	case 'DEAL_DAMAGE': {
+		let workingDamage = action.damage;
+		let workingHp = action.target.hp;
+		let workingDefense = action.target.defense;
+		let i;
+		for (i = 0; i < action.numberOfHits; i += 1) {
+			workingDamage = action.damage;
+			workingDamage = Math.max((workingDamage - workingDefense), 0);
+			workingDefense = Math.max((workingDefense - action.damage), 0);
+			workingHp = Math.max((workingHp - workingDamage), 0);
+		}
+		return {
+			...state,
+			enemyGroup: state.enemyGroup.map((enemy) => {
+				if (enemy.id === action.target.id) {
+					return {
+						...enemy,
+						hp: workingHp,
+						defense: workingDefense,
+					};
+				} else {
+					return enemy;
+				}
+			}),
+		};
+	}
 	default:
 		return state;
 	}
