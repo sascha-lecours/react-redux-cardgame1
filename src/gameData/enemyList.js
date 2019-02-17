@@ -28,6 +28,16 @@ export const enemyDefault = {
 	maxHp: 1,
 	defense: 0,
 	maxDefense: 999,
+	minDefense: 0,
+	strength: 0,
+	maxStrength: 999,
+	minStrength: -999,
+	toughness: 0,
+	maxToughness: 999,
+	minToughness: -999,
+	marked: 0,
+	maxMarked: 999,
+	minMarked: 0,
 	actions: [quickStrikes, bigStrike],
 };
 
@@ -43,6 +53,6 @@ export const testEnemy2 = {
 	id: 'placeholder2',
 	name: 'Big Beefo',
 	maxHp: 20,
-	defense: 1,
+	defense: 5,
 	actions: [quickStrikes, bigStrike, bigStrike],
 };

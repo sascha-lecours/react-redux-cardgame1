@@ -8,7 +8,7 @@ import { login, logout } from './actions/auth';
 import './styles/styles.scss';
 import { firebase } from './firebase/firebase';
 import LoadingPage from './components/LoadingPage';
-import { testCard1, testCard2, testCard3 } from './gameData/cardList';
+import { testCard1, testCard2, testCard3, testCard4, testCard5, testCard6, testCard7 } from './gameData/cardList';
 import { setHand, setDeck, initializePlayer } from './actions/cards';
 import { setEnemies } from './actions/enemies';
 import { testEnemy1, testEnemy2 } from './gameData/enemyList';
@@ -17,7 +17,7 @@ import { warrior } from './gameData/playerList';
 export const store = configureStore();
 
 store.dispatch(initializePlayer(warrior));
-store.dispatch(setHand([testCard1, testCard2, testCard3]));
+store.dispatch(setHand([testCard1, testCard6, testCard4, testCard7]));
 store.dispatch(setDeck([testCard1, testCard2, testCard2, testCard2, testCard2, testCard2]));
 store.dispatch(setEnemies([testEnemy1, testEnemy2]));
 

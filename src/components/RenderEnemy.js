@@ -14,6 +14,10 @@ const RenderEnemy = (props) => {
 				props.enemy.flavourText &&
 				<div className="enemy__flavour-text">{props.enemy.flavourText}</div>
 			}
+			{
+				(props.enemy.marked > 0) &&
+				<div className="enemy__targeted">{`Marked: ${props.enemy.marked}` }</div>
+			}
 		</div>
 	);
 };

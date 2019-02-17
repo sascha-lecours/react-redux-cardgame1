@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import shuffle from 'shuffle-array';
 import { playerDefault } from '../gameData/playerList';
 
-// Overall Combat Gam Reducer
+// Overall Combat-handling Game Reducer
 
 const gameReducerDefaultState = {
 	hand: [],
@@ -45,6 +45,7 @@ export default (state = gameReducerDefaultState, action) => {
 				...state.player,
 				...action.player,
 				hp: action.player.maxHp,
+				id: action.player.id,
 			},
 		};
 	case 'SET_ENEMIES':
@@ -81,7 +82,8 @@ export default (state = gameReducerDefaultState, action) => {
 	case 'DRAW_CARD': {
 		// DRAW_CARD will reshuffle the discard pile to make a new draw deck if necessary.
 		if (!(state.deck.length) && !(state.discard.length)) {
-			alert("Deck and discard pile both empty - cannot draw cards!");
+			// TODO: replace  this alert later with something more elegant.
+			alert('Deck and discard pile both empty - cannot draw cards!');
 			return state;
 		}
 		if (!(state.deck.length)) {
@@ -128,7 +130,7 @@ export default (state = gameReducerDefaultState, action) => {
 		};
 	}
 	case 'RAISE_DEFENSE': {
-		const newdefense = Math.min(
+		const newDefense = Math.min(
 			(action.target.defense + action.defense),
 			action.target.maxDefense
 		);
@@ -136,8 +138,53 @@ export default (state = gameReducerDefaultState, action) => {
 			...state,
 			player: {
 				...action.target,
-				defense: newdefense,
+				defense: newDefense,
 			},
+		};
+	}
+	case 'RAISE_STRENGTH': {
+		const newStrength = Math.min(
+			(action.target.strength + action.strength),
+			action.target.maxStrength
+		);
+		return {
+			...state,
+			player: {
+				...action.target,
+				strength: newStrength,
+			},
+		};
+	}
+	case 'RAISE_TOUGHNESS': {
+		const newToughness = Math.min(
+			(action.target.toughness + action.toughness),
+			action.target.maxToughness
+		);
+		return {
+			...state,
+			player: {
+				...action.target,
+				toughness: newToughness,
+			},
+		};
+	}
+	case 'RAISE_MARKED': {
+		const newMarked = Math.min(
+			(action.target.marked + action.marked),
+			action.target.maxMarked
+		);
+		return {
+			...state,
+			enemyGroup: state.enemyGroup.map((enemy) => {
+				if (enemy.id === action.target.id) {
+					return {
+						...enemy,
+						marked: newMarked,
+					};
+				} else {
+					return enemy;
+				}
+			}),
 		};
 	}
 	case 'DEAL_DAMAGE': {

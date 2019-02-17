@@ -17,7 +17,7 @@ export class RenderCard extends React.Component {
 	render() {
 		return (
 			<div className="card">
-				<div className="card__name">{`Name: ${this.props.card.name}`}</div>
+				<div className="card__name">{`${this.props.card.name}`}</div>
 				<div>{`Type: ${this.props.card.type}`}</div>
 				{this.props.card.attack && <div>{`Attack: ${this.props.card.attack}`}</div>}
 				{this.props.card.defense && <div>{`Defense: ${this.props.card.defense}`}</div>}

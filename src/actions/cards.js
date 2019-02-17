@@ -22,7 +22,10 @@ export const discardCard = ({ id }) => {
 export const initializePlayer = (player) => {
 	return {
 		type: 'INITIALIZE_PLAYER',
-		player,
+		player: {
+			...player,
+			id: uuid(),
+		},
 	};
 };
 
