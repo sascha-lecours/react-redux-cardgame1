@@ -31,9 +31,10 @@ export class RenderCard extends React.Component {
 	}
 }
 
+// Currently always points to player 1. This could be changed later on, if larger parties are implemented
 const mapStateToProps = (state) => {
 	return {
-		player: state.game.player,
+		player: state.game.playerGroup[0],
 	};
 };
 

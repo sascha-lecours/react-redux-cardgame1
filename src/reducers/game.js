@@ -9,7 +9,7 @@ const gameReducerDefaultState = {
 	deck: [],
 	discard: [],
 	banished: [],
-	player: { ...playerDefault },
+	playerGroup: [],
 	enemyGroup: [],
 };
 
@@ -41,12 +41,13 @@ export default (state = gameReducerDefaultState, action) => {
 	case 'INITIALIZE_PLAYER':
 		return {
 			...state,
-			player: {
+			playerGroup: [{
+				...playerDefault,
 				...state.player,
 				...action.player,
 				hp: action.player.maxHp,
 				id: action.player.id,
-			},
+			}],
 		};
 	case 'SET_ENEMIES':
 		return {
@@ -136,10 +137,26 @@ export default (state = gameReducerDefaultState, action) => {
 		);
 		return {
 			...state,
-			player: {
-				...action.target,
-				defense: newDefense,
-			},
+			enemyGroup: state.enemyGroup.map((enemy) => {
+				if (enemy.id === action.target.id) {
+					return {
+						...action.target,
+						defense: newDefense,
+					};
+				} else {
+					return enemy;
+				}
+			}),
+			playerGroup: state.playerGroup.map((player) => {
+				if (player.id === action.target.id) {
+					return {
+						...action.target,
+						defense: newDefense,
+					};
+				} else {
+					return player;
+				}
+			}),
 		};
 	}
 	case 'RAISE_STRENGTH': {
@@ -149,10 +166,26 @@ export default (state = gameReducerDefaultState, action) => {
 		);
 		return {
 			...state,
-			player: {
-				...action.target,
-				strength: newStrength,
-			},
+			enemyGroup: state.enemyGroup.map((enemy) => {
+				if (enemy.id === action.target.id) {
+					return {
+						...action.target,
+						strength: newStrength,
+					};
+				} else {
+					return enemy;
+				}
+			}),
+			playerGroup: state.playerGroup.map((player) => {
+				if (player.id === action.target.id) {
+					return {
+						...action.target,
+						strength: newStrength,
+					};
+				} else {
+					return player;
+				}
+			}),
 		};
 	}
 	case 'RAISE_TOUGHNESS': {
@@ -162,10 +195,26 @@ export default (state = gameReducerDefaultState, action) => {
 		);
 		return {
 			...state,
-			player: {
-				...action.target,
-				toughness: newToughness,
-			},
+			enemyGroup: state.enemyGroup.map((enemy) => {
+				if (enemy.id === action.target.id) {
+					return {
+						...action.target,
+						toughness: newToughness,
+					};
+				} else {
+					return enemy;
+				}
+			}),
+			playerGroup: state.playerGroup.map((player) => {
+				if (player.id === action.target.id) {
+					return {
+						...action.target,
+						toughness: newToughness,
+					};
+				} else {
+					return player;
+				}
+			}),
 		};
 	}
 	case 'RAISE_MARKED': {
@@ -183,6 +232,16 @@ export default (state = gameReducerDefaultState, action) => {
 					};
 				} else {
 					return enemy;
+				}
+			}),
+			playerGroup: state.playerGroup.map((player) => {
+				if (player.id === action.target.id) {
+					return {
+						...player,
+						marked: newMarked,
+					};
+				} else {
+					return player;
 				}
 			}),
 		};
@@ -209,6 +268,17 @@ export default (state = gameReducerDefaultState, action) => {
 					};
 				} else {
 					return enemy;
+				}
+			}),
+			playerGroup: state.playerGroup.map((player) => {
+				if (player.id === action.target.id) {
+					return {
+						...player,
+						hp: workingHp,
+						defense: workingDefense,
+					};
+				} else {
+					return player;
 				}
 			}),
 		};

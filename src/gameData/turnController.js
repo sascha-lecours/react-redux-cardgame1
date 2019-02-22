@@ -1,3 +1,10 @@
+import { store } from '../app';
+import { testCard1, testCard2, testCard3, testCard4, testCard5, testCard6, testCard7 } from '../gameData/cardList';
+import { setHand, setDeck, initializePlayer } from '../actions/cards';
+import { setEnemies } from '../actions/enemies';
+import { testEnemy1, testEnemy2 } from '../gameData/enemyList';
+import { warrior, bard } from '../gameData/playerList';
+
 // A component that manages the game state
 // This may be best handled using a subscribe listener that checks for certain key changes in...
 // ... in the store and implements turn events accordingly
@@ -8,6 +15,13 @@
 // -> Initialize combat.
 // --> Fetch player stats and deck(s), possibly including modified cards, buffs/debuffs, etc.
 // --> Fetch enemy stats
+const initializeCombat = () => {
+	store.dispatch(initializePlayer(warrior));
+	store.dispatch(setHand([testCard1, testCard6, testCard4, testCard7]));
+	store.dispatch(setDeck([testCard1, testCard2, testCard2, testCard2, testCard2, testCard2]));
+	store.dispatch(setEnemies([testEnemy1, testEnemy2]));
+};
+
 
 // -> Begin turn loop.
 // 1. Deal cards

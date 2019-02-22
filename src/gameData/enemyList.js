@@ -1,17 +1,56 @@
+import { store } from '../app';
+import { makeAttack, raiseDefense, raiseToughness } from './cardList';
+import targetPlayer from './targetPlayer';
+
+
+// Helper functions
+const applyVariance = (base, variance) => {
+	const modifier = Math.floor((Math.random() * ((variance * 2) + 1)) - variance);
+	console.log(`applying variance. Variance range is ${variance}, modifier is ${modifier}`);
+	return (base + modifier);
+};
+
 const quickStrikes = {
 	type: 'attack',
 	name: 'Quick Strikes',
-	baseDamage: 2,
+	attack: 2,
 	varianceDamage: 0,
 	numberOfHits: 3,
+	effects: [
+		(enemy, move) => makeAttack(
+			targetPlayer(),
+			enemy,
+			applyVariance(move.attack, move.varianceDamage),
+			move.numberOfHits
+		),
+	],
+};
+
+const crystallize = {
+	type: 'defense',
+	name: 'Crystallize',
+	defense: 6,
+	toughness: 2,
+	effects: [
+		(enemy, move) => store.dispatch(raiseDefense(enemy, move.defense)),
+		(enemy, move) => store.dispatch(raiseToughness(enemy, move.toughness)),
+	],
 };
 
 const bigStrike = {
 	type: 'attack',
 	name: 'Clonka Bonk',
-	baseDamage: 7,
+	attack: 7,
 	varianceDamage: 3,
 	numberOfHits: 1,
+	effects: [
+		(enemy, move) => makeAttack(
+			targetPlayer(),
+			enemy,
+			applyVariance(move.attack, move.varianceDamage),
+			move.numberOfHits
+		),
+	],
 };
 
 export const moveDefault = {
@@ -20,6 +59,7 @@ export const moveDefault = {
 	baseDamage: 0,
 	varianceDamage: 0,
 	numberOfHits: 1,
+	effects: [],
 };
 
 export const enemyDefault = {
@@ -46,7 +86,7 @@ export const testEnemy1 = {
 	name: "Lil' Gobster",
 	maxHp: 10,
 	defense: 0,
-	actions: [quickStrikes, quickStrikes, bigStrike],
+	actions: [quickStrikes, crystallize],
 };
 
 export const testEnemy2 = {

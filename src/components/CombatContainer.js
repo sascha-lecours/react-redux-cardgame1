@@ -3,14 +3,14 @@ import HandDisplay from './HandDisplay';
 import DeckButton from './DeckButton';
 import DiscardPileButton from './DiscardPileButton';
 import EnemiesArea from './EnemiesArea';
-import RenderPlayer from './RenderPlayer';
+import PlayerArea from './PlayerArea';
 
 export default () => {
 	return (
 		<div className="combat-container">
 			<EnemiesArea />
 			<div>
-				<RenderPlayer />
+				<PlayerArea />
 				<DeckButton />
 				<DiscardPileButton />
 			</div>
