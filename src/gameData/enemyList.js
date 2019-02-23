@@ -31,9 +31,17 @@ const frenzy = {
 	name: 'Frenzy',
 	strength: 1,
 	defense: 3,
+	attack: 1,
+	numberOfHits: 1,
 	effects: [
 		(enemy, move) => store.dispatch(raiseDefense(enemy, move.defense)),
 		(enemy, move) => store.dispatch(raiseStrength(enemy, move.strength)),
+		(enemy, move) => makeAttack(
+			targetPlayer(),
+			enemy,
+			applyVariance(move.attack, move.varianceDamage),
+			move.numberOfHits
+		),
 	],
 };
 

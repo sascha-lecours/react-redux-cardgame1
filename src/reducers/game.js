@@ -1,6 +1,7 @@
 import * as _ from 'lodash';
 import shuffle from 'shuffle-array';
 import { playerDefault } from '../gameData/playerList';
+import { moveDefault } from '../gameData/enemyList';
 
 // Overall Combat-handling Game Reducer
 
@@ -29,8 +30,15 @@ const reshuffleDiscards = (state) => {
 
 // Enemy functions
 
+
+// Pickmove is where the move defaults are applied to moves
+// Todo: this may be moved elsewhere (initializing move arrays on set-enemies)
 const pickMove = (enemy) => {
-	return enemy.actions[Math.floor(Math.random() * enemy.actions.length)];
+	const newMove = enemy.actions[Math.floor(Math.random() * enemy.actions.length)];
+	return {
+		...moveDefault,
+		...newMove,
+	};
 };
 
 
