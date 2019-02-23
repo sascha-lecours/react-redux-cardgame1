@@ -1,5 +1,5 @@
 import { store } from '../app';
-import { makeAttack, raiseDefense, raiseToughness } from './cardList';
+import { makeAttack, raiseDefense, raiseToughness, raiseStrength } from './cardList';
 import targetPlayer from './targetPlayer';
 
 
@@ -26,14 +26,34 @@ const quickStrikes = {
 	],
 };
 
+const frenzy = {
+	type: 'buff',
+	name: 'Frenzy',
+	strength: 1,
+	defense: 3,
+	effects: [
+		(enemy, move) => store.dispatch(raiseDefense(enemy, move.defense)),
+		(enemy, move) => store.dispatch(raiseStrength(enemy, move.strength)),
+	],
+};
+
 const crystallize = {
 	type: 'defense',
 	name: 'Crystallize',
 	defense: 6,
-	toughness: 2,
+	toughness: 1,
 	effects: [
 		(enemy, move) => store.dispatch(raiseDefense(enemy, move.defense)),
 		(enemy, move) => store.dispatch(raiseToughness(enemy, move.toughness)),
+	],
+};
+
+const warcry = {
+	type: 'buff',
+	name: 'Warcry',
+	strength: 2,
+	effects: [
+		(enemy, move) => store.dispatch(raiseStrength(enemy, move.strength)),
 	],
 };
 
@@ -86,7 +106,7 @@ export const testEnemy1 = {
 	name: "Lil' Gobster",
 	maxHp: 10,
 	defense: 0,
-	actions: [quickStrikes, crystallize],
+	actions: [quickStrikes, quickStrikes, frenzy],
 };
 
 export const testEnemy2 = {
@@ -94,5 +114,5 @@ export const testEnemy2 = {
 	name: 'Big Beefo',
 	maxHp: 20,
 	defense: 5,
-	actions: [quickStrikes, bigStrike, bigStrike],
+	actions: [quickStrikes, warcry, bigStrike, bigStrike],
 };

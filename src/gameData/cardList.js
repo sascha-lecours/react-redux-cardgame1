@@ -15,13 +15,6 @@ export const raiseStrength = (target, strength) => {
 	};
 };
 
-// Testing new way to buffing stats:
-// Currently, dispatching two buffs or self-modifying effects in the same action fails as they both update from the same state.
-// Makeattack does work, as do card-modifying actions. Need to implement buffs in same manner.
-const startRaiseStrength = (target, strength) => {
-	store.dispatch(raiseStrength(target, strength));
-};
-
 // RAISE MARKED
 export const raiseMarked = (target, marked) => {
 	console.log(`Marking ${target.name} for ${marked}`);
@@ -197,7 +190,7 @@ export const testCard7 = {
 	marked: 3,
 	effects: [
 		(player, card) => store.dispatch(raiseMarked(targetRandomEnemy(), card.marked)),
-		// (player, card) => store.dispatch(discardCard(card)),
+		(player, card) => store.dispatch(discardCard(card)),
 	],
 	specialText: 'Mark target for 3 turns',
 };
@@ -209,8 +202,8 @@ export const testCard8 = {
 	toughness: 1,
 	strength: 1,
 	effects: [
-		(player, card) => startRaiseStrength(player, card.strength),
-		(player, card) => startRaiseStrength(player, card.strength),
+		(player, card) => raiseToughness(player, card.strength),
+		(player, card) => raiseStrength(player, card.strength),
 		(player, card) => store.dispatch(discardCard(card)),
 	],
 	specialText: 'Raise strength by 2',

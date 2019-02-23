@@ -14,10 +14,6 @@ export class RenderEnemy extends React.Component {
 				<div className="enemy__hp">{`HP: ${this.props.enemy.hp}/${this.props.enemy.maxHp}`}</div>
 				<div className="enemy_defense">{`Defense: ${this.props.enemy.defense}`}</div>
 				{
-					this.props.enemy.nextMove &&
-					<div className="enemy__next-move">{this.props.enemy.nextMove.name}</div>
-				}
-				{
 					this.props.enemy.flavourText &&
 					<div className="enemy__flavour-text">{this.props.enemy.flavourText}</div>
 				}
@@ -26,6 +22,10 @@ export class RenderEnemy extends React.Component {
 				{
 					(this.props.enemy.marked > 0) &&
 					<div className="enemy__targeted">{`Marked: ${this.props.enemy.marked}` }</div>
+				}
+				{
+					this.props.enemy.nextMove &&
+					<div className="enemy__next-move">{this.props.enemy.nextMove.name}</div>
 				}
 				<button onClick={this.useMoveOnClick}> Use Move </button>
 			</div>
