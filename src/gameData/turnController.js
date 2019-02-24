@@ -32,6 +32,7 @@ const initializeCombat = () => {
 // 5. Resolve all card effects, including visuals/sound and checking for combat-over
 // 6. Player turn ends (muliple cards?) - player end-of-turn effects
 // 7. Enemy start-of-turn effects, checking for combat-over
+
 // 8. Enemy actions resolve, up through array, checking for combat-over
 // 9. Enemy end-of-turn effects, checking for combat-over
 // 10. Increment turn counter, start back at step 1.
@@ -40,3 +41,25 @@ const initializeCombat = () => {
 // 1. End-of-combat effects such as healing
 // 2. Gain rewards (gold, relics, potions, cards, etc.)
 // 3. Hand off to "campaign" component that moves on  higher scope.
+
+
+export class TurnController extends React.Component {
+	
+	enemiesTakeTurn = () => {
+		card.effects.forEach(element => element(getPlayerById(id), card));
+	}
+
+	// Non-rendered component
+	render() { return null }
+  };
+  
+  const mapStateToProps = (state, props) => ({
+	game: state.game,
+  });
+  
+  const mapDispatchToProps = (dispatch, props) => ({
+	// startEditExpense: (id, expense) => dispatch(startEditExpense(id, expense)),
+	// startRemoveExpense: (data) => dispatch(startRemoveExpense(data))
+  });
+  
+  export default connect(mapStateToProps, mapDispatchToProps)(TurnController);
