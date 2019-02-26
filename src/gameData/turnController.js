@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { store } from '../app';
 import { testCard1, testCard2, testCard3, testCard4, testCard5, testCard6, testCard7 } from '../gameData/cardList';
@@ -37,7 +37,7 @@ import { warrior, bard } from '../gameData/playerList';
 // 3. Hand off to "campaign" component that moves on  higher scope. 
 
 
-export class TurnController extends React.Component {
+export class TurnController extends Component {
 	
 
 
@@ -45,14 +45,16 @@ export class TurnController extends React.Component {
 // --> Fetch player stats and deck(s), possibly including modified cards, buffs/debuffs, etc.
 // --> Fetch enemy stats
 
+initializeCombat = () => {
+	store.dispatch(initializePlayer(warrior));
+	store.dispatch(setHand([testCard1, testCard6, testCard4, testCard7]));
+	store.dispatch(setDeck([testCard1, testCard2, testCard2, testCard2, testCard2, testCard2]));
+	store.dispatch(setEnemies([testEnemy1, testEnemy2]));
+};
 
-	initializeCombat = () => {
-		store.dispatch(initializePlayer(warrior));
-		store.dispatch(setHand([testCard1, testCard6, testCard4, testCard7]));
-		store.dispatch(setDeck([testCard1, testCard2, testCard2, testCard2, testCard2, testCard2]));
-		store.dispatch(setEnemies([testEnemy1, testEnemy2]));
-	};
-
+componentDidMount() {
+	this.initializeCombat();
+}
 
 	// -> Begin turn loop.
 // 1. Deal cards
