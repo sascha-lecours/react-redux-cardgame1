@@ -7,7 +7,7 @@ import { setHand, setDeck, initializePlayer } from '../actions/cards';
 import { setEnemies, setNewMove } from '../actions/enemies';
 import { testEnemy1, testEnemy2 } from '../gameData/enemyList';
 import { warrior, bard } from '../gameData/playerList';
-import { useMove } from '../gameData/useMove';
+import useMove from '../gameData/useMove';
 
 // A component that manages the game state
 // This may be best handled using a subscribe listener that checks for certain key changes in...
@@ -59,11 +59,8 @@ initializeCombat = () => {
 };
 
 enemiesTakeTurn = () => {
-	this.props.game.enemyGroup.forEach(element => {
-		console.log(`${element.name} will use ${element.nextMove.name}`);
-		(element) => useMove(element, element.nextMove); // Why is this not working?
-	});
-}
+	this.props.game.enemyGroup.forEach((enemy) => useMove(enemy, enemy.nextMove));
+};
 
 componentDidMount() {
 	this.initializeCombat();
