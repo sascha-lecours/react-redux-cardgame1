@@ -11,6 +11,7 @@ export const playerDefault = {
 	toughness: 0,
 	maxToughness: 999,
 	minToughness: -999,
+	startHandSize: 3,
 };
 
 export const warrior = {
