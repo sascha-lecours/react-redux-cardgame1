@@ -1,5 +1,5 @@
 const turnReducerDefaultState = {
-	phase: 0,
+	phase: -1,
 };
 
 export default (state = turnReducerDefaultState, action) => {

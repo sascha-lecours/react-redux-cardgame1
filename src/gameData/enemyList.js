@@ -6,7 +6,7 @@ import targetPlayer from './targetPlayer';
 // Helper functions
 const applyVariance = (base, variance) => {
 	const modifier = Math.floor((Math.random() * ((variance * 2) + 1)) - variance);
-	console.log(`applying variance. Variance range is ${variance}, modifier is ${modifier}`);
+	// console.log(`applying variance. Variance range is ${variance}, modifier is ${modifier}`);
 	return (base + modifier);
 };
 

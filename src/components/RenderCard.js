@@ -1,7 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { discardCard, banishCard } from '../actions/cards';
+import { advancePhase } from '../actions/turn';
 import playCard from '../gameData/playCard';
+
 
 export class RenderCard extends React.Component {
 	discardOnClick = () => {
@@ -11,6 +13,7 @@ export class RenderCard extends React.Component {
 		this.props.banishCard(this.props.card);
 	}
 	playOnClick = () => {
+		this.props.advancePhase();
 		playCard(this.props.player, this.props.card);
 	}
 
@@ -41,6 +44,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, props) => ({
 	discardCard: ({ id }) => dispatch(discardCard({ id })),
 	banishCard: ({ id }) => dispatch(banishCard({ id })),
+	advancePhase: () => dispatch(advancePhase()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(RenderCard);

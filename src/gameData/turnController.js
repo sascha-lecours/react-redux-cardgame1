@@ -55,6 +55,7 @@ export class TurnController extends React.Component {
 		// store.dispatch(setHand([testCard1, testCard6, testCard4, testCard7]));
 		store.dispatch(setDeck([testCard1, testCard2, testCard2, testCard2, testCard2, testCard2]));
 		store.dispatch(setEnemies([testEnemy1, testEnemy2]));
+		this.props.advancePhase();
 		
 	};
 
@@ -100,6 +101,9 @@ export class TurnController extends React.Component {
 				if (this.props.game.hand.length + 1 >= this.props.game.playerGroup[0].startHandSize) {
 					advancePhase();
 				}
+				break;
+			case 2:
+				// this state is progressed when the player plays a card
 				break;
 			case 3: 
 				this.enemiesTakeTurn();

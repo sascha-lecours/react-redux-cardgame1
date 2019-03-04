@@ -63,7 +63,7 @@ export const dealDamage = (target, source, damage, numberOfHits) => {
 // This function will need the store to be imported!
 export const makeAttack = (target, source, baseDamage, numberOfHits) => {
 	const modifiedDamage = baseDamage + source.strength;
-	console.log(`Attacking target: ${target.name} for ${modifiedDamage} damage ${numberOfHits} times`);
+	console.log(`${source.name} is attacking ${target.name} for ${modifiedDamage} damage, ${numberOfHits} times`);
 	store.dispatch(dealDamage(target, source, modifiedDamage, numberOfHits));
 };
 
