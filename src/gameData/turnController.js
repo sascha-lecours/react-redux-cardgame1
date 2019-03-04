@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { store } from '../app';
 import { advancePhase, setPhase } from '../actions/turn';
-import { testCard1, testCard2, testCard3, testCard4, testCard5, testCard6, testCard7 } from '../gameData/cardList';
-import { setHand, setDeck, initializePlayer, drawCard } from '../actions/cards';
+import { testCard1, testCard2, testCard3, testCard4, testCard5, testCard6, testCard7, testCard8 } from '../gameData/cardList';
+import { setHand, setDeck, initializePlayer, drawCard, discardHand } from '../actions/cards';
 import { setEnemies, setNewMove } from '../actions/enemies';
 import { testEnemy1, testEnemy2 } from '../gameData/enemyList';
 import { warrior, bard } from '../gameData/playerList';
@@ -49,7 +49,7 @@ export class TurnController extends React.Component {
 	initializeCombat = () => {
 		store.dispatch(initializePlayer(warrior));
 		// store.dispatch(setHand([testCard1, testCard6, testCard4, testCard7]));
-		store.dispatch(setDeck([testCard1, testCard2, testCard2, testCard2, testCard2, testCard2]));
+		store.dispatch(setDeck([testCard1, testCard2, testCard3, testCard4, testCard5, testCard6, testCard7, testCard8]));
 		store.dispatch(setEnemies([testEnemy1, testEnemy2]));
 		this.props.advancePhase();
 		
@@ -72,12 +72,15 @@ export class TurnController extends React.Component {
 
 
 
+
 	componentDidUpdate() {
 			// -> Begin turn loop.
 		const {
 			advancePhase,
+			setPhase,
 			setNewMoves,
-			drawCard
+			drawCard,
+			discardHand
 		} = this.props;
 
 		const { phase } = this.props.turn;
@@ -99,24 +102,51 @@ export class TurnController extends React.Component {
 				advancePhase();
 				break;
 
-			// 3. Player start-of-turn effects, checking for combat-over
-
 			case 3:
+			// 3. Player start-of-turn effects, checking for combat-over
+				//TODO: implement
+				advancePhase();
+				break;
+
+			case 4:
 				// 4. Player plays card
 				break;
 
-			// 5. Resolve all card effects, including visuals/sound and checking for combat-over
-			// 6. Player turn ends (muliple cards?) - player end-of-turn effects
-			// 7. Enemy start-of-turn effects, checking for combat-over
-
 			case 5:
+			// 5. Resolve all card effects, including visuals/sound and checking for combat-over
+				//TODO: implement
+				advancePhase();
+				break;
+			
+			case 6:
+			// 6. Player turn ends (muliple cards?) - player end-of-turn effects, including discarding cards
+				//TODO: implement events other than discarding
+				discardHand();
+				advancePhase();
+				break;
+			
+			case 7:
+			// 7. Enemy start-of-turn effects, checking for combat-over
+				//TODO: implement
+				advancePhase();
+				break;
+
+			case 8:
 			// 8. Enemy actions resolve, up through array, checking for combat-over
 				this.enemiesTakeTurn();
 				advancePhase();
 				break;
+
+			case 9:
 			// 9. Enemy end-of-turn effects, checking for combat-over
-			// 10. Increment turn counter, start back at step 1.
+				//TODO: implement
+				advancePhase();
+				break;
 			
+			// 10. Increment turn counter, start back at step 1.
+			case 10:
+				setPhase(1);
+				break;
 			default: 
 				break;	
 		};
@@ -141,11 +171,13 @@ export class TurnController extends React.Component {
   
   const mapDispatchToProps = (dispatch, props) => ({
 	advancePhase: () => dispatch(advancePhase()),
+	setPhase: (phase) => dispatch(setPhase(phase)),
 	setNewMoves: (enemyGroup) => { enemyGroup.forEach(element => {
 			dispatch(setNewMove(element));
 		});
 	},
 	drawCard: () => dispatch(drawCard()),
+	discardHand: () => dispatch(discardHand()),
   });
   
   export default connect(mapStateToProps, mapDispatchToProps)(TurnController);

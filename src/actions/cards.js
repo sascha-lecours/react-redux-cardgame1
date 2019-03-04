@@ -18,6 +18,13 @@ export const discardCard = ({ id }) => {
 	};
 };
 
+// DISCARD_HAND
+export const discardHand = () => {
+	return {
+		type: 'DISCARD_HAND',
+	};
+};
+
 // INITIALIZE_PLAYER
 export const initializePlayer = (player) => {
 	return {

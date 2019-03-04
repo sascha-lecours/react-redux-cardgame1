@@ -8,7 +8,7 @@ export const advancePhase = () => {
 
 
 // SET_PHASE
-export const etPhase = (phase) => {
+export const setPhase = (phase) => {
 	return {
 		type: 'SET_PHASE',
 		phase,

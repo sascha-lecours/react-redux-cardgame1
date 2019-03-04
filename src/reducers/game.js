@@ -88,6 +88,17 @@ export default (state = gameReducerDefaultState, action) => {
 			discard: newDiscard,
 		};
 	}
+	case 'DISCARD_HAND': {
+		const cardsDiscarded = state.hand.slice();
+		const newDiscard = state.discard.slice();
+		newDiscard.unshift(...cardsDiscarded);
+
+		return {
+			...state,
+			hand: [],
+			discard: newDiscard,
+		};
+	}
 	case 'DRAW_CARD': {
 		// DRAW_CARD will reshuffle the discard pile to make a new draw deck if necessary.
 		if (!(state.deck.length) && !(state.discard.length)) {
