@@ -26,3 +26,12 @@ export const setNewMove = ({ id }) => {
 		id,
 	};
 };
+
+// KILL_ENEMY
+
+export const killEnemy = ({ id }) => {
+	return {
+		type: 'KILL_ENEMY',
+		id,
+	};
+};

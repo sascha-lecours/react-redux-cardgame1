@@ -2,7 +2,7 @@ import { store } from '../app';
 
 // Returns a copy of a randomly-selected enemy from the list of all enemies, passed as a prop.
 
-// TODO: Make sure dead enemies are excluded from the choice.
+// TODO: Make sure dead enemies are excluded from the choice. -> exclude enemies at 0 (or less) hp?
 // TODO: consider refactoring so only the ID or index is passed rather than a full copy?
 
 export default () => {

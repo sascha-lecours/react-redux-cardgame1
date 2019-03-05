@@ -44,8 +44,6 @@ export class TurnController extends React.Component {
 // --> Fetch player stats and deck(s), possibly including modified cards, buffs/debuffs, etc.
 // --> Fetch enemy stats
 
-
-
 	initializeCombat = () => {
 		store.dispatch(initializePlayer(warrior));
 		// store.dispatch(setHand([testCard1, testCard6, testCard4, testCard7]));
@@ -62,16 +60,6 @@ export class TurnController extends React.Component {
 	componentDidMount() {
 		this.initializeCombat();
 	};
-
-
-
-
-
-
-
-
-
-
 
 	componentDidUpdate() {
 			// -> Begin turn loop.
@@ -109,17 +97,19 @@ export class TurnController extends React.Component {
 				break;
 
 			case 4:
-				// 4. Player plays card
+				// 4. Player plays card - phase will advance when they play
 				break;
 
 			case 5:
 			// 5. Resolve all card effects, including visuals/sound and checking for combat-over
 				//TODO: implement
+				// - kill enemies now at 0 hp
+				// then check for combat over
 				advancePhase();
 				break;
 			
 			case 6:
-			// 6. Player turn ends (muliple cards?) - player end-of-turn effects, including discarding cards
+			// 6. Player turn ends (muliple cards?) - player end-of-turn effects, including discarding card
 				//TODO: implement events other than discarding
 				discardHand();
 				advancePhase();
@@ -128,6 +118,8 @@ export class TurnController extends React.Component {
 			case 7:
 			// 7. Enemy start-of-turn effects, checking for combat-over
 				//TODO: implement
+				// - kill enemies now at 0 hp
+				// then check for combat over
 				advancePhase();
 				break;
 
@@ -140,6 +132,8 @@ export class TurnController extends React.Component {
 			case 9:
 			// 9. Enemy end-of-turn effects, checking for combat-over
 				//TODO: implement
+				// - kill enemies now at 0 hp
+				// then check for combat over
 				advancePhase();
 				break;
 			

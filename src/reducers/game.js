@@ -41,6 +41,9 @@ const pickMove = (enemy) => {
 	};
 };
 
+const killEnemy = ({ id }) => {
+
+};
 
 // Reducer
 
@@ -300,6 +303,14 @@ export default (state = gameReducerDefaultState, action) => {
 					return player;
 				}
 			}),
+		};
+	}
+	case 'KILL_ENEMY': {
+		// TODO - notify effects that trigger off of kills
+		const newEnemies = state.enemyGroup.slice().filter(({ id }) => id !== action.id);
+		return {
+			...state,
+			enemyGroup: newEnemies,
 		};
 	}
 	default:
