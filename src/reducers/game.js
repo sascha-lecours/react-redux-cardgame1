@@ -240,10 +240,11 @@ export default (state = gameReducerDefaultState, action) => {
 		};
 	}
 	case 'RAISE_MARKED': {
-		const newMarked = Math.min(
+		let newMarked = Math.min(
 			(action.target.marked + action.marked),
 			action.target.maxMarked
 		);
+		newMarked = Math.max(newMarked, 0);
 		return {
 			...state,
 			enemyGroup: state.enemyGroup.map((enemy) => {

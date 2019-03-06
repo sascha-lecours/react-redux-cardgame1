@@ -1,5 +1,6 @@
 import { store } from '../app';
-import { makeAttack, raiseDefense, raiseToughness, raiseStrength } from './cardList';
+import { makeAttack } from './cardList';
+import { raiseDefense, raiseToughness, raiseStrength } from '../actions/combatEffects';
 import targetPlayer from './targetPlayer';
 
 
@@ -120,7 +121,7 @@ export const testEnemy1 = {
 export const testEnemy2 = {
 	id: 'placeholder2',
 	name: 'Big Beefo',
-	maxHp: 20,
+	maxHp: 12,
 	defense: 5,
 	actions: [quickStrikes, warcry, bigStrike, bigStrike],
 };

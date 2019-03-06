@@ -4,7 +4,8 @@ import { store } from '../app';
 import { advancePhase, setPhase } from '../actions/turn';
 import { testCard1, testCard2, testCard3, testCard4, testCard5, testCard6, testCard7, testCard8 } from '../gameData/cardList';
 import { setHand, setDeck, initializePlayer, drawCard, discardHand } from '../actions/cards';
-import { setEnemies, setNewMove } from '../actions/enemies';
+import { setEnemies, setNewMove, killEnemy } from '../actions/enemies';
+import { raiseMarked } from '../actions/combatEffects';
 import { testEnemy1, testEnemy2 } from '../gameData/enemyList';
 import { warrior, bard } from '../gameData/playerList';
 import useMove from '../gameData/useMove';
@@ -47,7 +48,7 @@ export class TurnController extends React.Component {
 	initializeCombat = () => {
 		store.dispatch(initializePlayer(warrior));
 		// store.dispatch(setHand([testCard1, testCard6, testCard4, testCard7]));
-		store.dispatch(setDeck([testCard1, testCard2, testCard3, testCard4, testCard5, testCard6, testCard7, testCard8]));
+		store.dispatch(setDeck([testCard1, testCard2, testCard1, testCard4, testCard5, testCard6, testCard7, testCard8]));
 		store.dispatch(setEnemies([testEnemy1, testEnemy2]));
 		this.props.advancePhase();
 		
@@ -56,6 +57,30 @@ export class TurnController extends React.Component {
 	enemiesTakeTurn = () => {
 		this.props.game.enemyGroup.forEach((enemy) => useMove(enemy, enemy.nextMove));
 	};
+
+	killZeroHpEnemies = () => {
+		console.log('Checking for enemies at 0 hp')
+		this.props.game.enemyGroup.forEach((enemy) => {
+			if(enemy.hp === 0) {
+				console.log(`${enemy.name} is at 0 hp`);
+				this.props.killEnemy(enemy);
+			}
+		})
+	};
+
+	playerStartOfTurn = () => {
+		// Remove defense
+	}
+
+	reduceAllMarked = () => {
+		// Reduce all enemy Marked status by 1
+		this.props.game.enemyGroup.forEach((enemy) => {
+			this.props.raiseMarked(enemy, -1);
+		})
+
+	}
+
+	//Lifecycle hooks:
 
 	componentDidMount() {
 		this.initializeCombat();
@@ -111,6 +136,7 @@ export class TurnController extends React.Component {
 			case 6:
 			// 6. Player turn ends (muliple cards?) - player end-of-turn effects, including discarding card
 				//TODO: implement events other than discarding
+				this.reduceAllMarked();
 				discardHand();
 				advancePhase();
 				break;
@@ -118,7 +144,7 @@ export class TurnController extends React.Component {
 			case 7:
 			// 7. Enemy start-of-turn effects, checking for combat-over
 				//TODO: implement
-				// - kill enemies now at 0 hp
+				this.killZeroHpEnemies();
 				// then check for combat over
 				advancePhase();
 				break;
@@ -172,6 +198,8 @@ export class TurnController extends React.Component {
 	},
 	drawCard: () => dispatch(drawCard()),
 	discardHand: () => dispatch(discardHand()),
+	killEnemy: (enemy) => dispatch(killEnemy(enemy)),
+	raiseMarked: (enemy, marked) => dispatch(raiseMarked(enemy, marked)),
   });
   
   export default connect(mapStateToProps, mapDispatchToProps)(TurnController);
