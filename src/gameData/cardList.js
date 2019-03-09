@@ -1,5 +1,5 @@
 import { drawCard, discardCard } from '../actions/cards';
-import { raiseStrength, raiseMarked, raiseToughness, raiseDefense, dealDamage } from '../actions/combatEffects';
+import { raiseStrength, raiseMarked, raiseToughness, raiseDefense, raisePoison, dealDamage } from '../actions/combatEffects';
 import targetRandomEnemy from './targetRandomEnemy';
 import { store } from '../app';
 
@@ -22,6 +22,7 @@ export const cardDefault = {
 	defense: null,
 	strength: null,
 	toughness: null,
+	poison: null,
 	numberOfHits: 1,
 	portrait: null,
 	specialText: null,
@@ -148,9 +149,21 @@ export const testCard8 = {
 	toughness: 1,
 	strength: 1,
 	effects: [
-		(player, card) => raiseToughness(player, card.strength),
-		(player, card) => raiseStrength(player, card.strength),
+		(player, card) => store.dispatch(raiseToughness(player, card.strength)),
+		(player, card) => store.dispatch(raiseStrength(player, card.strength)),
 		(player, card) => store.dispatch(discardCard(card)),
 	],
 	specialText: 'Raise strength by 2',
+};
+
+export const testCard9 = {
+	id: 'placeholder9',
+	name: 'Poison Splash',
+	type: 'Test',
+	poison: 5,
+	effects: [
+		(player, card) => store.dispatch(raisePoison(targetRandomEnemy(), card.poison)),
+		(player, card) => store.dispatch(discardCard(card)),
+	],
+	specialText: 'Poison enemy for 5',
 };

@@ -107,6 +107,9 @@ export const enemyDefault = {
 	marked: 0,
 	maxMarked: 999,
 	minMarked: 0,
+	poison: 0,
+	maxPoison: 9999999999,
+	minPoison: 0,
 	actions: [quickStrikes, bigStrike],
 };
 

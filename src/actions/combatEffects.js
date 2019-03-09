@@ -10,11 +10,21 @@ export const raiseStrength = (target, strength) => {
 
 // RAISE MARKED
 export const raiseMarked = (target, marked) => {
-	console.log(`Marking ${target.name} for ${marked}`);
+	if (marked > 0)console.log(`Marking ${target.name} for ${marked}`);
 	return {
 		type: 'RAISE_MARKED',
 		target,
 		marked,
+	};
+};
+
+// RAISE POISON
+export const raisePoison = (target, poison) => {
+	if (poison > 0) console.log(`Poisoning ${target.name} for ${poison}`);
+	return {
+		type: 'RAISE_POISON',
+		target,
+		poison,
 	};
 };
 

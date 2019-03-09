@@ -7,7 +7,8 @@ import { store } from '../app';
 
 export default () => {
 	const { enemyGroup } = store.getState().game;
-	const markedEnemy = enemyGroup.slice().filter(({ marked }) => marked > 0);
+	const livingTargets = enemyGroup.slice().filter(({ hp }) => hp > 0);
+	const markedEnemy = livingTargets.slice().filter(({ marked }) => marked > 0);
 
 	// If an enemy is marked, always return that one. If not, choose a random one.
 	if (markedEnemy.length === 0) {

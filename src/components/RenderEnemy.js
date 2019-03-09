@@ -21,7 +21,11 @@ export class RenderEnemy extends React.Component {
 				{this.props.enemy.strength !== 0 && <div className="enemy_strength">{`Strength: ${this.props.enemy.strength}`}</div>}
 				{
 					(this.props.enemy.marked > 0) &&
-					<div className="enemy__targeted">{`Marked: ${this.props.enemy.marked}` }</div>
+					<div className="enemy__marked">{`Marked: ${this.props.enemy.marked}` }</div>
+				}
+				{
+					(this.props.enemy.poison > 0) &&
+					<div className="enemy__poison">{`Poison: ${this.props.enemy.poison}` }</div>
 				}
 				{
 					this.props.enemy.nextMove &&

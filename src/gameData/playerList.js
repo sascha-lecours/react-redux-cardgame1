@@ -12,6 +12,9 @@ export const playerDefault = {
 	maxToughness: 999,
 	minToughness: -999,
 	startHandSize: 3,
+	poison: 0,
+	maxPoison: 9999999999,
+	minPoison: 0,
 };
 
 export const warrior = {

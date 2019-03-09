@@ -2,10 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { store } from '../app';
 import { advancePhase, setPhase } from '../actions/turn';
-import { testCard1, testCard2, testCard3, testCard4, testCard5, testCard6, testCard7, testCard8 } from '../gameData/cardList';
+import { testCard1, testCard2, testCard3, testCard4, testCard5, testCard6, testCard7, testCard8, testCard9 } from '../gameData/cardList';
 import { setHand, setDeck, initializePlayer, drawCard, discardHand } from '../actions/cards';
 import { setEnemies, setNewMove, killEnemy } from '../actions/enemies';
-import { raiseMarked } from '../actions/combatEffects';
+import { raiseMarked, raisePoison, dealDamage } from '../actions/combatEffects';
 import { testEnemy1, testEnemy2 } from '../gameData/enemyList';
 import { warrior, bard } from '../gameData/playerList';
 import useMove from '../gameData/useMove';
@@ -48,7 +48,7 @@ export class TurnController extends React.Component {
 	initializeCombat = () => {
 		store.dispatch(initializePlayer(warrior));
 		// store.dispatch(setHand([testCard1, testCard6, testCard4, testCard7]));
-		store.dispatch(setDeck([testCard1, testCard2, testCard1, testCard4, testCard5, testCard6, testCard7, testCard8]));
+		store.dispatch(setDeck([testCard1, testCard2, testCard1, testCard4, testCard5, testCard6, testCard7, testCard9]));
 		store.dispatch(setEnemies([testEnemy1, testEnemy2]));
 		this.props.advancePhase();
 		
@@ -59,7 +59,6 @@ export class TurnController extends React.Component {
 	};
 
 	killZeroHpEnemies = () => {
-		console.log('Checking for enemies at 0 hp')
 		this.props.game.enemyGroup.forEach((enemy) => {
 			if(enemy.hp === 0) {
 				console.log(`${enemy.name} is at 0 hp`);
@@ -80,7 +79,20 @@ export class TurnController extends React.Component {
 
 	}
 
-	//Lifecycle hooks:
+	resolveEnemyPoison = () => {
+		// Enemies receive damage equal to their poison
+		this.props.game.enemyGroup.forEach((enemy) => {
+			this.props.dealDamage(enemy, null, enemy.poison, 1);
+		})
+
+		// Reduce all enemy poison status by 1
+		this.props.game.enemyGroup.forEach((enemy) => {
+			this.props.raisePoison(enemy, -1);
+		})
+
+	}
+
+	// Lifecycle hooks:
 
 	componentDidMount() {
 		this.initializeCombat();
@@ -143,7 +155,7 @@ export class TurnController extends React.Component {
 			
 			case 7:
 			// 7. Enemy start-of-turn effects, checking for combat-over
-				//TODO: implement
+				this.resolveEnemyPoison();
 				this.killZeroHpEnemies();
 				// then check for combat over
 				advancePhase();
@@ -200,6 +212,8 @@ export class TurnController extends React.Component {
 	discardHand: () => dispatch(discardHand()),
 	killEnemy: (enemy) => dispatch(killEnemy(enemy)),
 	raiseMarked: (enemy, marked) => dispatch(raiseMarked(enemy, marked)),
+	raisePoison: (target, poison) => dispatch(raisePoison(target, poison)),
+	dealDamage: (target, source, damage, numberOfHits) => dispatch(dealDamage(target, source, damage, numberOfHits)),
   });
   
   export default connect(mapStateToProps, mapDispatchToProps)(TurnController);
