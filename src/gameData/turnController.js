@@ -92,6 +92,19 @@ export class TurnController extends React.Component {
 
 	}
 
+	resolvePlayerPoison = () => {
+		// Players receive damage equal to their poison
+		this.props.game.playerGroup.forEach((player) => {
+			this.props.dealDamage(player, null, player.poison, 1);
+		})
+
+		// Reduce all player poison status by 1
+		this.props.game.playerGroup.forEach((player) => {
+			this.props.raisePoison(player, -1);
+		})
+
+	}
+
 	// Lifecycle hooks:
 
 	componentDidMount() {
@@ -130,6 +143,7 @@ export class TurnController extends React.Component {
 			case 3:
 			// 3. Player start-of-turn effects, checking for combat-over
 				//TODO: implement
+				this.resolvePlayerPoison();
 				advancePhase();
 				break;
 

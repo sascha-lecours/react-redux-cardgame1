@@ -19,7 +19,7 @@ export const EnemiesDisplay = (props) => {
 					})
 				)
 			}
-			<button onClick={() => props.setNewMoves(props.enemyGroup)}> New moves </button>
+			{/* <button onClick={() => props.setNewMoves(props.enemyGroup)}> New moves </button> */}
 		</div>
 	);
 };
@@ -30,11 +30,11 @@ const mapStateToProps = (state) => {
 	};
 };
 
-const mapDispatchToProps = (dispatch, props) => ({
-	setNewMoves: (enemyGroup) => { enemyGroup.forEach(element => {
-			dispatch(setNewMove(element));
-		}); 
-	},
-});
+// const mapDispatchToProps = (dispatch, props) => ({
+// 	setNewMoves: (enemyGroup) => { enemyGroup.forEach(element => {
+// 			dispatch(setNewMove(element));
+// 		}); 
+// 	},
+// });
 
-export default connect(mapStateToProps, mapDispatchToProps)(EnemiesDisplay);
+export default connect(mapStateToProps, undefined)(EnemiesDisplay);

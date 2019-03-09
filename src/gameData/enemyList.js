@@ -1,6 +1,6 @@
 import { store } from '../app';
 import { makeAttack } from './cardList';
-import { raiseDefense, raiseToughness, raiseStrength } from '../actions/combatEffects';
+import { raiseDefense, raiseToughness, raiseStrength, raisePoison } from '../actions/combatEffects';
 import targetPlayer from './targetPlayer';
 
 
@@ -54,6 +54,15 @@ const crystallize = {
 	effects: [
 		(enemy, move) => store.dispatch(raiseDefense(enemy, move.defense)),
 		(enemy, move) => store.dispatch(raiseToughness(enemy, move.toughness)),
+	],
+};
+
+const poisonBite = {
+	type: 'attack',
+	name: 'Poison Chomp',
+	poison: 4,
+	effects: [
+		(enemy, move) => store.dispatch(raisePoison(targetPlayer(), move.poison)),
 	],
 };
 
@@ -115,10 +124,10 @@ export const enemyDefault = {
 
 export const testEnemy1 = {
 	id: 'placeholder1',
-	name: "Lil' Gobster",
+	name: "Lil' Snek",
 	maxHp: 10,
 	defense: 0,
-	actions: [quickStrikes, quickStrikes, frenzy],
+	actions: [quickStrikes, poisonBite, frenzy],
 };
 
 export const testEnemy2 = {
@@ -126,5 +135,5 @@ export const testEnemy2 = {
 	name: 'Big Beefo',
 	maxHp: 12,
 	defense: 5,
-	actions: [quickStrikes, warcry, bigStrike, bigStrike],
+	actions: [warcry, bigStrike, bigStrike],
 };
