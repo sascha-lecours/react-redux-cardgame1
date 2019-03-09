@@ -2,13 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { store } from '../app';
 import { advancePhase, setPhase } from '../actions/turn';
-import { testCard1, testCard2, testCard3, testCard4, testCard5, testCard6, testCard7, testCard8, testCard9 } from '../gameData/cardList';
+import { testCard1, testCard2, testCard3, testCard4, testCard5, testCard6, testCard7, testCard8, testCard9 } from './cardList';
 import { setHand, setDeck, initializePlayer, drawCard, discardHand } from '../actions/cards';
 import { setEnemies, setNewMove, killEnemy } from '../actions/enemies';
 import { raiseMarked, raisePoison, dealDamage } from '../actions/combatEffects';
-import { testEnemy1, testEnemy2 } from '../gameData/enemyList';
-import { warrior, bard } from '../gameData/playerList';
-import useMove from '../gameData/useMove';
+import { testEnemy1, testEnemy2 } from './enemyList';
+import { warrior, bard } from './playerList';
+import useMove from './useMove';
 
 // A component that manages the game state
 // This may be best handled using a subscribe listener that checks for certain key changes in...

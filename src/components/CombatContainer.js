@@ -4,7 +4,7 @@ import DeckButton from './DeckButton';
 import DiscardPileButton from './DiscardPileButton';
 import EnemiesArea from './EnemiesArea';
 import PlayerArea from './PlayerArea';
-import TurnController from '../gameData/TurnController';
+import TurnController from '../gameData/turnController';
 
 export default () => {
 	return (
