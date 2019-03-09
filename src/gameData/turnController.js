@@ -39,7 +39,7 @@ import useMove from '../gameData/useMove';
 // 3. Hand off to "campaign" component that moves on  higher scope. 
 
 
-export class TurnController extends React.Component {
+class TurnController extends React.Component {
 
 // -> Initialize combat.
 // --> Fetch player stats and deck(s), possibly including modified cards, buffs/debuffs, etc.
