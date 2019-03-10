@@ -15,7 +15,7 @@ export default () => {
 		console.log('No valid targets left above 0 hp!')
 		return undefined;
 	} else if (markedEnemy.length === 0) {
-		return enemyGroup[Math.floor(Math.random() * enemyGroup.length)];
+		return livingTargets[Math.floor(Math.random() * livingTargets.length)];
 	} else {
 		return markedEnemy[0];
 	}

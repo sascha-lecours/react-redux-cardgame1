@@ -133,7 +133,7 @@ export const testEnemy1 = {
 export const testEnemy2 = {
 	id: 'placeholder2',
 	name: 'Big Beefo',
-	maxHp: 14,
+	maxHp: 12,
 	defense: 5,
-	actions: [warcry, bigStrike, bigStrike],
+	actions: [warcry, bigStrike, bigStrike, crystallize],
 };
