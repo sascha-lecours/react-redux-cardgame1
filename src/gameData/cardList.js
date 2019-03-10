@@ -1,4 +1,4 @@
-import { drawCard, discardCard } from '../actions/cards';
+import { drawCard, discardCard, banishCard } from '../actions/cards';
 import { raiseStrength, raiseMarked, raiseToughness, raiseDefense, raisePoison, dealDamage } from '../actions/combatEffects';
 import targetRandomEnemy from './targetRandomEnemy';
 import { store } from '../app';
@@ -120,9 +120,9 @@ export const testCard5 = {
 	strength: 2,
 	effects: [
 		(player, card) => store.dispatch(raiseStrength(player, card.strength)),
-		(player, card) => store.dispatch(discardCard(card)),
+		(player, card) => store.dispatch(banishCard(card)),
 	],
-	specialText: 'Raise strength by 2',
+	specialText: 'Raise strength by 2. Banished when played.',
 };
 
 export const testCard6 = {
@@ -132,21 +132,21 @@ export const testCard6 = {
 	toughness: 3,
 	effects: [
 		(player, card) => store.dispatch(raiseToughness(player, card.toughness)),
-		(player, card) => store.dispatch(discardCard(card)),
+		(player, card) => store.dispatch(banishCard(card)),
 	],
-	specialText: 'Raise toughness by 3',
+	specialText: 'Raise toughness by 3. Banished when played.',
 };
 
 export const testCard7 = {
 	id: 'placeholder7',
 	name: 'Mark for Death',
 	type: 'Test',
-	marked: 4,
+	marked: 5,
 	effects: [
 		(player, card) => store.dispatch(raiseMarked(targetRandomEnemy(), card.marked)),
-		(player, card) => store.dispatch(discardCard(card)),
+		(player, card) => store.dispatch(banishCard(card)),
 	],
-	specialText: 'Mark target for 4 turns',
+	specialText: 'Mark target for 4 turns. Banished when played.',
 };
 
 export const testCard8 = {
