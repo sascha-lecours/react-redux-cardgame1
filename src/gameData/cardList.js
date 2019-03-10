@@ -8,9 +8,13 @@ import { store } from '../app';
 
 // This function will need the store to be imported!
 export const makeAttack = (target, source, baseDamage, numberOfHits) => {
-	const modifiedDamage = baseDamage + source.strength;
-	console.log(`${source.name} is attacking ${target.name} for ${modifiedDamage} damage, ${numberOfHits} times`);
-	store.dispatch(dealDamage(target, source, modifiedDamage, numberOfHits));
+	if(target && source){
+		const modifiedDamage = baseDamage + source.strength;
+		console.log(`${source.name} is attacking ${target.name} (${target.hp} hp) for ${modifiedDamage} damage, ${numberOfHits} times`);
+		store.dispatch(dealDamage(target, source, modifiedDamage, numberOfHits));
+	} else {
+		console.log(`Attack cancelled - no valid target (or attacker no longer exists)!`);
+	}
 };
 
 // List of all cards in game

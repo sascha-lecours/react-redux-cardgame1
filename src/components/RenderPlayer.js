@@ -9,7 +9,7 @@ export default (props) => {
 			<div className="player__defense">{`Defense: ${props.player.defense}`}</div>
 			{props.player.toughness !== 0 && <div className="player__toughness">{`Toughness: ${props.player.toughness}`}</div>}
 			{props.player.strength !== 0 && <div className="player__strength">{`Strength: ${props.player.strength}`}</div>}
-			{props.player.poison !== 0 && <div className="player__poison">{`Strength: ${props.player.poison}`}</div>}
+			{props.player.poison !== 0 && <div className="player__poison">{`Poison: ${props.player.poison}`}</div>}
 		</div>
 	);
 };

@@ -11,7 +11,10 @@ export default () => {
 	const markedEnemy = livingTargets.slice().filter(({ marked }) => marked > 0);
 
 	// If an enemy is marked, always return that one. If not, choose a random one.
-	if (markedEnemy.length === 0) {
+	if (livingTargets.length === 0) {
+		console.log('No valid targets left above 0 hp!')
+		return undefined;
+	} else if (markedEnemy.length === 0) {
 		return enemyGroup[Math.floor(Math.random() * enemyGroup.length)];
 	} else {
 		return markedEnemy[0];
