@@ -31,7 +31,7 @@ export class RenderEnemy extends React.Component {
 					this.props.enemy.nextMove &&
 					<div className="enemy__next-move">{this.props.enemy.nextMove.name}</div>
 				}
-				<button onClick={this.useMoveOnClick}> Use Move </button>
+			{/* <button onClick={this.useMoveOnClick}> Use Move </button> */}
 			</div>
 		);
 	}

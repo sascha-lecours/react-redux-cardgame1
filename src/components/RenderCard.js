@@ -27,8 +27,8 @@ export class RenderCard extends React.Component {
 				{this.props.card.specialText && <div className="card__special-text">{this.props.card.specialText}</div>}
 				{this.props.card.flavourText && <div className="card__flavour-text">{this.props.card.flavourText}</div>}
 				<button onClick={this.playOnClick}> Play </button>
-				<button onClick={this.discardOnClick}> Discard </button>
-				<button onClick={this.banishOnClick}> Banish </button>
+				{/* <button onClick={this.discardOnClick}> Discard </button>
+					<button onClick={this.banishOnClick}> Banish </button> */}
 			</div>
 		);
 	}
