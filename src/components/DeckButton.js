@@ -5,10 +5,12 @@ import { drawCard } from '../actions/cards';
 export const DeckButton = (props) => {
 	return (
 		<div>
-			<button onClick={props.drawCard}>Deck: {props.deck.length}</button>
+			<button >Deck: {props.deck.length}</button>
 		</div>
 	);
 };
+
+// Previously, this button also had: onClick={props.drawCard}
 
 const mapStateToProps = (state) => {
 	return {
@@ -16,8 +18,9 @@ const mapStateToProps = (state) => {
 	};
 };
 
-const mapDispatchToProps = (dispatch, props) => ({
-	drawCard: () => dispatch(drawCard()),
-});
 
-export default connect(mapStateToProps, mapDispatchToProps)(DeckButton);
+// const mapDispatchToProps = (dispatch, props) => ({
+// 	drawCard: () => dispatch(drawCard()),
+// });
+
+export default connect(mapStateToProps, undefined)(DeckButton);

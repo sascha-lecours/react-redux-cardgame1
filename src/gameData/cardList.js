@@ -61,7 +61,7 @@ export const testCard2 = {
 	id: 'placeholder2',
 	name: 'Defensive stance',
 	type: 'Test',
-	defense: 10,
+	defense: 20,
 	effects: [
 		(player, card) => store.dispatch(raiseDefense(player, card.defense)),
 		(player, card) => store.dispatch(discardCard(card)),
