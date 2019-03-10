@@ -14,7 +14,7 @@ const applyVariance = (base, variance) => {
 const quickStrikes = {
 	type: 'attack',
 	name: 'Quick Strikes',
-	attack: 2,
+	attack: 1,
 	varianceDamage: 0,
 	numberOfHits: 3,
 	effects: [
@@ -37,12 +37,6 @@ const frenzy = {
 	effects: [
 		(enemy, move) => store.dispatch(raiseDefense(enemy, move.defense)),
 		(enemy, move) => store.dispatch(raiseStrength(enemy, move.strength)),
-		(enemy, move) => makeAttack(
-			targetPlayer(),
-			enemy,
-			applyVariance(move.attack, move.varianceDamage),
-			move.numberOfHits
-		),
 	],
 };
 
@@ -133,7 +127,7 @@ export const testEnemy1 = {
 export const testEnemy2 = {
 	id: 'placeholder2',
 	name: 'Big Beefo',
-	maxHp: 15,
-	defense: 10,
+	maxHp: 10,
+	defense: 5,
 	actions: [warcry, bigStrike, bigStrike, crystallize],
 };
