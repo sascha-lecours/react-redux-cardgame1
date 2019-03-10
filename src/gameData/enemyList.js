@@ -125,7 +125,7 @@ export const enemyDefault = {
 export const testEnemy1 = {
 	id: 'placeholder1',
 	name: "Lil' Snek",
-	maxHp: 9,
+	maxHp: 11,
 	defense: 0,
 	actions: [quickStrikes, poisonBite, frenzy],
 };
@@ -133,7 +133,7 @@ export const testEnemy1 = {
 export const testEnemy2 = {
 	id: 'placeholder2',
 	name: 'Big Beefo',
-	maxHp: 12,
-	defense: 5,
+	maxHp: 15,
+	defense: 10,
 	actions: [warcry, bigStrike, bigStrike, crystallize],
 };

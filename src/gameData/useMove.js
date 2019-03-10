@@ -6,5 +6,8 @@ const getEnemyById = (targetId) => {
 };
 
 
-export default ({ id }, move) =>
+export default ({ id }, move) => {
+	console.log(`Enemy used ${move.name}`);
 	move.effects.forEach(element => element(getEnemyById(id), move));
+}
+	
