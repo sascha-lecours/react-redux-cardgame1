@@ -10,10 +10,10 @@ import { firebase } from './firebase/firebase';
 import LoadingPage from './components/LoadingPage';
 
 // Playground imports
-
 import './playground/modals';
 
 /* eslint-disable import/prefer-default-export */
+// Reason: May add other exports to this file later
 export const store = configureStore();
 /* eslint-enable */
 
