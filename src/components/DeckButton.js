@@ -2,18 +2,20 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { show } from 'redux-modal';
 import { Button } from 'react-bootstrap';
-import BootstrapModal from '../playground/modals';
+import DeckModal from '../components/modals/DeckModal';
 
 export class DeckButton extends Component {
 
 	handleDeckOpen = (name) => () => {
-		this.props.show(name, { message: `This is a ${name} modal` })
+		this.props.show(name, {
+			message: `This is a ${name} modal`,
+		})
 	};
 
 	render() {
 		return (
 			<div>
-				<Button bsstyle="primary" onClick={this.handleDeckOpen('bootstrap')}>Deck: {this.props.deck.length}</Button>
+				<Button bsstyle="primary" onClick={this.handleDeckOpen('deck')}>Deck: {this.props.deck.length}</Button>
 			</div>
 		);
 	}

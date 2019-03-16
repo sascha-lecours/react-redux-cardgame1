@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import { connectModal } from 'redux-modal';
 
-class BootstrapModal extends Component {
+class DeckModal extends Component {
 	render() {
 		const { show, handleHide, message } = this.props;
 
 		return (
 			<Modal show={show}>
 				<Modal.Header>
-					<Modal.Title>Hello</Modal.Title>
+					<Modal.Title>Deck</Modal.Title>
 				</Modal.Header>
 
 				<Modal.Body>
@@ -25,4 +25,4 @@ class BootstrapModal extends Component {
 	}
 }
 
-export default connectModal({ name: 'bootstrap' })(BootstrapModal);
+export default connectModal({ name: 'deck' })(DeckModal);

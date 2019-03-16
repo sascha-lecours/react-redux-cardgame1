@@ -5,7 +5,7 @@ import DiscardPileButton from './DiscardPileButton';
 import EnemiesArea from './EnemiesArea';
 import PlayerArea from './PlayerArea';
 import TurnController from '../gameData/turnController';
-import BootstrapModal from '../playground/modals';
+import DeckModal from './modals/DeckModal';
 
 export default () => {
 	return (
@@ -14,7 +14,7 @@ export default () => {
 			<div>
 				<PlayerArea />
 				<DeckButton />
-				<BootstrapModal />
+				<DeckModal />
 				<DiscardPileButton />
 			</div>
 			<HandDisplay />
