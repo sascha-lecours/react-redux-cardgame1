@@ -5,7 +5,7 @@ const promise = new Promise((resolve, reject) => {
 	}, 4500);
 });
 
-console.log('before');
+// console.log('before');
 
 promise.then((data) => {
 	console.log('1', data);
@@ -21,4 +21,4 @@ promise.then((data) => {
 	console.log('error ', error);
 });
 
-console.log('after');
+// console.log('after');

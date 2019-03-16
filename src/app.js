@@ -9,6 +9,10 @@ import './styles/styles.scss';
 import { firebase } from './firebase/firebase';
 import LoadingPage from './components/LoadingPage';
 
+// Playground imports
+
+import './playground/modals';
+
 /* eslint-disable import/prefer-default-export */
 export const store = configureStore();
 /* eslint-enable */
