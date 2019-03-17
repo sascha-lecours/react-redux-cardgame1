@@ -114,12 +114,16 @@ export const enemyDefault = {
 	maxPoison: 9999999999,
 	minPoison: 0,
 	actions: [quickStrikes, bigStrike],
+	highlighted: false,
+	shaking: false,
+	buffing: false,
+	gettingHit: false,
 };
 
 export const testEnemy1 = {
 	id: 'placeholder1',
 	name: "Lil' Snek",
-	maxHp: 11,
+	maxHp: 8,
 	defense: 0,
 	actions: [quickStrikes, poisonBite, frenzy],
 };

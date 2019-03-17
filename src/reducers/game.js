@@ -344,7 +344,34 @@ export default (state = gameReducerDefaultState, action) => {
 			enemyGroup: newEnemies,
 		};
 	}
+	case 'APPLY_HIGHLIGHT': {
+		return {
+			...state,
+			enemyGroup: state.enemyGroup.map((enemy) => {
+				if (enemy.id === action.target.id) {
+					return {
+						...enemy,
+						highlighted: true,
+					};
+				} else {
+					return enemy;
+				}
+			}),
+			playerGroup: state.playerGroup.map((player) => {
+				if (player.id === action.target.id) {
+					return {
+						...player,
+						highlighted: true,
+					};
+				} else {
+					return player;
+				}
+			}),
+		};
+	}
+	// End of reducer switch (default case)
 	default:
 		return state;
 	}
 };
+
