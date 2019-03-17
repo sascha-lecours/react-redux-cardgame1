@@ -12,6 +12,13 @@ export const applyShaking = (target) => ({
 	target,
 });
 
+// CLEAR_SHAKING
+
+export const clearShaking = (target) => ({
+	type: 'CLEAR_SHAKING',
+	target,
+});
+
 // CLEAR_ALL_COSMETIC_EFFECTS
 export const clearAllCosmeticEffects = (target) => ({
 	type: 'CLEAR_ALL_COSMETIC_EFFECTS',
