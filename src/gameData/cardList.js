@@ -2,6 +2,7 @@ import { drawCard, discardCard, banishCard } from '../actions/cards';
 import { raiseStrength, raiseMarked, raiseToughness, raiseDefense, raisePoison, dealDamage } from '../actions/combatEffects';
 import targetRandomEnemy from './targetRandomEnemy';
 import { store } from '../app';
+import { delay } from './helpers';
 
 
 // Helper functions - probably to be moved to another file later.
@@ -44,13 +45,16 @@ export const testCard1 = {
 	specialText: 'Attack for 3, defend for 3.',
 	flavourText: "Sometimes you just need to see if it's working",
 	effects: [
-		(player, card) => makeAttack(
-			targetRandomEnemy(),
-			player,
-			card.attack,
-			card.numberOfHits
-		),
-
+		async (player, card) => {
+			const target = targetRandomEnemy();
+			await delay(1500);
+			makeAttack(
+				target,
+				player,
+				card.attack,
+				card.numberOfHits
+			);
+		},
 		(player, card) => store.dispatch(raiseDefense(player, card.defense)),
 		(player, card) => store.dispatch(discardCard(card)),
 	],
