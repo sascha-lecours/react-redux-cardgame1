@@ -8,6 +8,8 @@ const getPlayerById = (id) => {
 
 
 // Plays out effects of a card
-export default ({ id }, card) =>
-	card.effects.forEach(element => element(getPlayerById(id), card));
-
+export default async ({ id }, card) => {
+	for (const element of card.effects) {
+		await element(getPlayerById(id), card)
+	}; 
+}

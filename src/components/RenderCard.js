@@ -12,9 +12,10 @@ export class RenderCard extends React.Component {
 	banishOnClick = () => {
 		this.props.banishCard(this.props.card);
 	}
-	playOnClick = () => {
+	playOnClick = async () => {
+		// Todo: this probably needs to be refactored/moved
+		await playCard(this.props.player, this.props.card);
 		this.props.advancePhase();
-		playCard(this.props.player, this.props.card);
 	}
 
 	render() {
