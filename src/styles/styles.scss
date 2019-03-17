@@ -1,6 +1,5 @@
 @import './base/settings';
 @import './base/base';
-@import './components/csshake';
 @import './components/box-layout';
 @import './components/button';
 @import './components/header';
@@ -19,3 +18,4 @@
 @import './components/combat-container';
 @import './components/player';
 @import '../../node_modules/bootstrap/dist/css/bootstrap.css';
+@import './libraries/csshake';

@@ -426,6 +426,7 @@ export default (state = gameReducerDefaultState, action) => {
 				if (enemy.id === action.target.id) {
 					return {
 						...enemy,
+						takingturn: false,
 						highlighted: false,
 						shaking: false,
 						buffing: false,
@@ -439,6 +440,7 @@ export default (state = gameReducerDefaultState, action) => {
 				if (player.id === action.target.id) {
 					return {
 						...player,
+						takingturn: false,
 						highlighted: false,
 						shaking: false,
 						buffing: false,

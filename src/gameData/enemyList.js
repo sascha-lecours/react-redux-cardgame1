@@ -114,6 +114,7 @@ export const enemyDefault = {
 	maxPoison: 9999999999,
 	minPoison: 0,
 	actions: [quickStrikes, bigStrike],
+	takingturn: false,
 	highlighted: false,
 	shaking: false,
 	buffing: false,

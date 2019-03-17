@@ -15,6 +15,7 @@ export const playerDefault = {
 	poison: 0,
 	maxPoison: 9999999999,
 	minPoison: 0,
+	takingturn: false,
 	highlighted: false,
 	shaking: false,
 	buffing: false,
