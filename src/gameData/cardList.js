@@ -3,7 +3,7 @@ import { raiseStrength, raiseMarked, raiseToughness, raiseDefense, raisePoison, 
 import targetRandomEnemy from './targetRandomEnemy';
 import { store } from '../app';
 import { delay } from './helpers';
-import { applyHighlight } from '../actions/cosmeticBattleEffects';
+import { applyHighlight, clearAllCosmeticEffects } from '../actions/cosmeticBattleEffects';
 
 // Helper functions - probably to be moved to another file later.
 
@@ -56,6 +56,8 @@ export const testCard1 = {
 				card.attack,
 				card.numberOfHits
 			);
+			await delay(400);
+			store.dispatch(clearAllCosmeticEffects(target));
 		},
 		(player, card) => store.dispatch(raiseDefense(player, card.defense)),
 		(player, card) => store.dispatch(discardCard(card)),

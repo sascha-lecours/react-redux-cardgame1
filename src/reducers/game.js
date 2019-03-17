@@ -369,6 +369,37 @@ export default (state = gameReducerDefaultState, action) => {
 			}),
 		};
 	}
+	case 'CLEAR_ALL_COSMETIC_EFFECTS': {
+		return {
+			...state,
+			enemyGroup: state.enemyGroup.map((enemy) => {
+				if (enemy.id === action.target.id) {
+					return {
+						...enemy,
+						highlighted: false,
+						shaking: false,
+						buffing: false,
+						gettingHit: false,
+					};
+				} else {
+					return enemy;
+				}
+			}),
+			playerGroup: state.playerGroup.map((player) => {
+				if (player.id === action.target.id) {
+					return {
+						...player,
+						highlighted: false,
+						shaking: false,
+						buffing: false,
+						gettingHit: false,
+					};
+				} else {
+					return player;
+				}
+			}),
+		};
+	}
 	// End of reducer switch (default case)
 	default:
 		return state;
