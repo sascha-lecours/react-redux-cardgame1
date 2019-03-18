@@ -2,13 +2,17 @@
 	background-color: rgb(187, 112, 42);
 	border: 1px solid black;
 	margin: $s-size;
-	max-width: 200px;
+	max-width: 170px;
 	padding: 5px;
 }
 
 .enemy__name {
 	font-weight: 700;
 } 
+
+.enemy__portrait {
+	max-width: 60%;
+}
 
 .enemy__hp {
 	font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;

@@ -2,22 +2,28 @@ import { drawCard, discardCard, banishCard } from '../actions/cards';
 import { raiseStrength, raiseMarked, raiseToughness, raiseDefense, raisePoison, dealDamage } from '../actions/combatEffects';
 import targetRandomEnemy from './targetRandomEnemy';
 import { store } from '../app';
-import { delay } from './helpers';
+import { delay, getCombatantById, makeAttack } from './helpers';
 import { applyHighlight, applyShaking, clearShaking, clearAllCosmeticEffects } from '../actions/cosmeticBattleEffects';
 
-// Helper functions - probably to be moved to another file later.
+// Animation constants and functions - possibly to be moved later
+const pauseBeforePlayingCard = 100;
+const pauseBeforeAttack = 300;
+const durationhOfAttackShake = 130;
+const pauseAfterAttack = 450;
 
-// This function will need the store to be imported!
-export const makeAttack = (target, source, baseDamage, numberOfHits) => {
-	if(target && source){
-		const modifiedDamage = baseDamage + source.strength;
-		console.log(`${source.name} is attacking ${target.name} (${target.hp} hp) for ${modifiedDamage} damage, ${numberOfHits} times`);
-		store.dispatch(dealDamage(target, source, modifiedDamage, numberOfHits));
-	} else {
-		console.log(`Attack cancelled - no valid target (or attacker no longer exists)!`);
-	}
-};
-
+// This can only be executed inside of a card object with a target chosen
+const attackOnce = async (target, source, attack) => {
+			await delay(pauseBeforeAttack);
+			store.dispatch(applyShaking(target));
+			await makeAttack(
+				getCombatantById(target.id),
+				source,
+				attack,
+				1
+			);
+			await delay(durationhOfAttackShake);
+			store.dispatch(clearShaking(target));
+}
 // List of all cards in game
 
 export const cardDefault = {
@@ -47,19 +53,11 @@ export const testCard1 = {
 	effects: [
 		async (player, card) => {
 			const target = targetRandomEnemy();
-			await delay(100);
+			await delay(pauseBeforePlayingCard);
 			store.dispatch(applyHighlight(target));
-			await delay(300);
-			store.dispatch(applyShaking(target));
-			makeAttack(
-				target,
-				player,
-				card.attack,
-				card.numberOfHits
-			);
-			await delay(130);
-			store.dispatch(clearShaking(target));
-			await delay(450);
+			await attackOnce(target, player, card.attack);
+			await attackOnce(target, player, card.attack);
+			await attackOnce(target, player, card.attack);
 			store.dispatch(clearAllCosmeticEffects(target));
 		},
 		(player, card) => store.dispatch(raiseDefense(player, card.defense)),

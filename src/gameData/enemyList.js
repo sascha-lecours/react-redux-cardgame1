@@ -1,5 +1,5 @@
 import { store } from '../app';
-import { makeAttack } from './cardList';
+import { makeAttack } from './helpers';
 import { raiseDefense, raiseToughness, raiseStrength, raisePoison } from '../actions/combatEffects';
 import targetPlayer from './targetPlayer';
 
@@ -114,17 +114,19 @@ export const enemyDefault = {
 	maxPoison: 9999999999,
 	minPoison: 0,
 	actions: [quickStrikes, bigStrike],
-	takingturn: false,
+	isActive: false,
 	highlighted: false,
 	shaking: false,
 	buffing: false,
 	gettingHit: false,
+	portrait: '/images/enemies/snake.png',
 };
 
 export const testEnemy1 = {
 	id: 'placeholder1',
 	name: "Lil' Snek",
-	maxHp: 8,
+	portrait: '/images/enemies/snake.png',
+	maxHp: 10,
 	defense: 0,
 	actions: [quickStrikes, poisonBite, frenzy],
 };
@@ -132,7 +134,8 @@ export const testEnemy1 = {
 export const testEnemy2 = {
 	id: 'placeholder2',
 	name: 'Big Beefo',
-	maxHp: 10,
-	defense: 5,
+	portrait: '/images/enemies/ogre.png',
+	maxHp: 12,
+	defense: 4,
 	actions: [warcry, bigStrike, bigStrike, crystallize],
 };

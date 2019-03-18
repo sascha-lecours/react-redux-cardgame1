@@ -2,14 +2,16 @@ import React from 'react';
 // import { connect } from 'react-redux';
 
 export default (props) => {
+	const { player } = props;
 	return (
 		<div className="player">
-			<div className="player__name">{`${props.player.name}`}</div>
-			<div className="player__hp">{`HP: ${props.player.hp}/${props.player.maxHp}`}</div>
-			<div className="player__defense">{`Defense: ${props.player.defense}`}</div>
-			{props.player.toughness !== 0 && <div className="player__toughness">{`Toughness: ${props.player.toughness}`}</div>}
-			{props.player.strength !== 0 && <div className="player__strength">{`Strength: ${props.player.strength}`}</div>}
-			{props.player.poison !== 0 && <div className="player__poison">{`Poison: ${props.player.poison}`}</div>}
+			<div className="player__name">{`${player.name}`}</div>
+			<img className="player__portrait" alt={`${player.name}`} src={player.portrait} />
+			<div className="player__hp">{`HP: ${player.hp}/${player.maxHp}`}</div>
+			<div className="player__defense">{`Defense: ${player.defense}`}</div>
+			{player.toughness !== 0 && <div className="player__toughness">{`Toughness: ${player.toughness}`}</div>}
+			{player.strength !== 0 && <div className="player__strength">{`Strength: ${player.strength}`}</div>}
+			{player.poison !== 0 && <div className="player__poison">{`Poison: ${player.poison}`}</div>}
 		</div>
 	);
 };
