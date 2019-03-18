@@ -3,3 +3,9 @@
 	padding: 0 $m-size;
 	max-width: 80rem;
 }
+
+.combat-container__player-and-deck-area {
+	display: flex;
+	flex-direction: horizontal;
+	justify-content: center;
+}

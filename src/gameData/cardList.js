@@ -2,28 +2,12 @@ import { drawCard, discardCard, banishCard } from '../actions/cards';
 import { raiseStrength, raiseMarked, raiseToughness, raiseDefense, raisePoison, dealDamage } from '../actions/combatEffects';
 import targetRandomEnemy from './targetRandomEnemy';
 import { store } from '../app';
-import { delay, getCombatantById, makeAttack } from './helpers';
+import { delay, getCombatantById, makeAttack, attackOnce } from './helpers';
 import { applyHighlight, applyShaking, clearShaking, clearAllCosmeticEffects } from '../actions/cosmeticBattleEffects';
 
 // Animation constants and functions - possibly to be moved later
 const pauseBeforePlayingCard = 100;
-const pauseBeforeAttack = 300;
-const durationhOfAttackShake = 130;
-const pauseAfterAttack = 450;
 
-// This can only be executed inside of a card object with a target chosen
-const attackOnce = async (target, source, attack) => {
-			await delay(pauseBeforeAttack);
-			store.dispatch(applyShaking(target));
-			await makeAttack(
-				getCombatantById(target.id),
-				source,
-				attack,
-				1
-			);
-			await delay(durationhOfAttackShake);
-			store.dispatch(clearShaking(target));
-}
 // List of all cards in game
 
 export const cardDefault = {

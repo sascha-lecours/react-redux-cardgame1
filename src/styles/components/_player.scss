@@ -1,9 +1,10 @@
 .player {
-	background-color: rgb(42, 187, 114);
+	background-color: $player-background;
 	border: 1px solid black;
 	margin: $s-size;
 	max-width: 200px;
 	padding: 5px;
+	transition: transform .2s; /* Animation */
 }
 
 .player__name {
@@ -21,4 +22,9 @@
 .player__defense {
 	font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 	font-style: italic;
+}
+
+.player__is-active {
+	background-color: lighten($player-background, 25%);
+	transform: scale(1.1);
 }

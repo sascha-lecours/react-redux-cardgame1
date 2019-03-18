@@ -5,6 +5,13 @@ export const applyHighlight = (target) => ({
 	target,
 });
 
+// APPLY_IS_ACTIVE
+
+export const applyIsActive = (target) => ({
+	type: 'APPLY_IS_ACTIVE',
+	target,
+});
+
 // APPLY_SHAKING
 
 export const applyShaking = (target) => ({

@@ -369,6 +369,31 @@ export default (state = gameReducerDefaultState, action) => {
 			}),
 		};
 	}
+	case 'APPLY_IS_ACTIVE': {
+		return {
+			...state,
+			enemyGroup: state.enemyGroup.map((enemy) => {
+				if (enemy.id === action.target.id) {
+					return {
+						...enemy,
+						isActive: true,
+					};
+				} else {
+					return enemy;
+				}
+			}),
+			playerGroup: state.playerGroup.map((player) => {
+				if (player.id === action.target.id) {
+					return {
+						...player,
+						isActive: true,
+					};
+				} else {
+					return player;
+				}
+			}),
+		};
+	}
 	case 'APPLY_SHAKING': {
 		return {
 			...state,
@@ -426,7 +451,7 @@ export default (state = gameReducerDefaultState, action) => {
 				if (enemy.id === action.target.id) {
 					return {
 						...enemy,
-						takingturn: false,
+						isActive: false,
 						highlighted: false,
 						shaking: false,
 						buffing: false,
@@ -440,7 +465,7 @@ export default (state = gameReducerDefaultState, action) => {
 				if (player.id === action.target.id) {
 					return {
 						...player,
-						takingturn: false,
+						isActive: false,
 						highlighted: false,
 						shaking: false,
 						buffing: false,

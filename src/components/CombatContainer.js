@@ -11,11 +11,13 @@ export default () => {
 	return (
 		<div className="combat-container">
 			<EnemiesArea />
-			<div>
+			<div className="combat-container__player-and-deck-area">
 				<PlayerArea />
-				<DeckButton />
-				<DeckModal />
-				<DiscardPileButton />
+				<div>
+					<DeckButton />
+					<DeckModal />
+					<DiscardPileButton />
+				</div>
 			</div>
 			<HandDisplay />
 			<TurnController />

@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { store } from '../app';
 import { advancePhase, setPhase } from '../actions/turn';
+import { applyIsActive, clearAllCosmeticEffects } from '../actions/cosmeticBattleEffects';
+import { delay } from './helpers';
 import { testCard1, testCard2, testCard3, testCard4, testCard5, testCard6, testCard7, testCard8, testCard9 } from './cardList';
 import { setHand, setDeck, initializePlayer, drawCard, discardHand } from '../actions/cards';
 import { setEnemies, setNewMove, killEnemy } from '../actions/enemies';
@@ -57,8 +59,11 @@ class TurnController extends React.Component {
 		
 	};
 
-	enemiesTakeTurn = () => {
-		this.props.game.enemyGroup.forEach((enemy) => useMove(enemy, enemy.nextMove));
+	enemiesTakeTurn = async () => {
+		const pauseBeforeEnemyMove = 500;
+		this.props.game.enemyGroup.forEach(
+			async (enemy) => {await useMove(enemy, enemy.nextMove);
+		});
 	};
 
 	killZeroHpEnemies = () => {
@@ -72,41 +77,50 @@ class TurnController extends React.Component {
 
 	playerStartOfTurn = () => {
 		// Remove defense
-	}
+		// TODO: Implement defense removal
+		// set "active" cosmetic effect
+		store.dispatch(applyIsActive(this.props.game.playerGroup[0]));
+	};
+
+	playerEndOfTurn = () => {
+		// remove all cosmetic effects
+		console.log('player turn is over');
+		store.dispatch(clearAllCosmeticEffects(this.props.game.playerGroup[0]));
+
+	};
 
 	reduceAllMarked = () => {
 		// Reduce all enemy Marked status by 1
 		this.props.game.enemyGroup.forEach((enemy) => {
 			this.props.raiseMarked(enemy, -1);
-		})
-
-	}
+		});
+	};
 
 	resolveEnemyPoison = () => {
 		// Enemies receive damage equal to their poison
 		this.props.game.enemyGroup.forEach((enemy) => {
 			this.props.dealDamage(enemy, null, enemy.poison, 1);
-		})
+		});
 
 		// Reduce all enemy poison status by 1
 		this.props.game.enemyGroup.forEach((enemy) => {
 			this.props.raisePoison(enemy, -1);
-		})
+		});
 
-	}
+	};
 
 	resolvePlayerPoison = () => {
 		// Players receive damage equal to their poison
 		this.props.game.playerGroup.forEach((player) => {
 			this.props.dealDamage(player, null, player.poison, 1);
-		})
+		});
 
 		// Reduce all player poison status by 1
 		this.props.game.playerGroup.forEach((player) => {
 			this.props.raisePoison(player, -1);
-		})
+		});
 
-	}
+	};
 
 	// Lifecycle hooks:
 
@@ -146,6 +160,7 @@ class TurnController extends React.Component {
 			case 3:
 			// 3. Player start-of-turn effects, checking for combat-over
 				//TODO: implement
+				this.playerStartOfTurn();
 				this.resolvePlayerPoison();
 				advancePhase();
 				break;
@@ -164,7 +179,7 @@ class TurnController extends React.Component {
 			
 			case 6:
 			// 6. Player turn ends (muliple cards?) - player end-of-turn effects, including discarding card
-				//TODO: implement events other than discarding
+				this.playerEndOfTurn();
 				this.reduceAllMarked();
 				discardHand();
 				advancePhase();

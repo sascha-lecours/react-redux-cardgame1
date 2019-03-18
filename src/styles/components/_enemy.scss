@@ -1,9 +1,10 @@
 .enemy {
-	background-color: rgb(187, 112, 42);
+	background-color: $enemy-background;
 	border: 1px solid black;
 	margin: $s-size;
 	max-width: 170px;
 	padding: 5px;
+	transition: transform .2s; /* Animation */
 }
 
 .enemy__name {
@@ -30,4 +31,9 @@
 
 .enemy__highlighted {
 	border: 5px solid gold;
+}
+
+.player__is-active {
+	background-color: lighten($enemy-background, 25%);
+	transform: scale(1.1);
 }

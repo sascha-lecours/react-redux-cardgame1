@@ -1,6 +1,12 @@
 import { store } from '../app';
 import { dealDamage } from '../actions/combatEffects';
 
+// universal timing costants for animation
+
+const pauseBeforeAttack = 300;
+const durationhOfAttackShake = 130;
+const pauseAfterAttack = 450;
+
 export const delay = (time, callback) => {
 	return new Promise((resolve) => {
 		setTimeout(resolve.bind(null, callback), time);
@@ -27,4 +33,17 @@ export const makeAttack = (target, source, baseDamage, numberOfHits) => {
 	} else {
 		console.log('Attack cancelled - no valid target (or attacker no longer exists)!');
 	}
+};
+
+export const attackOnce = async (target, source, attack) => {
+	await delay(pauseBeforeAttack);
+	store.dispatch(applyShaking(target));
+	await makeAttack(
+		getCombatantById(target.id),
+		source,
+		attack,
+		1
+	);
+	await delay(durationhOfAttackShake);
+	store.dispatch(clearShaking(target));
 };

@@ -1,12 +1,6 @@
 import React from 'react';
-import useMove from '../gameData/useMove';
 
 export class RenderEnemy extends React.Component {
-
-	// This function is no longer in use and will be phased out later
-	// useMoveOnClick = () => {
-	// 	useMove(this.props.enemy, this.props.enemy.nextMove);
-	// };
 
 	getClassName = (enemy) => {
 		let workingClassName = "enemy";
@@ -42,7 +36,6 @@ export class RenderEnemy extends React.Component {
 					enemy.nextMove &&
 					<div className="enemy__next-move">{enemy.nextMove.name}</div>
 				}
-			{/* <button onClick={this.useMoveOnClick}> Use Move </button> */}
 			</div>
 		);
 	}
