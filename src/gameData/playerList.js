@@ -20,13 +20,13 @@ export const playerDefault = {
 	shaking: false,
 	buffing: false,
 	gettingHit: false,
-	portrait: '/images/players/tomyris.jpg',
+	portrait: '/images/players/tomyris_portrait.jpeg',
 };
 
 export const warrior = {
 	name: 'Tomyris',
 	maxHp: 80,
-	portrait: '/images/players/tomyris.jpg',
+	portrait: '/images/players/tomyris_portrait.jpeg',
 };
 
 export const bard = {

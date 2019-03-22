@@ -18,7 +18,7 @@ class DiscardModal extends Component {
 						{
 							discard.length === 0 ? (
 								<div>
-									<span>No cards in Discar Pile!</span>
+									<span>No cards in Discard pile!</span>
 								</div>
 							) : (
 								discard.map((card) => {
