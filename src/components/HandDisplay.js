@@ -13,7 +13,7 @@ export const HandDisplay = (props) => {
 					</div>
 				) : (
 					props.hand.map((card) => {
-						return <RenderCard card={card} key={card.id} />;
+						return <RenderCard card={card} key={card.id} inHand="true" />;
 					})
 				)
 			}

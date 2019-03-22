@@ -1,11 +1,11 @@
 import { store } from '../app';
 import { dealDamage } from '../actions/combatEffects';
+import { applyShaking, clearShaking } from '../actions/cosmeticBattleEffects';
 
 // universal timing costants for animation
 
 const pauseBeforeAttack = 300;
 const durationhOfAttackShake = 130;
-const pauseAfterAttack = 450;
 
 export const delay = (time, callback) => {
 	return new Promise((resolve) => {

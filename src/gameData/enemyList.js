@@ -1,7 +1,8 @@
 import { store } from '../app';
-import { makeAttack } from './helpers';
 import { raiseDefense, raiseToughness, raiseStrength, raisePoison } from '../actions/combatEffects';
+import { delay, getCombatantById, makeAttack, attackOnce } from './helpers';
 import targetPlayer from './targetPlayer';
+
 
 
 // Helper functions
@@ -18,12 +19,9 @@ const quickStrikes = {
 	varianceDamage: 0,
 	numberOfHits: 3,
 	effects: [
-		(enemy, move) => makeAttack(
-			targetPlayer(),
-			enemy,
-			applyVariance(move.attack, move.varianceDamage),
-			move.numberOfHits
-		),
+		async (enemy, move) => { 
+			await attackOnce(targetPlayer(), enemy, applyVariance(move.attack, move.varianceDamage)); 
+		}
 	],
 };
 

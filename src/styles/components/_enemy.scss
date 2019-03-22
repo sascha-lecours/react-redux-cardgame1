@@ -4,7 +4,7 @@
 	margin: $s-size;
 	max-width: 170px;
 	padding: 5px;
-	transition: transform .2s; /* Animation */
+	// transition: transform .2s; /* Animation */
 }
 
 .enemy__name {
@@ -33,7 +33,7 @@
 	border: 5px solid gold;
 }
 
-.player__is-active {
+.enemy__is-active {
 	background-color: lighten($enemy-background, 25%);
-	transform: scale(1.1);
+	border: 5px double cyan;
 }

@@ -41,9 +41,9 @@ const pickMove = (enemy) => {
 	};
 };
 
-const killEnemy = ({ id }) => {
+// const killEnemy = ({ id }) => {
 
-};
+// };
 
 // Reducer
 

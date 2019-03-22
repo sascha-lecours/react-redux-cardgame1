@@ -6,16 +6,19 @@ import DeckModal from '../components/modals/DeckModal';
 
 export class DeckButton extends Component {
 
-	handleDeckOpen = (name) => () => {
+	handleDeckOpen = (name, deck) => () => {
 		this.props.show(name, {
 			message: `This is a ${name} modal`,
+			deck,
 		})
 	};
 
 	render() {
 		return (
 			<div>
-				<Button bsstyle="primary" onClick={this.handleDeckOpen('deck')}>Deck: {this.props.deck.length}</Button>
+				<Button bsstyle="primary" onClick={this.handleDeckOpen('deck', this.props.deck)}>
+					Deck: {this.props.deck.length}
+				</Button>
 			</div>
 		);
 	}

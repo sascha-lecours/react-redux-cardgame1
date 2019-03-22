@@ -4,7 +4,7 @@
 	margin: $s-size;
 	max-width: 200px;
 	padding: 5px;
-	transition: transform .2s; /* Animation */
+	// transition: transform .2s; /* Animation */
 }
 
 .player__name {
@@ -26,5 +26,5 @@
 
 .player__is-active {
 	background-color: lighten($player-background, 25%);
-	transform: scale(1.1);
+	border: 5px double cyan;
 }

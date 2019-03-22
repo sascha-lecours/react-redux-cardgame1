@@ -1,5 +1,5 @@
 import React from 'react';
-// import { connect } from 'react-redux';
+import { connect } from 'react-redux';
 
 export class RenderPlayer extends React.Component {
 	
@@ -28,13 +28,10 @@ export class RenderPlayer extends React.Component {
 	}
 };
 
+const mapStateToProps = (state) => {
+	return {
+		player: state.game.playerGroup[0],
+	};
+};
 
-export default RenderPlayer;
-
-// const mapStateToProps = (state) => {
-// 	return {
-// 		player: state.game.playerGroup,
-// 	};
-// };
-
-// export default connect(mapStateToProps, undefined)(RenderPlayer);
+export default connect(mapStateToProps, undefined)(RenderPlayer);

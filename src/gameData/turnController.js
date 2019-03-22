@@ -47,6 +47,12 @@ class TurnController extends React.Component {
 // --> Fetch player stats and deck(s), possibly including modified cards, buffs/debuffs, etc.
 // --> Fetch enemy stats
 
+	// Timing variables
+	pauseBeforeEnemyMove = 800;
+	pauseAfterEnemyMove = 300;
+	pauseBeforePlayerTurn = 1000;
+	pauseAfterPlayerTurn = 1000;
+
 	initializeCombat = () => {
 		store.dispatch(initializePlayer(warrior));
 
@@ -59,10 +65,15 @@ class TurnController extends React.Component {
 		
 	};
 
+
+
 	enemiesTakeTurn = async () => {
-		const pauseBeforeEnemyMove = 500;
 		this.props.game.enemyGroup.forEach(
-			async (enemy) => {await useMove(enemy, enemy.nextMove);
+			async (enemy) => {
+				await this.props.applyIsActive(enemy);
+				await delay(this.pauseBeforeEnemyMove);
+				await useMove(enemy, enemy.nextMove);
+				await delay(this.pauseAfterEnemyMove);
 		});
 	};
 
@@ -75,18 +86,19 @@ class TurnController extends React.Component {
 		})
 	};
 
-	playerStartOfTurn = () => {
+	playerStartOfTurn = async () => {
 		// Remove defense
 		// TODO: Implement defense removal
 		// set "active" cosmetic effect
-		store.dispatch(applyIsActive(this.props.game.playerGroup[0]));
+		await delay(this.pauseBeforePlayerTurn);
+		await this.props.applyIsActive(this.props.game.playerGroup[0]);
 	};
 
-	playerEndOfTurn = () => {
+	playerEndOfTurn = async () => {
 		// remove all cosmetic effects
+		await this.props.clearAllCosmeticEffects(this.props.game.playerGroup[0]);
+		await delay(this.pauseAfterPlayerTurn);
 		console.log('player turn is over');
-		store.dispatch(clearAllCosmeticEffects(this.props.game.playerGroup[0]));
-
 	};
 
 	reduceAllMarked = () => {
@@ -135,7 +147,7 @@ class TurnController extends React.Component {
 			setPhase,
 			setNewMoves,
 			drawCard,
-			discardHand
+			discardHand,
 		} = this.props;
 
 		const { phase } = this.props.turn;
@@ -184,7 +196,7 @@ class TurnController extends React.Component {
 				discardHand();
 				advancePhase();
 				break;
-			
+
 			case 7:
 			// 7. Enemy start-of-turn effects, checking for combat-over
 				this.resolveEnemyPoison();
@@ -235,17 +247,20 @@ class TurnController extends React.Component {
   
   const mapDispatchToProps = (dispatch, props) => ({
 	advancePhase: () => dispatch(advancePhase()),
+	applyIsActive: (target) => dispatch(applyIsActive(target)),
+	clearAllCosmeticEffects: (target) => dispatch(clearAllCosmeticEffects(target)),
+	dealDamage: (target, source, damage, numberOfHits) => dispatch(dealDamage(target, source, damage, numberOfHits)),
+	discardHand: () => dispatch(discardHand()),
+	drawCard: () => dispatch(drawCard()),
+	killEnemy: (enemy) => dispatch(killEnemy(enemy)),
+	raiseMarked: (enemy, marked) => dispatch(raiseMarked(enemy, marked)),
+	raisePoison: (target, poison) => dispatch(raisePoison(target, poison)),
 	setPhase: (phase) => dispatch(setPhase(phase)),
 	setNewMoves: (enemyGroup) => { enemyGroup.forEach(element => {
 			dispatch(setNewMove(element));
 		});
 	},
-	drawCard: () => dispatch(drawCard()),
-	discardHand: () => dispatch(discardHand()),
-	killEnemy: (enemy) => dispatch(killEnemy(enemy)),
-	raiseMarked: (enemy, marked) => dispatch(raiseMarked(enemy, marked)),
-	raisePoison: (target, poison) => dispatch(raisePoison(target, poison)),
-	dealDamage: (target, source, damage, numberOfHits) => dispatch(dealDamage(target, source, damage, numberOfHits)),
+
   });
   
   export default connect(mapStateToProps, mapDispatchToProps)(TurnController);

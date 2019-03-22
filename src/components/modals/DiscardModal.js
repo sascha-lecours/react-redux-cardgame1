@@ -3,25 +3,25 @@ import { Button, Modal } from 'react-bootstrap';
 import { connectModal } from 'redux-modal';
 import { RenderCard } from '../RenderCard';
 
-class DeckModal extends Component {
+class DiscardModal extends Component {
 	render() {
-		const { show, handleHide, message, deck } = this.props;
+		const { show, handleHide, message, discard } = this.props;
 
 		return (
 			<Modal show={show} onHide={handleHide}>
 				<Modal.Header>
-					<Modal.Title>Deck</Modal.Title>
+					<Modal.Title>Discards</Modal.Title>
 				</Modal.Header>
 
 				<Modal.Body>
-					<div className="deck__modal">
+					<div className="discard__modal">
 						{
-							deck.length === 0 ? (
+							discard.length === 0 ? (
 								<div>
-									<span>No cards in Deck!</span>
+									<span>No cards in Discar Pile!</span>
 								</div>
 							) : (
-								deck.map((card) => {
+								discard.map((card) => {
 									return <RenderCard card={card} key={card.id} />;
 								})
 							)
@@ -37,4 +37,4 @@ class DeckModal extends Component {
 	}
 }
 
-export default connectModal({ name: 'deck' })(DeckModal);
+export default connectModal({ name: 'discard' })(DiscardModal);

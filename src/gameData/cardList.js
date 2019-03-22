@@ -7,6 +7,7 @@ import { applyHighlight, applyShaking, clearShaking, clearAllCosmeticEffects } f
 
 // Animation constants and functions - possibly to be moved later
 const pauseBeforePlayingCard = 100;
+const pauseAfterPlayingCard = 450;
 
 // List of all cards in game
 
@@ -42,6 +43,7 @@ export const testCard1 = {
 			await attackOnce(target, player, card.attack);
 			await attackOnce(target, player, card.attack);
 			await attackOnce(target, player, card.attack);
+			await delay(pauseAfterPlayingCard);
 			store.dispatch(clearAllCosmeticEffects(target));
 		},
 		(player, card) => store.dispatch(raiseDefense(player, card.defense)),

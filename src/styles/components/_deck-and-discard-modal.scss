@@ -1,0 +1,16 @@
+.deck__modal, .discard__modal{
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+
+@media (min-width: 768px) {
+	.modal-dialog {
+	  	width: 90%;
+	  	max-width:1200px;
+	}
+	.modal-content {
+	 	width: 90%;
+		max-width:1200px;
+	}
+  }
