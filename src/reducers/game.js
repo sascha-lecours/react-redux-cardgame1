@@ -477,6 +477,21 @@ export default (state = gameReducerDefaultState, action) => {
 			}),
 		};
 	}
+	case 'HIGHLIGHT_CARD': {
+		return {
+			...state,
+			hand: state.hand.map((card) => {
+				if (card.id === action.id) {
+					return {
+						...card,
+						highlighted: true,
+					};
+				} else {
+					return card;
+				}
+			}),
+		};
+	}
 	// End of reducer switch (default case)
 	default:
 		return state;

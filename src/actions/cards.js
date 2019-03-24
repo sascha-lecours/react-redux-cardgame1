@@ -2,6 +2,14 @@ import uuid from 'uuid';
 import shuffle from 'shuffle-array';
 import { cardDefault } from '../gameData/cardList';
 
+// CLEAR_HIGHLIGHT_CARD
+export const clearHighlightCard = ({ id }) => {
+	return {
+		type: 'CLEAR_HIGHLIGHT_CARD',
+		id,
+	};
+};
+
 // DRAW_CARD
 export const drawCard = () => {
 	return {
@@ -22,6 +30,14 @@ export const discardCard = ({ id }) => {
 export const discardHand = () => {
 	return {
 		type: 'DISCARD_HAND',
+	};
+};
+
+// HIGHLIGHT_CARD
+export const highlightCard = ({ id }) => {
+	return {
+		type: 'HIGHLIGHT_CARD',
+		id,
 	};
 };
 
@@ -51,7 +67,11 @@ export const setHand = (cards) => {
 // SET_DECK
 export const setDeck = (cards) => {
 	const cardsWithIds = cards.slice(0).map((card) => {
-		return { ...cardDefault, ...card, id: uuid.v4() };
+		return {
+			...cardDefault,
+			...card,
+			id: uuid.v4(),
+		};
 	});
 	const shuffledCards = shuffle(cardsWithIds);
 	return {

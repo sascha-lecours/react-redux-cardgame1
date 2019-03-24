@@ -7,6 +7,7 @@ import { applyHighlight, applyShaking, clearShaking, clearAllCosmeticEffects } f
 
 // Animation constants and functions - possibly to be moved later
 const pauseBeforePlayingCard = 100;
+const pauseAfterCardEffect = 220;
 const pauseAfterPlayingCard = 450;
 
 // List of all cards in game
@@ -14,6 +15,7 @@ const pauseAfterPlayingCard = 450;
 export const cardDefault = {
 	id: null,
 	name: '',
+	type: undefined,
 	attack: null,
 	defense: null,
 	strength: null,
@@ -24,6 +26,8 @@ export const cardDefault = {
 	specialText: null,
 	flavourText: null,
 	effects: [],
+	unplayedEffects: [],
+	highlighted: false,
 };
 
 export const testCard1 = {
@@ -43,10 +47,13 @@ export const testCard1 = {
 			await attackOnce(target, player, card.attack);
 			await attackOnce(target, player, card.attack);
 			await attackOnce(target, player, card.attack);
-			await delay(pauseAfterPlayingCard);
+			await delay(pauseAfterCardEffect);
 			store.dispatch(clearAllCosmeticEffects(target));
 		},
-		(player, card) => store.dispatch(raiseDefense(player, card.defense)),
+		async (player, card) => {
+			store.dispatch(raiseDefense(player, card.defense));
+			await delay(pauseAfterPlayingCard);
+		},
 		(player, card) => store.dispatch(discardCard(card)),
 	],
 };

@@ -56,7 +56,6 @@ class TurnController extends React.Component {
 	initializeCombat = () => {
 		store.dispatch(initializePlayer(warrior));
 
-		// This makes sure one copy of berkserk rampage always starts in hand
 		store.dispatch(setHand([testCard1]));
 
 		store.dispatch(setDeck([testCard1, testCard2, testCard1, testCard4, testCard5, testCard6, testCard7, testCard8, testCard9]));

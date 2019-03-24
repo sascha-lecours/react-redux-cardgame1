@@ -10,7 +10,7 @@ class DiscardModal extends Component {
 		return (
 			<Modal show={show} onHide={handleHide}>
 				<Modal.Header>
-					<Modal.Title>Discards</Modal.Title>
+					<Modal.Title className="discard__modal__title">Discards</Modal.Title>
 				</Modal.Header>
 
 				<Modal.Body>

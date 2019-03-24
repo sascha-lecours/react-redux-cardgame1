@@ -21,16 +21,25 @@ export class RenderCard extends React.Component {
 		this.props.advancePhase();
 	}
 
+	getClassName = (card) => {
+		let workingClassName = "card";
+		if(card.highlighted) {workingClassName = workingClassName + " card__highlighted"};
+		if(card.isActive) {workingClassName = workingClassName + " card__is-active"};
+		if(card.shaking) {workingClassName = workingClassName + " shake-hard shake-constant"};
+		return workingClassName;
+	}
+
 	render() {
+		const { card, inHand } = this.props;
 		return (
-			<div className="card">
-				<div className="card__name">{`${this.props.card.name}`}</div>
-				<div>{`Type: ${this.props.card.type}`}</div>
-				{this.props.card.attack && <div>{`Attack: ${this.props.card.attack}`}</div>}
-				{this.props.card.defense && <div>{`Defense: ${this.props.card.defense}`}</div>}
-				{this.props.card.specialText && <div className="card__special-text">{this.props.card.specialText}</div>}
-				{this.props.card.flavourText && <div className="card__flavour-text">{this.props.card.flavourText}</div>}
-				{this.props.inHand && <Button onClick={this.playOnClick}> Play </Button>}
+			<div className={this.getClassName(card)}>
+				<div className="card__name">{`${card.name}`}</div>
+				<div>{`Type: ${card.type}`}</div>
+				{card.attack && <div>{`Attack: ${card.attack}`}</div>}
+				{card.defense && <div>{`Defense: ${card.defense}`}</div>}
+				{card.specialText && <div className="card__special-text">{card.specialText}</div>}
+				{card.flavourText && <div className="card__flavour-text">{card.flavourText}</div>}
+				{inHand && <Button onClick={this.playOnClick}> Play </Button>}
 				{/* <button onClick={this.discardOnClick}> Discard </button>
 					<button onClick={this.banishOnClick}> Banish </button> */}
 			</div>
