@@ -5,7 +5,7 @@ import { RenderCard } from '../RenderCard';
 
 class DiscardModal extends Component {
 	render() {
-		const { show, handleHide, message, discard } = this.props;
+		const { show, handleHide, discard } = this.props;
 
 		return (
 			<Modal show={show} onHide={handleHide}>

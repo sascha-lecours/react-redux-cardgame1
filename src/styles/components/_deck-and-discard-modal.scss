@@ -4,6 +4,10 @@
 	flex-wrap: wrap;
 }
 
+.discard__modal__title, .deck__modal__title {
+	font-weight: bold;
+}
+
 @media (min-width: 768px) {
 	.modal-dialog {
 	  	width: 90%;

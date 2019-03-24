@@ -5,12 +5,12 @@ import { RenderCard } from '../RenderCard';
 
 class DeckModal extends Component {
 	render() {
-		const { show, handleHide, message, deck } = this.props;
+		const { show, handleHide, deck } = this.props;
 
 		return (
 			<Modal show={show} onHide={handleHide}>
 				<Modal.Header>
-					<Modal.Title>Deck</Modal.Title>
+					<Modal.Title className=".deck__modal__title">Deck</Modal.Title>
 				</Modal.Header>
 
 				<Modal.Body>
