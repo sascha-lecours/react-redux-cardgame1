@@ -1,4 +1,4 @@
-import { drawCard, discardCard, banishCard } from '../actions/cards';
+import { drawCard, discardCard, banishCard, clearHighlightCard, } from '../actions/cards';
 import { raiseStrength, raiseMarked, raiseToughness, raiseDefense, raisePoison, dealDamage } from '../actions/combatEffects';
 import targetRandomEnemy from './targetRandomEnemy';
 import { store } from '../app';
@@ -7,8 +7,22 @@ import { applyHighlight, applyShaking, clearShaking, clearAllCosmeticEffects } f
 
 // Animation constants and functions - possibly to be moved later
 const pauseBeforePlayingCard = 100;
+const pauseAfterBuffHighlight = 220;
 const pauseAfterCardEffect = 220;
 const pauseAfterPlayingCard = 450;
+
+const pauseBeforeUnplayedCard = 100;
+const pauseAfterUnplayedBuffHighlight = 220;
+const pauseAfterUnplayedCardEffect = 220;
+
+
+// helper function used to un-highlight and then discard a card
+
+const cardFinished = (card) => {
+	store.dispatch(clearHighlightCard(card));
+	store.dispatch(discardCard(card));
+};
+
 
 // List of all cards in game
 
@@ -26,6 +40,9 @@ export const cardDefault = {
 	specialText: null,
 	flavourText: null,
 	effects: [],
+	unplayedAttack: null,
+	unplayedDefense: null,
+	unplayedSpecialText: null,
 	unplayedEffects: [],
 	highlighted: false,
 };
@@ -51,11 +68,24 @@ export const testCard1 = {
 			store.dispatch(clearAllCosmeticEffects(target));
 		},
 		async (player, card) => {
+			store.dispatch(applyHighlight(player));
+			await delay(pauseAfterBuffHighlight);
 			store.dispatch(raiseDefense(player, card.defense));
 			await delay(pauseAfterPlayingCard);
+			store.dispatch(clearAllCosmeticEffects(player));
 		},
-		(player, card) => store.dispatch(discardCard(card)),
+		(player, card) => cardFinished(card),
 	],
+	unplayedEffects: [
+		async (player, card) => {
+			await delay(pauseBeforeUnplayedCard);
+			store.dispatch(applyHighlight(player));
+			await delay(pauseAfterUnplayedBuffHighlight);
+			store.dispatch(raiseDefense(player, card.defense));
+			await delay(pauseAfterUnplayedCard);
+		}
+	],
+	unplayedSpecialText: "Defend for 3",
 };
 
 

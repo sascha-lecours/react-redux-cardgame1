@@ -30,10 +30,10 @@
 }
 
 .enemy__highlighted {
-	border: 5px solid gold;
+	outline: 4px solid gold;
 }
 
 .enemy__is-active {
 	background-color: lighten($enemy-background, 25%);
-	border: 5px double cyan;
+	box-shadow: 0px 0px 5px cyan;
 }
