@@ -41,6 +41,14 @@ export const highlightCard = ({ id }) => {
 	};
 };
 
+// HIGHLIGHT_CARD
+export const highlighUnplayed = ({ id }) => {
+	return {
+		type: 'HIGHLIGHT_UNPLAYED',
+		id,
+	};
+};
+
 // INITIALIZE_PLAYER
 export const initializePlayer = (player) => {
 	return {

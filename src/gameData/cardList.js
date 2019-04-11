@@ -45,6 +45,7 @@ export const cardDefault = {
 	unplayedSpecialText: null,
 	unplayedEffects: [],
 	highlighted: false,
+	highlightUnplayed: false,
 };
 
 export const testCard1 = {
@@ -74,7 +75,7 @@ export const testCard1 = {
 			await delay(pauseAfterPlayingCard);
 			store.dispatch(clearAllCosmeticEffects(player));
 		},
-		(player, card) => cardFinished(card),
+		async (player, card) => cardFinished(card),
 	],
 	unplayedEffects: [
 		async (player, card) => {
@@ -99,7 +100,7 @@ export const testCard2 = {
 	effects: [
 		(player, card) => store.dispatch(raiseDefense(player, card.defense)),
 		(player, card) => store.dispatch(raiseDefense(player, card.defense)),
-		(player, card) => store.dispatch(discardCard(card)),
+		async (player, card) => cardFinished(card),
 	],
 };
 

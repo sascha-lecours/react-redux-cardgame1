@@ -492,6 +492,21 @@ export default (state = gameReducerDefaultState, action) => {
 			}),
 		};
 	}
+	case 'HIGHLIGHT_UPLAYED': {
+		return {
+			...state,
+			hand: state.hand.map((card) => {
+				if (card.id === action.id) {
+					return {
+						...card,
+						highlighUnplayed: true,
+					};
+				} else {
+					return card;
+				}
+			}),
+		};
+	}
 	case 'CLEAR_HIGHLIGHT_CARD': {
 		return {
 			...state,
@@ -500,6 +515,7 @@ export default (state = gameReducerDefaultState, action) => {
 					return {
 						...card,
 						highlighted: false,
+						highlightUnplayed: false,
 					};
 				} else {
 					return card;

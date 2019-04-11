@@ -29,6 +29,12 @@ export class RenderCard extends React.Component {
 		return workingClassName;
 	}
 
+	getUnplayedClassName = (card) => {
+		let workingClassName = "card__unplayed";
+		if(card.highlightUnplayed) {workingClassName = workingClassName + " card__unplayed__highlighted"};
+		return workingClassName;
+	}
+
 	render() {
 		const { card, inHand } = this.props;
 		return (
@@ -40,7 +46,7 @@ export class RenderCard extends React.Component {
 				{card.specialText && <div className="card__special-text">{card.specialText}</div>}
 				{card.flavourText && <div className="card__flavour-text">{card.flavourText}</div>}
 				{inHand && <Button onClick={this.playOnClick}> Play </Button>}
-				{card.unplayedEffects.length > 0 && <div className="card__unplayed">
+				{card.unplayedEffects.length > 0 && <div className={this.getUnplayedClassName(card)}>
 				{card.unplayedSpecialText && <div className="card__unplayed-special-text">If not played: {card.unplayedSpecialText}</div>}
 				</div>}
 				{/* <button onClick={this.discardOnClick}> Discard </button>
