@@ -10,7 +10,7 @@ class DeckModal extends Component {
 		return (
 			<Modal show={show} onHide={handleHide}>
 				<Modal.Header>
-					<Modal.Title className=".deck__modal__title">Deck</Modal.Title>
+					<Modal.Title className="deck__modal__title">Deck</Modal.Title>
 				</Modal.Header>
 
 				<Modal.Body>

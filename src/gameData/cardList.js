@@ -13,7 +13,7 @@ const pauseAfterPlayingCard = 450;
 
 const pauseBeforeUnplayedCard = 100;
 const pauseAfterUnplayedBuffHighlight = 220;
-const pauseAfterUnplayedCardEffect = 220;
+const pauseAfterUnplayedCardEffect = 120;
 
 
 // helper function used to un-highlight and then discard a card
@@ -52,10 +52,10 @@ export const testCard1 = {
 	id: 'placeholder1',
 	name: 'Triple Threat',
 	type: 'Test',
-	attack: 3,
+	attack: 1,
 	defense: 3,
 	numberOfHits: 1,
-	specialText: 'Attack for 3, defend for 3.',
+	specialText: 'Attack for 1 damage, 3 times',
 	flavourText: "Sometimes you just need to see if it's working",
 	effects: [
 		async (player, card) => {
@@ -68,13 +68,6 @@ export const testCard1 = {
 			await delay(pauseAfterCardEffect);
 			store.dispatch(clearAllCosmeticEffects(target));
 		},
-		async (player, card) => {
-			store.dispatch(applyHighlight(player));
-			await delay(pauseAfterBuffHighlight);
-			store.dispatch(raiseDefense(player, card.defense));
-			await delay(pauseAfterPlayingCard);
-			store.dispatch(clearAllCosmeticEffects(player));
-		},
 		async (player, card) => cardFinished(card),
 	],
 	unplayedEffects: [
@@ -83,7 +76,7 @@ export const testCard1 = {
 			store.dispatch(applyHighlight(player));
 			await delay(pauseAfterUnplayedBuffHighlight);
 			store.dispatch(raiseDefense(player, card.defense));
-			await delay(pauseAfterUnplayedCard);
+			await delay(pauseAfterUnplayedCardEffect);
 		}
 	],
 	unplayedSpecialText: "Defend for 3",
@@ -111,7 +104,7 @@ export const testCard3 = {
 	effects: [
 		() => store.dispatch(drawCard()),
 		() => store.dispatch(drawCard()),
-		(player, card) => store.dispatch(discardCard(card)),
+		async (player, card) => cardFinished(card),
 	],
 	specialText: 'Draw 2 cards',
 };
@@ -141,7 +134,7 @@ export const testCard4 = {
 			card.attack,
 			card.numberOfHits
 		),
-		(player, card) => store.dispatch(discardCard(card)),
+		async (player, card) => cardFinished(card),
 	],
 	specialText: 'Attack for 3 damage against 3 random targets',
 };
@@ -206,7 +199,7 @@ export const testCard9 = {
 	poison: 5,
 	effects: [
 		(player, card) => store.dispatch(raisePoison(targetRandomEnemy(), card.poison)),
-		(player, card) => store.dispatch(discardCard(card)),
+		async (player, card) => cardFinished(card),
 	],
 	specialText: 'Poison enemy for 5',
 };

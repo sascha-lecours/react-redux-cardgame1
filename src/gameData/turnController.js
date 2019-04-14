@@ -56,13 +56,15 @@ class TurnController extends React.Component {
 	pauseBeforeUnplayedCard = 200;
 	pauseAfterUnplayedCard = 200;
 
+	unplayedEffectsDone = false;
+
 	initializeCombat = () => {
 		store.dispatch(initializePlayer(warrior));
 
-		store.dispatch(setHand([testCard1]));
+		store.dispatch(setHand([testCard1, testCard1, testCard1]));
 
 		store.dispatch(setDeck([testCard1, testCard2, testCard1, testCard4, testCard5, testCard6, testCard7, testCard8, testCard9]));
-		store.dispatch(setEnemies([testEnemy1, testEnemy1, testEnemy2]));
+		store.dispatch(setEnemies([testEnemy2, testEnemy2, testEnemy2]));
 		this.props.advancePhase();
 		
 	};
@@ -79,16 +81,18 @@ class TurnController extends React.Component {
 		});
 	};
 
+	// TODO: Currently this is not resolving with the appropriate delay - toubleshoot
 	applyUnplayedCardEffects = async () => {
 		this.props.game.hand.forEach(
 			async (card) => {
-				if (card.unplayedEffects.length > 0) { 
+				if (card.unplayedEffects.length > 0) {
 					await delay(this.pauseBeforeUnplayedCard);
 					await useUnplayedCard(this.props.game.playerGroup[0], card);
 					await delay(this.pauseAfterUnplayedCard);
 					await this.props.clearHighlightCard(card);
 				};
 		});
+		this.unplayedEffectsDone = true;
 	};
 
 	killZeroHpEnemies = () => {
@@ -109,6 +113,7 @@ class TurnController extends React.Component {
 	};
 
 	playerEndOfTurn = async () => {
+		await this.applyUnplayedCardEffects();
 		// remove all cosmetic effects
 		await this.props.clearAllCosmeticEffects(this.props.game.playerGroup[0]);
 		await delay(this.pauseAfterPlayerTurn);
@@ -148,6 +153,7 @@ class TurnController extends React.Component {
 
 	};
 
+
 	// Lifecycle hooks:
 
 	componentDidMount() {
@@ -169,10 +175,12 @@ class TurnController extends React.Component {
 		if (phase === 1) {
 			// 1. Deal cards
 				// --> Deal player hand(s), including placing 'innate' cards in first time through.
-				drawCard();
+
 				// TODO: The logic below will need to account for the case where the deck and hand both run out, as well.
-				if (this.props.game.hand.length + 1 >= this.props.game.playerGroup[0].startHandSize) {
+				if (this.props.game.hand.length >= this.props.game.playerGroup[0].startHandSize) {
 					advancePhase();
+				} else {
+					drawCard();
 				}
 		} else if (phase === 2) {
 			// 2. Assign enemy moves
@@ -199,33 +207,37 @@ class TurnController extends React.Component {
 		} else if (phase === 6) {
 
 			// 6. Player turn ends (muliple cards?) - player end-of-turn effects, including discarding card
-				this.applyUnplayedCardEffects();
-				this.playerEndOfTurn();
-				this.reduceAllMarked();
+			this.playerEndOfTurn();
+			this.reduceAllMarked();
+			if (this.unplayedEffectsDone) {advancePhase(); this.unplayedEffectsDone = false;}
+
+
+		} else if (phase === 7) {
+			//7. Discard hand
 				discardHand();
 				advancePhase();
 
-		} else if (phase === 7) {
-			// 7. Enemy start-of-turn effects, checking for combat-over
+		} else if (phase === 8) {
+			// 8. Enemy start-of-turn effects, checking for combat-over
 				this.resolveEnemyPoison();
 				this.killZeroHpEnemies();
 				// then check for combat over
 				advancePhase();
 
-		} else if (phase === 8) {
-			// 8. Enemy actions resolve, up through array, checking for combat-over
+		} else if (phase === 9) {
+			// 9. Enemy actions resolve, up through array, checking for combat-over
 				this.enemiesTakeTurn();
 				advancePhase();
 
-		} else if (phase === 9) {
-			// 9. Enemy end-of-turn effects, checking for combat-over
+		} else if (phase === 10) {
+			// 10. Enemy end-of-turn effects, checking for combat-over
 				//TODO: implement
 				// - kill enemies now at 0 hp
 				// then check for combat over
 				advancePhase();
 
-		} else if (phase === 10) {
-			// 10. Increment turn counter, start back at step 1.
+		} else if (phase === 11) {
+			// 11. Increment turn counter, start back at step 1.
 				setPhase(1);
 		};
 	};

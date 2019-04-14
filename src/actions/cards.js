@@ -41,8 +41,8 @@ export const highlightCard = ({ id }) => {
 	};
 };
 
-// HIGHLIGHT_CARD
-export const highlighUnplayed = ({ id }) => {
+// HIGHLIGHT_UNPLAYED
+export const highlightUnplayed = ({ id }) => {
 	return {
 		type: 'HIGHLIGHT_UNPLAYED',
 		id,

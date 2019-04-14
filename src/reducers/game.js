@@ -492,7 +492,7 @@ export default (state = gameReducerDefaultState, action) => {
 			}),
 		};
 	}
-	case 'HIGHLIGHT_UPLAYED': {
+	case 'HIGHLIGHT_UNPLAYED': {
 		return {
 			...state,
 			hand: state.hand.map((card) => {
