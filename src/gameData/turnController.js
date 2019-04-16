@@ -82,14 +82,14 @@ class TurnController extends React.Component {
 	};
 
 	// TODO: Currently this is not resolving with the appropriate delay - toubleshoot
-	applyUnplayedCardEffects = async () => {
+	applyUnplayedCardEffects = () => {
 		this.props.game.hand.forEach(
-			async (card) => {
+			 (card) => {
 				if (card.unplayedEffects.length > 0) {
-					await delay(this.pauseBeforeUnplayedCard);
-					await useUnplayedCard(this.props.game.playerGroup[0], card);
-					await delay(this.pauseAfterUnplayedCard);
-					await this.props.clearHighlightCard(card);
+					delay(this.pauseBeforeUnplayedCard);
+					useUnplayedCard(this.props.game.playerGroup[0], card);
+					delay(this.pauseAfterUnplayedCard);
+					this.props.clearHighlightCard(card);
 				};
 		});
 		this.unplayedEffectsDone = true;
@@ -112,11 +112,11 @@ class TurnController extends React.Component {
 		await this.props.applyIsActive(this.props.game.playerGroup[0]);
 	};
 
-	playerEndOfTurn = async () => {
-		await this.applyUnplayedCardEffects();
+	playerEndOfTurn = () => {
+		this.applyUnplayedCardEffects();
 		// remove all cosmetic effects
-		await this.props.clearAllCosmeticEffects(this.props.game.playerGroup[0]);
-		await delay(this.pauseAfterPlayerTurn);
+		this.props.clearAllCosmeticEffects(this.props.game.playerGroup[0]);
+		delay(this.pauseAfterPlayerTurn);
 		console.log('player turn is over');
 	};
 
