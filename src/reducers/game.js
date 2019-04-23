@@ -499,7 +499,7 @@ export default (state = gameReducerDefaultState, action) => {
 				if (card.id === action.id) {
 					return {
 						...card,
-						highlighUnplayed: true,
+						highlightUnplayed: true,
 					};
 				} else {
 					return card;

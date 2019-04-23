@@ -5,6 +5,7 @@ export class RenderEnemy extends React.Component {
 	getClassName = (enemy) => {
 		let workingClassName = "enemy";
 		if(enemy.highlighted) {workingClassName = workingClassName + " enemy__highlighted"};
+		if(enemy.isActive) {workingClassName = workingClassName + " enemy__is-active"};
 		if(enemy.shaking) {workingClassName = workingClassName + " shake-hard shake-constant"};
 		return workingClassName;
 	}

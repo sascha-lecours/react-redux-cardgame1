@@ -75,13 +75,13 @@ class TurnController extends React.Component {
 
 
 	enemiesTakeTurn = async () => {
-		this.props.game.enemyGroup.forEach(
-			async (enemy) => {
+		for (const enemy of this.props.game.enemyGroup) {
 				await this.props.applyIsActive(enemy);
 				await delay(this.pauseBeforeEnemyMove);
 				await useMove(enemy, enemy.nextMove);
 				await delay(this.pauseAfterEnemyMove);
-		});
+				await this.props.clearAllCosmeticEffects(enemy);
+		};
 	};
 
 	applyUnplayedCardEffects = async () => {
@@ -93,7 +93,7 @@ class TurnController extends React.Component {
 					await this.props.clearHighlightCard(card);
 				}
 			};
-		this.unplayedEffectsDone = true;
+		// this.unplayedEffectsDone = true;
 	};
 
 	killZeroHpEnemies = () => {
