@@ -58,6 +58,9 @@ class TurnController extends React.Component {
 
 	unplayedEffectsDone = false;
 
+	// This may not be needed
+	lastPhase = null;
+
 	initializeCombat = () => {
 		store.dispatch(initializePlayer(warrior));
 
@@ -90,7 +93,7 @@ class TurnController extends React.Component {
 					await this.props.clearHighlightCard(card);
 				}
 			};
-		// this.unplayedEffectsDone = true;
+		this.unplayedEffectsDone = true;
 	};
 
 	killZeroHpEnemies = () => {
@@ -160,6 +163,7 @@ class TurnController extends React.Component {
 
 	async componentDidUpdate() {
 			// -> Begin turn loop.
+
 		const {
 			advancePhase,
 			setPhase,
@@ -170,75 +174,81 @@ class TurnController extends React.Component {
 
 		const { phase } = this.props.turn;
 
-		if (phase === 1) {
-			// 1. Deal cards
-				// --> Deal player hand(s), including placing 'innate' cards in first time through.
+		if (phase != 1 && (phase === this.lastPhase)) return;
+		this.lastPhase = phase;
 
-				// TODO: The logic below will need to account for the case where the deck and hand both run out, as well.
-				if (this.props.game.hand.length >= this.props.game.playerGroup[0].startHandSize) {
+		(async () => {
+				if (phase === 1) {
+				// 1. Deal cards
+					// --> Deal player hand(s), including placing 'innate' cards in first time through.
+
+					// TODO: The logic below will need to account for the case where the deck and hand both run out, as well.
+					if (this.props.game.hand.length >= this.props.game.playerGroup[0].startHandSize) {
+						advancePhase();
+					} else {
+						drawCard();
+					}
+			} else if (phase === 2) {
+				// 2. Assign enemy moves
+					setNewMoves(this.props.game.enemyGroup);
 					advancePhase();
-				} else {
-					drawCard();
-				}
-		} else if (phase === 2) {
-			// 2. Assign enemy moves
-				setNewMoves(this.props.game.enemyGroup);
+
+			} else if (phase === 3) {
+				// 3. Player start-of-turn effects, checking for combat-over
+					//TODO: implement
+					this.playerStartOfTurn();
+					this.resolvePlayerPoison();
+					advancePhase();
+
+			} else if (phase === 4) {
+					// 4. Player plays card - phase will advance when they play
+
+			} else if (phase === 5) {
+				// 5. Resolve all card effects, including visuals/sound and checking for combat-over
+					//TODO: implement
+					// - kill enemies now at 0 hp
+					// then check for combat over
+					advancePhase();
+
+			} else if (phase === 6) {
+
+				// 6. Player turn ends (muliple cards?) - player end-of-turn effects, including discarding card
+				console.log('starting end of turn')
+				await this.playerEndOfTurn();
+				await this.reduceAllMarked();
+				// if (this.unplayedEffectsDone) {advancePhase(); this.unplayedEffectsDone = false;}
 				advancePhase();
 
-		} else if (phase === 3) {
-			// 3. Player start-of-turn effects, checking for combat-over
-				//TODO: implement
-				this.playerStartOfTurn();
-				this.resolvePlayerPoison();
-				advancePhase();
 
-		} else if (phase === 4) {
-				// 4. Player plays card - phase will advance when they play
+			} else if (phase === 7) {
+				//7. Discard hand
+					discardHand();
+					advancePhase();
 
-		} else if (phase === 5) {
-			// 5. Resolve all card effects, including visuals/sound and checking for combat-over
-				//TODO: implement
-				// - kill enemies now at 0 hp
-				// then check for combat over
-				advancePhase();
+			} else if (phase === 8) {
+				// 8. Enemy start-of-turn effects, checking for combat-over
+					this.resolveEnemyPoison();
+					this.killZeroHpEnemies();
+					// then check for combat over
+					advancePhase();
 
-		} else if (phase === 6) {
+			} else if (phase === 9) {
+				// 9. Enemy actions resolve, up through array, checking for combat-over
+					this.enemiesTakeTurn();
+					advancePhase();
 
-			// 6. Player turn ends (muliple cards?) - player end-of-turn effects, including discarding card
-			await this.playerEndOfTurn();
-			await this.reduceAllMarked();
-			// if (this.unplayedEffectsDone) {advancePhase(); this.unplayedEffectsDone = false;}
-			advancePhase();
+			} else if (phase === 10) {
+				// 10. Enemy end-of-turn effects, checking for combat-over
+					//TODO: implement
+					// - kill enemies now at 0 hp
+					// then check for combat over
+					advancePhase();
 
-
-		} else if (phase === 7) {
-			//7. Discard hand
-				discardHand();
-				advancePhase();
-
-		} else if (phase === 8) {
-			// 8. Enemy start-of-turn effects, checking for combat-over
-				this.resolveEnemyPoison();
-				this.killZeroHpEnemies();
-				// then check for combat over
-				advancePhase();
-
-		} else if (phase === 9) {
-			// 9. Enemy actions resolve, up through array, checking for combat-over
-				this.enemiesTakeTurn();
-				advancePhase();
-
-		} else if (phase === 10) {
-			// 10. Enemy end-of-turn effects, checking for combat-over
-				//TODO: implement
-				// - kill enemies now at 0 hp
-				// then check for combat over
-				advancePhase();
-
-		} else if (phase === 11) {
-			// 11. Increment turn counter, start back at step 1.
-				setPhase(1);
-		};
+			} else if (phase === 11) {
+				// 11. Increment turn counter, start back at step 1.
+					setPhase(1);
+			};
+		})();
 	};
 
 
