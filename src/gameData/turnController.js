@@ -81,18 +81,16 @@ class TurnController extends React.Component {
 		});
 	};
 
-	// TODO: Currently this is not resolving with the appropriate delay - toubleshoot
-	applyUnplayedCardEffects = () => {
-		this.props.game.hand.forEach(
-			 (card) => {
+	applyUnplayedCardEffects = async () => {
+		for (const card of this.props.game.hand) {
 				if (card.unplayedEffects.length > 0) {
-					delay(this.pauseBeforeUnplayedCard);
-					useUnplayedCard(this.props.game.playerGroup[0], card);
-					delay(this.pauseAfterUnplayedCard);
-					this.props.clearHighlightCard(card);
-				};
-		});
-		this.unplayedEffectsDone = true;
+					await delay(this.pauseBeforeUnplayedCard);
+					await useUnplayedCard(this.props.game.playerGroup[0], card);
+					await delay(this.pauseAfterUnplayedCard);
+					await this.props.clearHighlightCard(card);
+				}
+			};
+		// this.unplayedEffectsDone = true;
 	};
 
 	killZeroHpEnemies = () => {
@@ -112,11 +110,11 @@ class TurnController extends React.Component {
 		await this.props.applyIsActive(this.props.game.playerGroup[0]);
 	};
 
-	playerEndOfTurn = () => {
-		this.applyUnplayedCardEffects();
+	playerEndOfTurn = async () => {
+		await this.applyUnplayedCardEffects();
 		// remove all cosmetic effects
-		this.props.clearAllCosmeticEffects(this.props.game.playerGroup[0]);
-		delay(this.pauseAfterPlayerTurn);
+		await this.props.clearAllCosmeticEffects(this.props.game.playerGroup[0]);
+		await delay(this.pauseAfterPlayerTurn);
 		console.log('player turn is over');
 	};
 
@@ -160,7 +158,7 @@ class TurnController extends React.Component {
 		this.initializeCombat();
 	};
 
-	componentDidUpdate() {
+	async componentDidUpdate() {
 			// -> Begin turn loop.
 		const {
 			advancePhase,
@@ -207,9 +205,10 @@ class TurnController extends React.Component {
 		} else if (phase === 6) {
 
 			// 6. Player turn ends (muliple cards?) - player end-of-turn effects, including discarding card
-			this.playerEndOfTurn();
-			this.reduceAllMarked();
-			if (this.unplayedEffectsDone) {advancePhase(); this.unplayedEffectsDone = false;}
+			await this.playerEndOfTurn();
+			await this.reduceAllMarked();
+			// if (this.unplayedEffectsDone) {advancePhase(); this.unplayedEffectsDone = false;}
+			advancePhase();
 
 
 		} else if (phase === 7) {

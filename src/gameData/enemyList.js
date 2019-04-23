@@ -135,5 +135,5 @@ export const testEnemy2 = {
 	portrait: '/images/enemies/ogre.png',
 	maxHp: 12,
 	defense: 4,
-	actions: [bigStrike, bigStrike],
+	actions: [warcry],
 };
