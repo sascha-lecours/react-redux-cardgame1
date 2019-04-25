@@ -7,6 +7,10 @@
 	padding: 5px;
 }
 
+.card:hover {
+	transform: scale(1.1);
+}
+
 .card__name {
 	font-weight: 700;
 } 

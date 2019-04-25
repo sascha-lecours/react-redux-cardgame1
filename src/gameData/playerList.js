@@ -20,6 +20,7 @@ export const playerDefault = {
 	shaking: false,
 	buffing: false,
 	gettingHit: false,
+	isPulsing: false,
 	portrait: '/images/players/tomyris_portrait.jpeg',
 };
 

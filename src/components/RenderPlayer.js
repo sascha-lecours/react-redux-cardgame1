@@ -8,6 +8,7 @@ export class RenderPlayer extends React.Component {
 		if(player.highlighted) {workingClassName = workingClassName + " player__highlighted"};
 		if(player.isActive) {workingClassName = workingClassName + " player__is-active"};
 		if(player.shaking) {workingClassName = workingClassName + " shake-hard shake-constant"};
+		if(player.isPulsing) {workingClassName = workingClassName + " player__is-pulsing"};
 		return workingClassName;
 	}
 

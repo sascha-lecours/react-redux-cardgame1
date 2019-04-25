@@ -4,7 +4,7 @@
 	margin: $s-size;
 	max-width: 170px;
 	padding: 5px;
-	// transition: transform .2s; /* Animation */
+	transition: transform .2s; /* Animation */
 }
 
 .enemy__name {
@@ -36,4 +36,5 @@
 .enemy__is-active {
 	background-color: lighten($enemy-background, 25%);
 	box-shadow: 0px 0px 5px cyan;
+	transform: scale(1.05);
 }

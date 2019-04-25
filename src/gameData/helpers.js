@@ -1,11 +1,15 @@
 import { store } from '../app';
-import { dealDamage } from '../actions/combatEffects';
-import { applyShaking, clearShaking } from '../actions/cosmeticBattleEffects';
+import { dealDamage, raiseDefense } from '../actions/combatEffects';
+import { applyShaking, clearShaking, applyPulsing, clearPulsing } from '../actions/cosmeticBattleEffects';
 
 // universal timing costants for animation
 
 const pauseBeforeAttack = 300;
 const durationhOfAttackShake = 130;
+
+const pauseBeforeDefend = 250;
+const durationhOfDefendPulse = 500;
+
 
 export const delay = (time, callback) => {
 	return new Promise((resolve) => {
@@ -35,6 +39,16 @@ export const makeAttack = (target, source, baseDamage, numberOfHits) => {
 	}
 };
 
+export const makeDefend = (target, source, baseDefense) => {
+	if (target && source) {
+		const modifiedDefense = baseDefense + source.toughness;
+		console.log(`${source.name} is defending ${target.name} (${target.defense} defense) for ${modifiedDefense} defense`);
+		store.dispatch(raiseDefense(target, modifiedDefense));
+	} else {
+		console.log('Defense cancelled - no valid target (or defender no longer exists)!');
+	}
+}
+
 export const attackOnce = async (target, source, attack) => {
 	await delay(pauseBeforeAttack);
 	store.dispatch(applyShaking(target));
@@ -46,4 +60,16 @@ export const attackOnce = async (target, source, attack) => {
 	);
 	await delay(durationhOfAttackShake);
 	store.dispatch(clearShaking(target));
+};
+
+export const defendOnce = async (target, source, defense) => {
+	await delay(pauseBeforeDefend);
+	store.dispatch(applyPulsing(target));
+	await makeDefend(
+		getCombatantById(target.id),
+		source,
+		defense,
+	);
+	await delay(durationhOfDefendPulse);
+	store.dispatch(clearPulsing(target));
 };

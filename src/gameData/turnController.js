@@ -5,7 +5,7 @@ import { advancePhase, setPhase } from '../actions/turn';
 import { applyIsActive, clearAllCosmeticEffects } from '../actions/cosmeticBattleEffects';
 import { delay } from './helpers';
 import { testCard1, testCard2, testCard3, testCard4, testCard5, testCard6, testCard7, testCard8, testCard9 } from './cardList';
-import { setHand, setDeck, initializePlayer, drawCard, discardHand, highlightCard, clearHighlightCard } from '../actions/cards';
+import { setHand, setDeck, initializePlayer, drawCard, discardHand, highlightCard, clearHighlightCard, allowPlayerToPlayCards, forbidPlayerToPlayCards } from '../actions/cards';
 import { setEnemies, setNewMove, killEnemy } from '../actions/enemies';
 import { raiseMarked, raisePoison, dealDamage } from '../actions/combatEffects';
 import { testEnemy1, testEnemy2 } from './enemyList';
@@ -17,30 +17,7 @@ import useUnplayedCard from './useUnplayedCard';
 // This may be best handled using a subscribe listener that checks for certain key changes in...
 // ... in the store and implements turn events accordingly
 
-
-// -> Dormant state when awaiting combat
-
-
-
-// -> Begin turn loop.
-// 1. Deal cards
-// --> Deal player hand(s), including placing 'innate' cards in first time through.
-// 2. Assign enemy moves
-// 3. Player start-of-turn effects, checking for combat-over
-// 4. Player plays card
-// 5. Resolve all card effects, including visuals/sound and checking for combat-over
-// 6. Player turn ends (muliple cards?) - player end-of-turn effects
-// 7. Enemy start-of-turn effects, checking for combat-over
-
-// 8. Enemy actions resolve, up through array, checking for combat-over
-// 9. Enemy end-of-turn effects, checking for combat-over
-// 10. Increment turn counter, start back at step 1.
-
-// -> Resolve post-combat
-// 1. End-of-combat effects such as healing
-// 2. Gain rewards (gold, relics, potions, cards, etc.)
-// 3. Hand off to "campaign" component that moves on  higher scope. 
-
+export const playCardPhase = 4;
 
 class TurnController extends React.Component {
 
@@ -64,10 +41,11 @@ class TurnController extends React.Component {
 	initializeCombat = () => {
 		store.dispatch(initializePlayer(warrior));
 
-		store.dispatch(setHand([testCard1, testCard1, testCard1]));
+		store.dispatch(setHand([testCard1, testCard1, testCard2]));
 
 		store.dispatch(setDeck([testCard1, testCard2, testCard1, testCard4, testCard5, testCard6, testCard7, testCard8, testCard9]));
 		store.dispatch(setEnemies([testEnemy2, testEnemy2, testEnemy2]));
+		this.props.forbidPlayerToPlayCards();
 		this.props.advancePhase();
 		
 	};
@@ -170,7 +148,10 @@ class TurnController extends React.Component {
 			setNewMoves,
 			drawCard,
 			discardHand,
+			allowPlayerToPlayCards,
 		} = this.props;
+
+
 
 		const { phase } = this.props.turn;
 
@@ -200,7 +181,8 @@ class TurnController extends React.Component {
 					this.resolvePlayerPoison();
 					advancePhase();
 
-			} else if (phase === 4) {
+			} else if (phase === playCardPhase) {
+					allowPlayerToPlayCards();
 					// 4. Player plays card - phase will advance when they play
 
 			} else if (phase === 5) {
@@ -270,12 +252,14 @@ class TurnController extends React.Component {
   
   const mapDispatchToProps = (dispatch, props) => ({
 	advancePhase: () => dispatch(advancePhase()),
+	allowPlayerToPlayCards: () => dispatch(allowPlayerToPlayCards()),
 	applyIsActive: (target) => dispatch(applyIsActive(target)),
 	clearAllCosmeticEffects: (target) => dispatch(clearAllCosmeticEffects(target)),
 	clearHighlightCard: (card) => dispatch(clearHighlightCard(card)),
 	dealDamage: (target, source, damage, numberOfHits) => dispatch(dealDamage(target, source, damage, numberOfHits)),
 	discardHand: () => dispatch(discardHand()),
 	drawCard: () => dispatch(drawCard()),
+	forbidPlayerToPlayCards: () => dispatch(forbidPlayerToPlayCards()),
 	highlightCard: (card) => dispatch(highlightCard(card)),
 	killEnemy: (enemy) => dispatch(killEnemy(enemy)),
 	raiseMarked: (enemy, marked) => dispatch(raiseMarked(enemy, marked)),

@@ -104,3 +104,19 @@ export const banishCard = ({ id }) => {
 		id,
 	};
 };
+
+// ALLOW_PLAYER_TO_PLAY_CARDS
+
+export const allowPlayerToPlayCards = () => {
+	return {
+		type: 'ALLOW_PLAYER_TO_PLAY_CARDS',
+	};
+};
+
+// FORBID_PLAYER_TO_PLAY_CARDS
+
+export const forbidPlayerToPlayCards = () => {
+	return {
+		type: 'FORBID_PLAYER_TO_PLAY_CARDS',
+	};
+};

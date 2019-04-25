@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { discardCard, banishCard } from '../actions/cards';
+import { discardCard, banishCard, forbidPlayerToPlayCards } from '../actions/cards';
 import { advancePhase } from '../actions/turn';
 import playCard from '../gameData/playCard';
 import { Button } from 'react-bootstrap';
+import { playCardPhase } from '../gameData/turnController';
 
 
 export class RenderCard extends React.Component {
@@ -17,8 +18,11 @@ export class RenderCard extends React.Component {
 	}
 	playOnClick = async () => {
 		// Todo: this probably needs to be refactored/moved
-		await playCard(this.props.player, this.props.card);
-		this.props.advancePhase();
+		if(this.props.phase === playCardPhase && this.props.playerCanPlayCards) {
+			this.props.forbidPlayerToPlayCards();
+			await playCard(this.props.player, this.props.card);
+			this.props.advancePhase();
+		};
 	}
 
 	getClassName = (card) => {
@@ -38,14 +42,14 @@ export class RenderCard extends React.Component {
 	render() {
 		const { card, inHand } = this.props;
 		return (
-			<div className={this.getClassName(card)}>
+			<div onClick={this.playOnClick} className={this.getClassName(card)}>
 				<div className="card__name">{`${card.name}`}</div>
 				<div>{`Type: ${card.type}`}</div>
 				{/*{card.attack && <div>{`Attack: ${card.attack}`}</div>}
 				{card.defense && <div>{`Defense: ${card.defense}`}</div>} */}
 				{card.specialText && <div className="card__special-text">{card.specialText}</div>}
 				{card.flavourText && <div className="card__flavour-text">{card.flavourText}</div>}
-				{inHand && <Button onClick={this.playOnClick}> Play </Button>}
+				{/*inHand && <Button > Play </Button>*/}
 				{card.unplayedEffects.length > 0 && <div className={this.getUnplayedClassName(card)}>
 				{card.unplayedSpecialText && <div className="card__unplayed-special-text">If not played: {card.unplayedSpecialText}</div>}
 				</div>}
@@ -65,6 +69,8 @@ RenderCard.	defaultProps = {
 const mapStateToProps = (state) => {
 	return {
 		player: state.game.playerGroup[0],
+		phase: state.turn.phase,
+		playerCanPlayCards: state.game.playerCanPlayCards,
 	};
 };
 
@@ -72,6 +78,7 @@ const mapDispatchToProps = (dispatch, props) => ({
 	discardCard: ({ id }) => dispatch(discardCard({ id })),
 	banishCard: ({ id }) => dispatch(banishCard({ id })),
 	advancePhase: () => dispatch(advancePhase()),
+	forbidPlayerToPlayCards: () => dispatch(forbidPlayerToPlayCards()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(RenderCard);

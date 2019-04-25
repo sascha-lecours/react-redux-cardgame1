@@ -12,6 +12,7 @@ const gameReducerDefaultState = {
 	banished: [],
 	playerGroup: [],
 	enemyGroup: [],
+	playerCanPlayCards: false,
 };
 
 // Cards functions
@@ -444,6 +445,56 @@ export default (state = gameReducerDefaultState, action) => {
 			}),
 		};
 	}
+	case 'APPLY_PULSING': {
+		return {
+			...state,
+			enemyGroup: state.enemyGroup.map((enemy) => {
+				if (enemy.id === action.target.id) {
+					return {
+						...enemy,
+						isPulsing: true,
+					};
+				} else {
+					return enemy;
+				}
+			}),
+			playerGroup: state.playerGroup.map((player) => {
+				if (player.id === action.target.id) {
+					return {
+						...player,
+						isPulsing: true,
+					};
+				} else {
+					return player;
+				}
+			}),
+		};
+	}
+	case 'CLEAR_PULSING': {
+		return {
+			...state,
+			enemyGroup: state.enemyGroup.map((enemy) => {
+				if (enemy.id === action.target.id) {
+					return {
+						...enemy,
+						isPulsing: false,
+					};
+				} else {
+					return enemy;
+				}
+			}),
+			playerGroup: state.playerGroup.map((player) => {
+				if (player.id === action.target.id) {
+					return {
+						...player,
+						isPulsing: false,
+					};
+				} else {
+					return player;
+				}
+			}),
+		};
+	}
 	case 'CLEAR_ALL_COSMETIC_EFFECTS': {
 		return {
 			...state,
@@ -456,6 +507,7 @@ export default (state = gameReducerDefaultState, action) => {
 						shaking: false,
 						buffing: false,
 						gettingHit: false,
+						isPulsing: false,
 					};
 				} else {
 					return enemy;
@@ -521,6 +573,18 @@ export default (state = gameReducerDefaultState, action) => {
 					return card;
 				}
 			}),
+		};
+	}
+	case 'ALLOW_PLAYER_TO_PLAY_CARDS': {
+		return {
+			...state,
+			playerCanPlayCards: true,
+		};
+	}
+	case 'FORBID_PLAYER_TO_PLAY_CARDS': {
+		return {
+			...state,
+			playerCanPlayCards: false,
 		};
 	}
 	// End of reducer switch (default case)

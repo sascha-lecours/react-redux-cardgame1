@@ -2,7 +2,7 @@ import { drawCard, discardCard, banishCard, clearHighlightCard, } from '../actio
 import { raiseStrength, raiseMarked, raiseToughness, raiseDefense, raisePoison, dealDamage } from '../actions/combatEffects';
 import targetRandomEnemy from './targetRandomEnemy';
 import { store } from '../app';
-import { delay, getCombatantById, makeAttack, attackOnce } from './helpers';
+import { delay, getCombatantById, makeAttack, attackOnce, makeDefend, defendOnce } from './helpers';
 import { applyHighlight, applyShaking, clearShaking, clearAllCosmeticEffects } from '../actions/cosmeticBattleEffects';
 
 // Animation constants and functions - possibly to be moved later
@@ -56,7 +56,6 @@ export const testCard1 = {
 	defense: 3,
 	numberOfHits: 1,
 	specialText: 'Attack for 1 damage, 3 times',
-	flavourText: "Sometimes you just need to see if it's working",
 	effects: [
 		async (player, card) => {
 			const target = targetRandomEnemy();
@@ -72,10 +71,11 @@ export const testCard1 = {
 	],
 	unplayedEffects: [
 		async (player, card) => {
+			const target = player;
 			await delay(pauseBeforeUnplayedCard);
 			store.dispatch(applyHighlight(player));
 			await delay(pauseAfterUnplayedBuffHighlight);
-			store.dispatch(raiseDefense(player, card.defense));
+			await defendOnce(target, player, card.defense);
 			await delay(pauseAfterUnplayedCardEffect);
 		}
 	],
@@ -91,8 +91,15 @@ export const testCard2 = {
 	specialText: 'Gain 10 defense 2 times.',
 	flavourText: "Time to hunker down",
 	effects: [
-		(player, card) => store.dispatch(raiseDefense(player, card.defense)),
-		(player, card) => store.dispatch(raiseDefense(player, card.defense)),
+		async (player, card) => {
+			const target = player;
+			await delay(pauseBeforePlayingCard);
+			store.dispatch(applyHighlight(target));
+			await defendOnce(target, player, card.defense);
+			await defendOnce(target, player, card.defense);
+			await delay(pauseAfterCardEffect);
+			store.dispatch(clearAllCosmeticEffects(target));
+		},
 		async (player, card) => cardFinished(card),
 	],
 };

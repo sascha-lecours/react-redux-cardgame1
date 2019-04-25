@@ -4,7 +4,7 @@
 	margin: $s-size;
 	max-width: 200px;
 	padding: 5px;
-	// transition: transform .2s; /* Animation */
+	transition: transform .2s; /* Animation */
 }
 
 .player__name {
@@ -31,4 +31,19 @@
 .player__is-active {
 	background-color: lighten($player-background, 25%);
 	box-shadow: 0px 0px 5px cyan;
+	transform: scale(1.05);
+}
+
+@keyframes shadow-pulse
+{
+  0% {
+    box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.2);
+  }
+  100% {
+    box-shadow: 0 0 0 35px rgba(0, 0, 0, 0);
+  }
+}
+
+.player__is-pulsing {
+	animation: shadow-pulse 1s infinite;
 }
