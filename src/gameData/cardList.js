@@ -49,13 +49,12 @@ export const cardDefault = {
 };
 
 export const testCard1 = {
-	id: 'placeholder1',
-	name: 'Triple Threat',
-	type: 'Test',
+	name: 'Spear Jabs',
+	type: 'Attack',
 	attack: 1,
 	defense: 3,
 	numberOfHits: 1,
-	specialText: 'Attack for 1 damage, 3 times',
+	specialText: (player) => {return `Attack for ${1 + player.strength} damage, 3 times`},
 	effects: [
 		async (player, card) => {
 			const target = targetRandomEnemy();
@@ -79,7 +78,7 @@ export const testCard1 = {
 			await delay(pauseAfterUnplayedCardEffect);
 		}
 	],
-	unplayedSpecialText: "Defend for 3",
+	unplayedSpecialText: (player) => {return `Defend for ${3 + player.toughness}`},
 };
 
 

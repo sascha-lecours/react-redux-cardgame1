@@ -40,18 +40,18 @@ export class RenderCard extends React.Component {
 	}
 
 	render() {
-		const { card, inHand } = this.props;
+		const { card, inHand, player } = this.props;
 		return (
 			<div onClick={this.playOnClick} className={this.getClassName(card)}>
 				<div className="card__name">{`${card.name}`}</div>
-				<div>{`Type: ${card.type}`}</div>
+				<div className="card__type">{card.type}</div>
 				{/*{card.attack && <div>{`Attack: ${card.attack}`}</div>}
 				{card.defense && <div>{`Defense: ${card.defense}`}</div>} */}
-				{card.specialText && <div className="card__special-text">{card.specialText}</div>}
+				{card.specialText && <div className="card__special-text">{card.specialText(player)}</div>}
 				{card.flavourText && <div className="card__flavour-text">{card.flavourText}</div>}
 				{/*inHand && <Button > Play </Button>*/}
 				{card.unplayedEffects.length > 0 && <div className={this.getUnplayedClassName(card)}>
-				{card.unplayedSpecialText && <div className="card__unplayed-special-text">If not played: {card.unplayedSpecialText}</div>}
+				{card.unplayedSpecialText && <div className="card__unplayed-special-text">Unplayed: {card.unplayedSpecialText(player)}</div>}
 				</div>}
 				{/* <button onClick={this.discardOnClick}> Discard </button>
 					<button onClick={this.banishOnClick}> Banish </button> */}
