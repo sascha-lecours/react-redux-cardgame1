@@ -6,7 +6,7 @@ const getEnemyById = (targetId) => {
 };
 
 
-export default ({ id }, move) => {
+export default async ({ id }, move) => {
 	console.log(`Enemy used ${move.name}`);
-	move.effects.forEach(element => element(getEnemyById(id), move));
+	await move.effects.forEach(element => element(getEnemyById(id), move));
 };

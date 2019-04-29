@@ -10,7 +10,6 @@ const getPlayerById = (id) => {
 
 // Plays out effects of a card
 export default async ({ id }, card) => {
-	console.log(`highlighting unplayed portion of ${card.name}`);
 	store.dispatch(highlightUnplayed(card));
 	for (const element of card.unplayedEffects) {
 		await element(getPlayerById(id), card)

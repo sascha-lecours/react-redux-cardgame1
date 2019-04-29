@@ -20,7 +20,7 @@ export const raiseMarked = (target, marked) => {
 
 // RAISE POISON
 export const raisePoison = (target, poison) => {
-	if (poison > 0) console.log(`Poisoning ${target.name} for ${poison}`);
+	// if (poison > 0) console.log(`Poisoning ${target.name} for ${poison}`);
 	return {
 		type: 'RAISE_POISON',
 		target,
@@ -41,7 +41,7 @@ export const raiseToughness = (target, toughness) => {
 // RAISE DEFENSE
 export const raiseDefense = (target, defense) => {
 	const modifiedDefense = Math.max((defense + target.toughness), 0);
-	console.log(`Raising defense of ${target.name} by ${modifiedDefense}`);
+	// console.log(`Raising defense of ${target.name} by ${modifiedDefense}`);
 	return {
 		type: 'RAISE_DEFENSE',
 		target,

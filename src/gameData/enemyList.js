@@ -1,26 +1,45 @@
 import { store } from '../app';
 import { raiseDefense, raiseToughness, raiseStrength, raisePoison } from '../actions/combatEffects';
-import { delay, getCombatantById, makeAttack, attackOnce } from './helpers';
+import { 
+	delay,
+	getCombatantById,
+	makeAttack,
+	attackOnce,
+	makeDefend,
+	defendOnce,
+	startBuffAnimation,
+	endBuffAnimation,
+	applyPoison 
+} from './helpers';
 import targetPlayer from './targetPlayer';
+import { clearAllCosmeticEffects } from '../actions/cosmeticBattleEffects';
+
+// Animation constants and functions - possibly to be moved later
+const pauseBeforePlayingCard = 100;
+const pauseAfterBuffHighlight = 220;
+const pauseAfterCardEffect = 220;
+const pauseAfterPlayingCard = 450;
+
+const pauseBeforeUnplayedCard = 100;
+const pauseAfterUnplayedBuffHighlight = 220;
+const pauseAfterUnplayedCardEffect = 120;
 
 
-
-// Helper functions
-const applyVariance = (base, variance) => {
-	const modifier = Math.floor((Math.random() * ((variance * 2) + 1)) - variance);
-	// console.log(`applying variance. Variance range is ${variance}, modifier is ${modifier}`);
-	return (base + modifier);
-};
+// // Helper functions
+// const applyVariance = (base, variance) => {
+// 	const modifier = Math.floor((Math.random() * ((variance * 2) + 1)) - variance);
+// 	// console.log(`applying variance. Variance range is ${variance}, modifier is ${modifier}`);
+// 	return (base + modifier);
+// };
 
 const quickStrikes = {
 	type: 'attack',
 	name: 'Quick Strikes',
 	attack: 1,
-	varianceDamage: 0,
 	numberOfHits: 3,
 	effects: [
 		async (enemy, move) => { 
-			await attackOnce(targetPlayer(), enemy, applyVariance(move.attack, move.varianceDamage)); 
+			await attackOnce(targetPlayer(), enemy, move.attack); 
 		}
 	],
 };
@@ -30,11 +49,15 @@ const frenzy = {
 	name: 'Frenzy',
 	strength: 1,
 	defense: 3,
-	attack: 1,
-	numberOfHits: 1,
 	effects: [
-		(enemy, move) => store.dispatch(raiseDefense(enemy, move.defense)),
-		(enemy, move) => store.dispatch(raiseStrength(enemy, move.strength)),
+		async (enemy, move) => {
+			await defendOnce(enemy, enemy, move.defense);
+			await startBuffAnimation(enemy, enemy, move);
+			await store.dispatch(raiseStrength(getCombatantById(enemy.id), move.strength));
+			await endBuffAnimation(enemy, enemy, move);
+			await delay(pauseAfterCardEffect);
+			// await clearAllCosmeticEffects(enemy);
+		}
 	],
 };
 
@@ -54,7 +77,9 @@ const poisonBite = {
 	name: 'Poison Chomp',
 	poison: 4,
 	effects: [
-		(enemy, move) => store.dispatch(raisePoison(targetPlayer(), move.poison)),
+		async (enemy, move) => {
+			applyPoison(targetPlayer(), enemy, move.poison);
+		}
 	],
 };
 
@@ -71,15 +96,9 @@ const bigStrike = {
 	type: 'attack',
 	name: 'Clonka Bonk',
 	attack: 7,
-	varianceDamage: 3,
 	numberOfHits: 1,
 	effects: [
-		(enemy, move) => makeAttack(
-			targetPlayer(),
-			enemy,
-			applyVariance(move.attack, move.varianceDamage),
-			move.numberOfHits
-		),
+		async (enemy, move) => {attackOnce(targetPlayer(), enemy, move.attack)},
 	],
 };
 
@@ -87,7 +106,6 @@ export const moveDefault = {
 	type: undefined,
 	name: undefined,
 	baseDamage: 0,
-	varianceDamage: 0,
 	numberOfHits: 1,
 	effects: [],
 };
@@ -126,7 +144,8 @@ export const testEnemy1 = {
 	portrait: '/images/enemies/snake.png',
 	maxHp: 10,
 	defense: 0,
-	actions: [quickStrikes, poisonBite, frenzy],
+	// actions: [quickStrikes, poisonBite, frenzy],
+	actions: [frenzy],
 };
 
 export const testEnemy2 = {
@@ -135,5 +154,5 @@ export const testEnemy2 = {
 	portrait: '/images/enemies/ogre.png',
 	maxHp: 12,
 	defense: 4,
-	actions: [quickStrikes],
+	actions: [bigStrike, bigStrike, warcry],
 };

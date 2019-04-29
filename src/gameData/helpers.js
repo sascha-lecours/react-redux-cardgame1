@@ -1,6 +1,7 @@
 import { store } from '../app';
-import { dealDamage, raiseDefense } from '../actions/combatEffects';
+import { dealDamage, raiseDefense, raisePoison } from '../actions/combatEffects';
 import { applyShaking, clearShaking, applyPulsing, clearPulsing } from '../actions/cosmeticBattleEffects';
+import { playerDefault } from './playerList';
 
 // universal timing costants for animation
 
@@ -9,6 +10,9 @@ const durationhOfAttackShake = 130;
 
 const pauseBeforeDefend = 250;
 const durationhOfDefendPulse = 500;
+
+const pauseBeforeBuff= 300;
+const durationhOfBuffAnimation = 500;
 
 
 export const delay = (time, callback) => {
@@ -39,6 +43,7 @@ export const makeAttack = (target, source, baseDamage, numberOfHits) => {
 	}
 };
 
+
 export const makeDefend = (target, source, baseDefense) => {
 	if (target && source) {
 		const modifiedDefense = baseDefense + source.toughness;
@@ -49,7 +54,7 @@ export const makeDefend = (target, source, baseDefense) => {
 	}
 }
 
-export const attackOnce = async (target, source, attack) => {
+export const attackOnce = async (target, source = playerDefault, attack) => {
 	await delay(pauseBeforeAttack);
 	store.dispatch(applyShaking(target));
 	await makeAttack(
@@ -62,7 +67,7 @@ export const attackOnce = async (target, source, attack) => {
 	store.dispatch(clearShaking(target));
 };
 
-export const defendOnce = async (target, source, defense) => {
+export const defendOnce = async (target, source = playerDefault, defense) => {
 	await delay(pauseBeforeDefend);
 	store.dispatch(applyPulsing(target));
 	await makeDefend(
@@ -71,5 +76,28 @@ export const defendOnce = async (target, source, defense) => {
 		defense,
 	);
 	await delay(durationhOfDefendPulse);
+	store.dispatch(clearPulsing(target));
+};
+
+export const applyPoison = async (target, source = playerDefault, poison) => {
+	await delay(pauseBeforeAttack);
+	store.dispatch(applyShaking(target));
+	if (target && source) {
+		console.log(`${source.name} is poisoning ${target.name} for ${poison} poison`);
+		store.dispatch(raisePoison(target, poison));
+	} else {
+		console.log('Poison cancelled - no valid target (or poisoner no longer exists)!');
+	}
+	await delay(durationhOfAttackShake);
+	store.dispatch(clearShaking(target));
+};
+
+export const startBuffAnimation = async (target, source = playerDefault, card) => {
+	await delay(pauseBeforeBuff);
+	store.dispatch(applyPulsing(target));
+};
+
+export const endBuffAnimation = async (target, source = playerDefault, card) => {
+	await delay(durationhOfBuffAnimation);
 	store.dispatch(clearPulsing(target));
 };

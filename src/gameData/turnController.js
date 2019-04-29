@@ -40,11 +40,9 @@ class TurnController extends React.Component {
 
 	initializeCombat = () => {
 		store.dispatch(initializePlayer(warrior));
-
-		store.dispatch(setHand([testCard1, testCard1, testCard1]));
-
-		store.dispatch(setDeck([testCard1, testCard2, testCard1, testCard4, testCard5, testCard6, testCard7, testCard8, testCard9]));
-		store.dispatch(setEnemies([testEnemy2, testEnemy2, testEnemy2]));
+		store.dispatch(setHand([testCard8]))
+		store.dispatch(setDeck([testCard1, testCard2, testCard4, testCard5, testCard6, testCard7, testCard8, testCard9, testCard1, testCard2, testCard9]));
+		store.dispatch(setEnemies([testEnemy1, testEnemy1, testEnemy2]));
 		this.props.forbidPlayerToPlayCards();
 		this.props.advancePhase();
 		
