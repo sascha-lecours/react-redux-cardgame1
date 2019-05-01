@@ -37,8 +37,11 @@ const quickStrikes = {
 	name: 'Quick Strikes',
 	attack: 1,
 	numberOfHits: 3,
+	damageString: (enemy, move) => (`${move.numberOfHits} x ${move.attack + enemy.strength}`),
 	effects: [
 		async (enemy, move) => { 
+			await attackOnce(targetPlayer(), enemy, move.attack);
+			await attackOnce(targetPlayer(), enemy, move.attack); 
 			await attackOnce(targetPlayer(), enemy, move.attack); 
 		}
 	],
@@ -53,11 +56,13 @@ const frenzy = {
 		async (enemy, move) => {
 			await defendOnce(enemy, enemy, move.defense);
 			await startBuffAnimation(enemy, enemy, move);
-			await store.dispatch(raiseStrength(getCombatantById(enemy.id), move.strength));
-			await endBuffAnimation(enemy, enemy, move);
+			store.dispatch(raiseStrength(getCombatantById(enemy.id), move.strength));
+			await endBuffAnimation(getCombatantById(enemy.id), enemy, move);
 			await delay(pauseAfterCardEffect);
 			// await clearAllCosmeticEffects(enemy);
-		}
+		},
+		// async (enemy, move) => {return},
+		// TDOD: Why is the next move starting before this one is fully finished? Could it be ebcause enemy movesets don't have a second 'card finished' element?
 	],
 };
 
@@ -97,6 +102,7 @@ const bigStrike = {
 	name: 'Clonka Bonk',
 	attack: 7,
 	numberOfHits: 1,
+	damageString: (enemy, move) => (`${move.attack + enemy.strength}`),
 	effects: [
 		async (enemy, move) => {attackOnce(targetPlayer(), enemy, move.attack)},
 	],
@@ -108,6 +114,7 @@ export const moveDefault = {
 	baseDamage: 0,
 	numberOfHits: 1,
 	effects: [],
+	damageString: (enemy, move) => (''),
 };
 
 export const enemyDefault = {
@@ -144,8 +151,7 @@ export const testEnemy1 = {
 	portrait: '/images/enemies/snake.png',
 	maxHp: 10,
 	defense: 0,
-	// actions: [quickStrikes, poisonBite, frenzy],
-	actions: [frenzy],
+	actions: [quickStrikes, quickStrikes, frenzy],
 };
 
 export const testEnemy2 = {

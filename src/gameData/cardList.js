@@ -66,10 +66,72 @@ export const cardDefault = {
 	banishedOnUse: false,
 };
 
+// Base warrior cards
+
+export const baseAttack = {
+	name: 'Thrust',
+	type: 'Attack',
+	attack: 5,
+	unplayedDefense: 2,
+	numberOfHits: 1,
+	specialText: (card, player = playerDefault) => {return `Attack for ${card.attack + player.strength} damage`},
+	effects: [
+		async (player, card) => {
+			const target = targetRandomEnemy();
+			await delay(pauseBeforePlayingCard);
+			store.dispatch(applyHighlight(target));
+			await attackOnce(target, player, card.attack);
+			await delay(pauseAfterCardEffect);
+			store.dispatch(clearAllCosmeticEffects(target));
+		},
+		async (player, card) => cardFinished(card),
+	],
+	unplayedSpecialText: (card, player = playerDefault) => {return `Defend for ${card.unplayedDefense + player.toughness}`},
+	unplayedEffects: [
+		async (player, card) => {
+			const target = player;
+			await delay(pauseBeforeUnplayedCard);
+			store.dispatch(applyHighlight(player));
+			await delay(pauseAfterUnplayedBuffHighlight);
+			await defendOnce(target, player, card.unplayedDefense);
+			await delay(pauseAfterUnplayedCardEffect);
+		}
+	],
+};
+
+export const baseDefend = {
+	name: 'Block',
+	type: 'Defense',
+	defense: 6,
+	unplayedMarked: 2,
+	specialText: (card, player = playerDefault) => {return `Defend for ${card.defense + player.toughness}`},
+	effects: [
+		async (player, card) => {
+			const target = player;
+			await delay(pauseBeforePlayingCard);
+			store.dispatch(applyHighlight(target));
+			await defendOnce(target, player, card.defense);
+			await delay(pauseAfterCardEffect);
+			store.dispatch(clearAllCosmeticEffects(target));
+		},
+		async (player, card) => cardFinished(card),
+	],
+	unplayedSpecialText: (card, player = playerDefault) => {return `Mark a target for ${card.unplayedMarked}`},
+	unplayedEffects: [
+		async (player, card) => {
+			const target = targetRandomEnemy();
+			await delay(pauseBeforeUnplayedCard);
+			store.dispatch(applyHighlight(target));
+			store.dispatch(raiseMarked(target, card.unplayedMarked)),
+			await delay(pauseAfterUnplayedCardEffect);
+		}
+	],
+};
+
 export const testCard1 = {
 	name: 'Spear Jabs',
 	type: 'Attack',
-	attack: 1,
+	attack: 2,
 	unplayedDefense: 3,
 	numberOfHits: 1,
 	specialText: (card, player = playerDefault) => {return `Attack for ${card.attack + player.strength} damage, 3 times`},
@@ -219,7 +281,7 @@ export const testCard5 = {
 export const testCard6 = {
 	name: 'Tenacity',
 	type: 'Buff',
-	toughness: 3,
+	toughness: 2,
 	unplayedDefense: 3,
 	banishedOnUse: true,
 	specialText: (card, player = playerDefault) => {return `Raise toughness by ${card.toughness}.`},

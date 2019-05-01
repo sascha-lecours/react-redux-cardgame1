@@ -37,6 +37,11 @@ export class RenderEnemy extends React.Component {
 				{
 					enemy.nextMove &&
 					<div className="enemy__next-move">{enemy.nextMove.name}</div>
+					
+				}
+				{
+					(enemy.nextMove.type == 'attack') &&
+					<div className="enemy__next-move">{`${enemy.nextMove.damageString(enemy, enemy.nextMove)} damage`}</div>
 				}
 			</div>
 		);

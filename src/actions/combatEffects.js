@@ -40,12 +40,20 @@ export const raiseToughness = (target, toughness) => {
 
 // RAISE DEFENSE
 export const raiseDefense = (target, defense) => {
-	const modifiedDefense = Math.max((defense + target.toughness), 0);
+	// const modifiedDefense = Math.max((defense + target.toughness), 0);
 	// console.log(`Raising defense of ${target.name} by ${modifiedDefense}`);
 	return {
 		type: 'RAISE_DEFENSE',
 		target,
-		defense: modifiedDefense,
+		defense,
+	};
+};
+
+// CLEAR DEFENSE
+export const clearDefense = (target) => {
+	return {
+		type: 'CLEAR_DEFENSE',
+		target,
 	};
 };
 

@@ -182,6 +182,31 @@ export default (state = gameReducerDefaultState, action) => {
 			}),
 		};
 	}
+	case 'CLEAR_DEFENSE': {
+		return {
+			...state,
+			enemyGroup: state.enemyGroup.map((enemy) => {
+				if (enemy.id === action.target.id) {
+					return {
+						...action.target,
+						defense: 0,
+					};
+				} else {
+					return enemy;
+				}
+			}),
+			playerGroup: state.playerGroup.map((player) => {
+				if (player.id === action.target.id) {
+					return {
+						...action.target,
+						defense: 0,
+					};
+				} else {
+					return player;
+				}
+			}),
+		};
+	}
 	case 'RAISE_STRENGTH': {
 		const newStrength = Math.min(
 			(action.target.strength + action.strength),

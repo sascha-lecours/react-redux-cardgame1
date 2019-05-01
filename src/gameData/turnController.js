@@ -4,17 +4,29 @@ import { store } from '../app';
 import { advancePhase, setPhase } from '../actions/turn';
 import { applyIsActive, clearAllCosmeticEffects } from '../actions/cosmeticBattleEffects';
 import { delay } from './helpers';
-import { testCard1, testCard2, testCard3, testCard4, testCard5, testCard6, testCard7, testCard8, testCard9 } from './cardList';
+import {
+	testCard1,
+	testCard2,
+	testCard3,
+	testCard4,
+	testCard5,
+	testCard6,
+	testCard7,
+	testCard8,
+	testCard9,
+	baseAttack,
+	baseDefend
+} from './cardList';
 import { setHand, setDeck, initializePlayer, drawCard, discardHand, highlightCard, clearHighlightCard, allowPlayerToPlayCards, forbidPlayerToPlayCards } from '../actions/cards';
 import { setEnemies, setNewMove, killEnemy } from '../actions/enemies';
-import { raiseMarked, raisePoison, dealDamage } from '../actions/combatEffects';
+import { raiseMarked, raisePoison, dealDamage, clearDefense } from '../actions/combatEffects';
 import { testEnemy1, testEnemy2 } from './enemyList';
 import { warrior, bard } from './playerList';
 import useMove from './useMove';
 import useUnplayedCard from './useUnplayedCard';
 
 // A component that manages the game state
-// This may be best handled using a subscribe listener that checks for certain key changes in...
+// TODO: This may be best handled using a subscribe listener that checks for certain key changes in...
 // ... in the store and implements turn events accordingly
 
 export const playCardPhase = 4;
@@ -28,8 +40,13 @@ class TurnController extends React.Component {
 	// Timing variables
 	pauseBeforeEnemyMove = 800;
 	pauseAfterEnemyMove = 300;
-	pauseBeforePlayerTurn = 1000;
+
+	pauseBeforePlayerTurn = 100;
 	pauseAfterPlayerTurn = 1000;
+
+	pauseBeforeEnemyTurn = 500;
+	pauseAfterEnemyTurn = 1000;
+
 	pauseBeforeUnplayedCard = 200;
 	pauseAfterUnplayedCard = 200;
 
@@ -40,9 +57,27 @@ class TurnController extends React.Component {
 
 	initializeCombat = () => {
 		store.dispatch(initializePlayer(warrior));
-		store.dispatch(setHand([testCard8]))
-		store.dispatch(setDeck([testCard1, testCard2, testCard4, testCard5, testCard6, testCard7, testCard8, testCard9, testCard1, testCard2, testCard9]));
-		store.dispatch(setEnemies([testEnemy1, testEnemy1, testEnemy2]));
+		store.dispatch(setHand([]))
+		store.dispatch(setDeck([
+			testCard1, 
+			testCard2, 
+			testCard4, 
+			testCard5, 
+			testCard6, 
+			testCard7, 
+			testCard8, 
+			testCard9, 
+			testCard1, 
+			testCard2, 
+			testCard9, 
+			baseAttack, 
+			baseAttack, 
+			baseAttack,
+			baseDefend,
+			baseDefend,
+			baseDefend
+		]));
+		store.dispatch(setEnemies([testEnemy1, testEnemy2, testEnemy1]));
 		this.props.forbidPlayerToPlayCards();
 		this.props.advancePhase();
 		
@@ -51,12 +86,19 @@ class TurnController extends React.Component {
 
 
 	enemiesTakeTurn = async () => {
+		await delay(this.pauseBeforeEnemyTurn);
 		for (const enemy of this.props.game.enemyGroup) {
 				await this.props.applyIsActive(enemy);
 				await delay(this.pauseBeforeEnemyMove);
 				await useMove(enemy, enemy.nextMove);
 				await delay(this.pauseAfterEnemyMove);
 				await this.props.clearAllCosmeticEffects(enemy);
+		};
+	};
+
+	clearAllEnemyDefense = async () => {
+		for (const enemy of this.props.game.enemyGroup) {
+				await this.props.clearDefense(enemy);
 		};
 	};
 
@@ -83,8 +125,9 @@ class TurnController extends React.Component {
 
 	playerStartOfTurn = async () => {
 		// Remove defense
-		// TODO: Implement defense removal
 		// set "active" cosmetic effect
+		await delay(this.pauseBeforePlayerTurn);
+		await this.props.clearDefense(this.props.game.playerGroup[0]);
 		await delay(this.pauseBeforePlayerTurn);
 		await this.props.applyIsActive(this.props.game.playerGroup[0]);
 	};
@@ -207,14 +250,15 @@ class TurnController extends React.Component {
 
 			} else if (phase === 8) {
 				// 8. Enemy start-of-turn effects, checking for combat-over
-					this.resolveEnemyPoison();
-					this.killZeroHpEnemies();
+					await this.resolveEnemyPoison();
+					await this.killZeroHpEnemies();
+					await this.clearAllEnemyDefense();
 					// then check for combat over
 					advancePhase();
 
 			} else if (phase === 9) {
 				// 9. Enemy actions resolve, up through array, checking for combat-over
-					this.enemiesTakeTurn();
+					await this.enemiesTakeTurn();
 					advancePhase();
 
 			} else if (phase === 10) {
@@ -222,6 +266,7 @@ class TurnController extends React.Component {
 					//TODO: implement
 					// - kill enemies now at 0 hp
 					// then check for combat over
+					await delay(this.pauseAfterEnemyTurn);
 					advancePhase();
 
 			} else if (phase === 11) {
@@ -253,6 +298,7 @@ class TurnController extends React.Component {
 	allowPlayerToPlayCards: () => dispatch(allowPlayerToPlayCards()),
 	applyIsActive: (target) => dispatch(applyIsActive(target)),
 	clearAllCosmeticEffects: (target) => dispatch(clearAllCosmeticEffects(target)),
+	clearDefense: (target) => dispatch(clearDefense(target)),
 	clearHighlightCard: (card) => dispatch(clearHighlightCard(card)),
 	dealDamage: (target, source, damage, numberOfHits) => dispatch(dealDamage(target, source, damage, numberOfHits)),
 	discardHand: () => dispatch(discardHand()),

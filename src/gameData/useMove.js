@@ -8,5 +8,8 @@ const getEnemyById = (targetId) => {
 
 export default async ({ id }, move) => {
 	console.log(`Enemy used ${move.name}`);
-	await move.effects.forEach(element => element(getEnemyById(id), move));
+	for (const element of move.effects) {
+		await element(getEnemyById(id), move);
+	};
 };
+
