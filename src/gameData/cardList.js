@@ -39,6 +39,9 @@ const cardFinished = (card) => {
 	}
 };
 
+const safeApplyHightlight = (target) => {
+	if (target) store.dispatch(applyHighlight(target))
+};
 
 // List of all cards in game
 
@@ -91,7 +94,7 @@ export const baseAttack = {
 		async (player, card) => {
 			const target = player;
 			await delay(pauseBeforeUnplayedCard);
-			store.dispatch(applyHighlight(player));
+			store.dispatch(applyHighlight(target));
 			await delay(pauseAfterUnplayedBuffHighlight);
 			await defendOnce(target, player, card.unplayedDefense);
 			await delay(pauseAfterUnplayedCardEffect);
@@ -139,7 +142,7 @@ export const testCard1 = {
 		async (player, card) => {
 			const target = targetRandomEnemy();
 			await delay(pauseBeforePlayingCard);
-			store.dispatch(applyHighlight(target));
+			await safeApplyHightlight(target);
 			await attackOnce(target, player, card.attack);
 			await attackOnce(target, player, card.attack);
 			await attackOnce(target, player, card.attack);
@@ -153,7 +156,7 @@ export const testCard1 = {
 		async (player, card) => {
 			const target = player;
 			await delay(pauseBeforeUnplayedCard);
-			store.dispatch(applyHighlight(player));
+			await safeApplyHightlight(target);
 			await delay(pauseAfterUnplayedBuffHighlight);
 			await defendOnce(target, player, card.unplayedDefense);
 			await delay(pauseAfterUnplayedCardEffect);
@@ -172,7 +175,7 @@ export const testCard2 = {
 		async (player, card) => {
 			const target = player;
 			await delay(pauseBeforePlayingCard);
-			store.dispatch(applyHighlight(target));
+			await safeApplyHightlight(target);
 			await defendOnce(target, player, card.defense);
 			await defendOnce(target, player, card.defense);
 			await delay(pauseAfterCardEffect);
@@ -185,7 +188,7 @@ export const testCard2 = {
 		async (player, card) => {
 			const target = targetRandomEnemy();
 			await delay(pauseBeforeUnplayedCard);
-			store.dispatch(applyHighlight(target));
+			await safeApplyHightlight(target);
 			await attackOnce(target, player, card.unplayedAttack);
 			await delay(pauseAfterUnplayedCardEffect);
 		}
@@ -207,7 +210,7 @@ export const testCard3 = {
 export const testCard4 = {
 	name: 'Furious Slaughter',
 	type: 'Attack',
-	attack: 3,
+	attack: 300,
 	unplayedAttack: 3,
 	numberOfHits: 1,
 	specialText: (card, player = playerDefault) => {return `Attack random targets for ${card.attack + player.strength}, 3 times.`},

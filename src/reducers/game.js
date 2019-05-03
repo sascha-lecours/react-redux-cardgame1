@@ -371,6 +371,7 @@ export default (state = gameReducerDefaultState, action) => {
 		};
 	}
 	case 'APPLY_HIGHLIGHT': {
+		if (action.target == null) return { ...state };
 		return {
 			...state,
 			enemyGroup: state.enemyGroup.map((enemy) => {
@@ -396,6 +397,7 @@ export default (state = gameReducerDefaultState, action) => {
 		};
 	}
 	case 'APPLY_IS_ACTIVE': {
+		if (action.target == null) return { ...state };
 		return {
 			...state,
 			enemyGroup: state.enemyGroup.map((enemy) => {
@@ -421,6 +423,7 @@ export default (state = gameReducerDefaultState, action) => {
 		};
 	}
 	case 'APPLY_SHAKING': {
+		if (action.target == null) return { ...state };
 		return {
 			...state,
 			enemyGroup: state.enemyGroup.map((enemy) => {
@@ -446,6 +449,7 @@ export default (state = gameReducerDefaultState, action) => {
 		};
 	}
 	case 'CLEAR_SHAKING': {
+		if (action.target == null) return { ...state };
 		return {
 			...state,
 			enemyGroup: state.enemyGroup.map((enemy) => {
@@ -471,6 +475,7 @@ export default (state = gameReducerDefaultState, action) => {
 		};
 	}
 	case 'APPLY_PULSING': {
+		if (action.target == null) return { ...state };
 		return {
 			...state,
 			enemyGroup: state.enemyGroup.map((enemy) => {
@@ -496,6 +501,7 @@ export default (state = gameReducerDefaultState, action) => {
 		};
 	}
 	case 'CLEAR_PULSING': {
+		if (action.target == null) return { ...state };
 		return {
 			...state,
 			enemyGroup: state.enemyGroup.map((enemy) => {
@@ -521,6 +527,7 @@ export default (state = gameReducerDefaultState, action) => {
 		};
 	}
 	case 'CLEAR_ALL_COSMETIC_EFFECTS': {
+		if (action.target == null) return { ...state };
 		return {
 			...state,
 			enemyGroup: state.enemyGroup.map((enemy) => {

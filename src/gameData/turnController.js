@@ -24,6 +24,7 @@ import { testEnemy1, testEnemy2 } from './enemyList';
 import { warrior, bard } from './playerList';
 import useMove from './useMove';
 import useUnplayedCard from './useUnplayedCard';
+import { savePlayer } from '../actions/campaign';
 
 // A component that manages the game state
 // TODO: This may be best handled using a subscribe listener that checks for certain key changes in...
@@ -59,25 +60,32 @@ class TurnController extends React.Component {
 		store.dispatch(initializePlayer(warrior));
 		store.dispatch(setHand([]))
 		store.dispatch(setDeck([
-			testCard1, 
-			testCard2, 
+			// testCard1, 
+			// testCard2, 
+			testCard4,
 			testCard4, 
-			testCard5, 
-			testCard6, 
-			testCard7, 
-			testCard8, 
-			testCard9, 
-			testCard1, 
-			testCard2, 
-			testCard9, 
-			baseAttack, 
-			baseAttack, 
-			baseAttack,
-			baseDefend,
-			baseDefend,
-			baseDefend
+			testCard4, 
+			testCard4, 
+			// testCard5, 
+			// testCard6, 
+			// testCard7, 
+			// testCard8, 
+			// testCard9, 
+			// testCard1, 
+			// testCard2, 
+			// testCard9, 
+			// baseAttack, 
+			// baseAttack, 
+			// baseAttack,
+			// baseDefend,
+			// baseDefend,
+			// baseDefend
 		]));
-		store.dispatch(setEnemies([testEnemy1, testEnemy2, testEnemy1]));
+		store.dispatch(setEnemies([
+			// testEnemy1, 
+			// testEnemy2, 
+			testEnemy1
+		]));
 		this.props.forbidPlayerToPlayCards();
 		this.props.advancePhase();
 		
@@ -120,7 +128,7 @@ class TurnController extends React.Component {
 				console.log(`${enemy.name} is at 0 hp`);
 				this.props.killEnemy(enemy);
 			}
-		})
+		});
 	};
 
 	playerStartOfTurn = async () => {
@@ -190,6 +198,7 @@ class TurnController extends React.Component {
 			drawCard,
 			discardHand,
 			allowPlayerToPlayCards,
+			savePlayer,
 		} = this.props;
 
 
@@ -228,9 +237,9 @@ class TurnController extends React.Component {
 
 			} else if (phase === 5) {
 				// 5. Resolve all card effects, including visuals/sound and checking for combat-over
-					//TODO: implement
-					// - kill enemies now at 0 hp
-					// then check for combat over
+					
+					await this.killZeroHpEnemies();
+					//TODO: check for combat over
 					advancePhase();
 
 			} else if (phase === 6) {
@@ -245,7 +254,7 @@ class TurnController extends React.Component {
 
 			} else if (phase === 7) {
 				//7. Discard hand
-					discardHand();
+					await discardHand();
 					advancePhase();
 
 			} else if (phase === 8) {
@@ -263,15 +272,16 @@ class TurnController extends React.Component {
 
 			} else if (phase === 10) {
 				// 10. Enemy end-of-turn effects, checking for combat-over
-					//TODO: implement
-					// - kill enemies now at 0 hp
-					// then check for combat over
+					await this.killZeroHpEnemies();
+					//TODO: check for combat over
 					await delay(this.pauseAfterEnemyTurn);
 					advancePhase();
 
 			} else if (phase === 11) {
 				// 11. Increment turn counter, start back at step 1.
-					setPhase(1);
+				// Save player to the "campaign" object
+				await savePlayer(this.props.game.player); 
+				setPhase(1);
 			};
 		})();
 	};
@@ -308,6 +318,7 @@ class TurnController extends React.Component {
 	killEnemy: (enemy) => dispatch(killEnemy(enemy)),
 	raiseMarked: (enemy, marked) => dispatch(raiseMarked(enemy, marked)),
 	raisePoison: (target, poison) => dispatch(raisePoison(target, poison)),
+	savePlayer: (player) => dispatch(savePlayer(player)),
 	setPhase: (phase) => dispatch(setPhase(phase)),
 	setNewMoves: (enemyGroup) => { enemyGroup.forEach(element => {
 			dispatch(setNewMove(element));

@@ -4,6 +4,7 @@ import { reducer as modal } from 'redux-modal';
 import authReducer from '../reducers/auth';
 import gameReducer from '../reducers/game';
 import turnReducer from '../reducers/turn';
+import campaignReducer from '../reducers/campaign';
 
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -14,6 +15,7 @@ export default () => {
 			auth: authReducer,
 			game: gameReducer,
 			turn: turnReducer,
+			campaign: campaignReducer,
 			modal,
 		}),
 		composeEnhancers(applyMiddleware(thunk))

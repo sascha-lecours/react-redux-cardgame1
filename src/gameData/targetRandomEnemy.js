@@ -12,8 +12,8 @@ export default () => {
 
 	// If an enemy is marked, always return that one. If not, choose a random one.
 	if (livingTargets.length === 0) {
-		console.log('No valid targets left above 0 hp!')
-		return undefined;
+		console.log('No valid targets left above 0 hp!');
+		return null;
 	} else if (markedEnemy.length === 0) {
 		return livingTargets[Math.floor(Math.random() * livingTargets.length)];
 	} else {

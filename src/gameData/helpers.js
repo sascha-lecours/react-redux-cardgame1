@@ -56,6 +56,10 @@ export const makeDefend = (target, source, baseDefense) => {
 
 export const attackOnce = async (target, source = playerDefault, attack) => {
 	await delay(pauseBeforeAttack);
+	if(!target) {
+		console.log('target no longer exists!');
+		return;
+	}
 	store.dispatch(applyShaking(target));
 	await makeAttack(
 		getCombatantById(target.id),
