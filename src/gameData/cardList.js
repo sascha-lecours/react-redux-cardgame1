@@ -210,7 +210,7 @@ export const testCard3 = {
 export const testCard4 = {
 	name: 'Furious Slaughter',
 	type: 'Attack',
-	attack: 300,
+	attack: 3,
 	unplayedAttack: 3,
 	numberOfHits: 1,
 	specialText: (card, player = playerDefault) => {return `Attack random targets for ${card.attack + player.strength}, 3 times.`},
