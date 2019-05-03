@@ -11,7 +11,8 @@ import {
 		defendOnce,
 		startBuffAnimation,
 		endBuffAnimation,
-		applyPoison 
+		applyPoison,
+		getEnemyGroup
 } from './helpers';
 import { applyHighlight, applyShaking, clearShaking, clearAllCosmeticEffects } from '../actions/cosmeticBattleEffects';
 import { playerDefault } from './playerList';
@@ -130,6 +131,110 @@ export const baseDefend = {
 		}
 	],
 };
+
+export const sweepAttack = {
+	name: 'Sweeping Blow',
+	type: 'Attack',
+	attack: 3,
+	unplayedAttack: 3,
+	numberOfHits: 1,
+	specialText: (card, player = playerDefault) => {return `Attack all enemies for ${card.attack + player.strength} damage`},
+	effects: [
+		async (player, card) => {
+			const enemies = getEnemyGroup();
+			if (enemies == null) return;
+			for (const enemy of enemies) {
+				const target = enemy;
+				await delay(pauseBeforePlayingCard);
+				store.dispatch(applyHighlight(target));
+				await attackOnce(target, player, card.attack);
+				await delay(pauseAfterCardEffect);
+				store.dispatch(clearAllCosmeticEffects(target));
+			}
+		},
+		async (player, card) => cardFinished(card),
+	],
+	unplayedSpecialText: (card, player = playerDefault) => {return `Attack for ${card.unplayedAttack + player.strength}`},
+	unplayedEffects: [
+		async (player, card) => {
+			const target = targetRandomEnemy();
+			await delay(pauseBeforeUnplayedCard);
+			await safeApplyHightlight(target);
+			await attackOnce(target, player, card.unplayedAttack);
+			await delay(pauseAfterUnplayedCardEffect);
+		}
+	],
+};
+
+export const poisonCloud = {
+	name: 'Poison Mist',
+	type: 'Attack',
+	poison: 4,
+	unplayedAttack: 3,
+	numberOfHits: 1,
+	specialText: (card, player = playerDefault) => {return `Poison all enemies for ${card.poison}`},
+	effects: [
+		async (player, card) => {
+			const enemies = getEnemyGroup();
+			if (enemies == null) return;
+			for (const enemy of enemies) {
+				const target = enemy;
+				await delay(pauseBeforePlayingCard);
+				store.dispatch(applyHighlight(target));
+				await applyPoison(target, player, card.poison);
+				await delay(pauseAfterCardEffect);
+				store.dispatch(clearAllCosmeticEffects(target));
+			}
+		},
+		async (player, card) => cardFinished(card),
+	],
+	unplayedSpecialText: (card, player = playerDefault) => {return `Suffer ${card.unplayedAttack} damage`},
+	unplayedEffects: [
+		async (player, card) => {
+			const target = targetPlayer();
+			await delay(pauseBeforeUnplayedCard);
+			store.dispatch(applyHighlight(target));
+			await attackOnce(target, playerDefault, card.unplayedAttack);
+			await delay(pauseAfterUnplayedCardEffect);
+		}
+	],
+	flavourText: 'This mist may harm friend and foe alike.'
+};
+
+export const grief = {
+	name: 'Grief of Tomyris',
+	type: 'Buff',
+	strength: 4,
+	unplayedAttack: 3, 
+	banishedOnUse: true,
+	specialText: (card, player = playerDefault) => {return `Raise strength by ${card.strength}, then banish all cards in hand.`},
+	effects: [
+		async (player, card) => {
+			const target = player;
+			await delay(pauseBeforePlayingCard);
+			store.dispatch(applyHighlight(target));
+			await startBuffAnimation(target, player, card);
+			store.dispatch(raiseStrength(targetPlayer(), card.strength)),
+			await endBuffAnimation(target, player, card);
+			await delay(pauseAfterCardEffect);
+			store.dispatch(clearAllCosmeticEffects(target));
+			// TODO: need function to get array of remaining cards in hand, then remove them. (use for-element-of loop)
+		},
+		async (player, card) => cardFinished(card),
+	],
+	unplayedSpecialText: (card, player = playerDefault) => {return `Attack for ${card.unplayedAttack + player.strength}`},
+	unplayedEffects: [
+		async (player, card) => {
+			const target = targetRandomEnemy();
+			await delay(pauseBeforeUnplayedCard);
+			await safeApplyHightlight(target);
+			await attackOnce(target, player, card.unplayedAttack);
+			await delay(pauseAfterUnplayedCardEffect);
+		}
+	],
+};
+
+
 
 export const testCard1 = {
 	name: 'Spear Jabs',
@@ -252,7 +357,7 @@ export const testCard5 = {
 	name: 'Thirst for Vengeance',
 	type: 'Buff',
 	strength: 2,
-	unplayedDefense: 3,
+	unplayedAttack: 3,
 	banishedOnUse: true,
 	specialText: (card, player = playerDefault) => {return `Raise strength by ${card.strength}.`},
 	effects: [
@@ -268,14 +373,13 @@ export const testCard5 = {
 		},
 		async (player, card) => cardFinished(card),
 	],
-	unplayedSpecialText: (card, player = playerDefault) => {return `Defend for ${card.unplayedDefense + player.toughness}`},
+	unplayedSpecialText: (card, player = playerDefault) => {return `Attack for ${card.unplayedAttack + player.strength}`},
 	unplayedEffects: [
 		async (player, card) => {
-			const target = player;
+			const target = targetRandomEnemy();
 			await delay(pauseBeforeUnplayedCard);
-			store.dispatch(applyHighlight(player));
-			await delay(pauseAfterUnplayedBuffHighlight);
-			await defendOnce(target, player, card.unplayedDefense);
+			await safeApplyHightlight(target);
+			await attackOnce(target, player, card.unplayedAttack);
 			await delay(pauseAfterUnplayedCardEffect);
 		}
 	],
@@ -285,7 +389,7 @@ export const testCard6 = {
 	name: 'Tenacity',
 	type: 'Buff',
 	toughness: 2,
-	unplayedDefense: 3,
+	unplayedPoison: 3,
 	banishedOnUse: true,
 	specialText: (card, player = playerDefault) => {return `Raise toughness by ${card.toughness}.`},
 	effects: [
@@ -301,15 +405,15 @@ export const testCard6 = {
 		},
 		async (player, card) => cardFinished(card),
 	],
-	unplayedSpecialText: (card, player = playerDefault) => {return `Defend for ${card.unplayedDefense + player.toughness}`},
+	unplayedSpecialText: (card, player = playerDefault) => {return `Poison a target for ${card.unplayedPoison}`},
 	unplayedEffects: [
 		async (player, card) => {
-			const target = player;
+			const target = targetRandomEnemy();
 			await delay(pauseBeforeUnplayedCard);
-			store.dispatch(applyHighlight(player));
-			await delay(pauseAfterUnplayedBuffHighlight);
-			await defendOnce(target, player, card.unplayedDefense);
+			store.dispatch(applyHighlight(target));
+			await applyPoison(target, player, card.unplayedPoison);
 			await delay(pauseAfterUnplayedCardEffect);
+			store.dispatch(clearAllCosmeticEffects(target));
 		}
 	],
 };
@@ -354,7 +458,7 @@ export const testCard8 = {
 	defense: 5,
 	unplayedDefense: 3,
 	banishedOnUse: true,
-	specialText: (card, player = playerDefault) => {return `Defend for ${card.defense + player.toughness}, raise strength by ${card.strength}, raise toughness by ${card.toughness}, and cure poison.`},
+	specialText: (card, player = playerDefault) => {return `Defend for ${card.defense + player.toughness}, raise strength by ${card.strength}, raise toughness by ${card.toughness}.`},
 	effects: [
 		async (player, card) => {
 			const target = player;
@@ -364,7 +468,6 @@ export const testCard8 = {
 			await startBuffAnimation(target, player, card);
 			store.dispatch(raiseToughness(targetPlayer(), card.toughness)),
 			store.dispatch(raiseStrength(targetPlayer(), card.strength)),
-			store.dispatch(raisePoison(targetPlayer(), -9999999999999)),
 			await endBuffAnimation(target, player, card);
 			await delay(pauseAfterCardEffect);
 			store.dispatch(clearAllCosmeticEffects(target));

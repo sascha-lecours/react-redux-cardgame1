@@ -1,7 +1,5 @@
-import { playerDefault } from '../gameData/playerList';
-
 const campaignDefaultState = {
-	playerSave: playerDefault,
+	playerSave: null,
 };
 
 export default (state = campaignDefaultState, action) => {
@@ -9,7 +7,7 @@ export default (state = campaignDefaultState, action) => {
 	switch (action.type) {
 	case 'SAVE_PLAYER':
 		return {
-			playerSave: action.player,
+			playerSave: action.savedPlayer,
 		};
 	default:
 		return state;

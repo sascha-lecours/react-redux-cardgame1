@@ -33,6 +33,13 @@ export const getCombatantById = (id) => {
 	return null;
 };
 
+export const getEnemyGroup = () => {
+	const myState = store.getState();
+	const allEnemies = myState.game.enemyGroup;
+	if (!allEnemies || allEnemies.length===0) return null;
+	return allEnemies;
+}
+
 export const makeAttack = (target, source, baseDamage, numberOfHits) => {
 	if (target && source) {
 		const modifiedDamage = baseDamage + source.strength;

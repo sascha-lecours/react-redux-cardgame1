@@ -15,7 +15,9 @@ import {
 	testCard8,
 	testCard9,
 	baseAttack,
-	baseDefend
+	baseDefend,
+	sweepAttack,
+	poisonCloud
 } from './cardList';
 import { setHand, setDeck, initializePlayer, drawCard, discardHand, highlightCard, clearHighlightCard, allowPlayerToPlayCards, forbidPlayerToPlayCards } from '../actions/cards';
 import { setEnemies, setNewMove, killEnemy } from '../actions/enemies';
@@ -58,8 +60,9 @@ class TurnController extends React.Component {
 
 	initializeCombat = () => {
 		store.dispatch(initializePlayer(warrior));
-		store.dispatch(setHand([]))
+		store.dispatch(setHand([poisonCloud]))
 		store.dispatch(setDeck([
+			sweepAttack,
 			testCard1, 
 			testCard2, 
 			testCard4,
@@ -277,7 +280,7 @@ class TurnController extends React.Component {
 			} else if (phase === 11) {
 				// 11. Increment turn counter, start back at step 1.
 				// Save player to the "campaign" object
-				await savePlayer(this.props.game.player); 
+				await savePlayer(this.props.game.playerGroup[0]); 
 				setPhase(1);
 			};
 		})();
@@ -315,7 +318,7 @@ class TurnController extends React.Component {
 	killEnemy: (enemy) => dispatch(killEnemy(enemy)),
 	raiseMarked: (enemy, marked) => dispatch(raiseMarked(enemy, marked)),
 	raisePoison: (target, poison) => dispatch(raisePoison(target, poison)),
-	savePlayer: (player) => dispatch(savePlayer(player)),
+	savePlayer: (savedPlayer) => dispatch(savePlayer(savedPlayer)),
 	setPhase: (phase) => dispatch(setPhase(phase)),
 	setNewMoves: (enemyGroup) => { enemyGroup.forEach(element => {
 			dispatch(setNewMove(element));

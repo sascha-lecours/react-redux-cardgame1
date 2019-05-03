@@ -1,7 +1,7 @@
 // SAVE_PLAYER
-export const savePlayer = (player) => {
+export const savePlayer = (savedPlayer) => {
 	return {
 		type: 'SAVE_PLAYER',
-		player,
+		savedPlayer,
 	};
 };
