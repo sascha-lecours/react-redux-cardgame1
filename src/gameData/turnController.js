@@ -5,23 +5,42 @@ import { advancePhase, setPhase } from '../actions/turn';
 import { applyIsActive, clearAllCosmeticEffects } from '../actions/cosmeticBattleEffects';
 import { delay } from './helpers';
 import {
-	testCard1,
-	testCard2,
+	tripleStrike,
+	doubleShield,
 	testCard3,
-	testCard4,
-	testCard5,
-	testCard6,
-	testCard7,
-	testCard8,
-	testCard9,
+	wildStrikes,
+	strengthBuff,
+	toughBuff,
+	attackMark,
+	buffStrenghTough,
+	poisonSplash,
 	baseAttack,
 	baseDefend,
 	sweepAttack,
-	poisonCloud
+	poisonCloud,
+	bodySlam,
+	strengthIfMarked,
+	defenseKeep
 } from './cardList';
-import { setHand, setDeck, initializePlayer, drawCard, discardHand, highlightCard, clearHighlightCard, allowPlayerToPlayCards, forbidPlayerToPlayCards } from '../actions/cards';
+import { 
+	setHand, 
+	setDeck, 
+	initializePlayer, 
+	drawCard, 
+	discardHand, 
+	highlightCard, 
+	clearHighlightCard, 
+	allowPlayerToPlayCards, 
+	forbidPlayerToPlayCards 
+} from '../actions/cards';
 import { setEnemies, setNewMove, killEnemy } from '../actions/enemies';
-import { raiseMarked, raisePoison, dealDamage, clearDefense } from '../actions/combatEffects';
+import { 
+	raiseMarked, 
+	raisePoison, 
+	dealDamage, 
+	clearDefense, 
+	keepDefenseOnce
+} from '../actions/combatEffects';
 import { testEnemy1, testEnemy2 } from './enemyList';
 import { warrior, bard } from './playerList';
 import useMove from './useMove';
@@ -60,26 +79,26 @@ class TurnController extends React.Component {
 
 	initializeCombat = () => {
 		store.dispatch(initializePlayer(warrior));
-		store.dispatch(setHand([poisonCloud]))
+		store.dispatch(setHand([defenseKeep, doubleShield]))
 		store.dispatch(setDeck([
+			baseAttack, 
+			baseAttack, 
+			baseDefend,
+			baseDefend,
+			tripleStrike,
+			tripleStrike,
+			doubleShield,
+			doubleShield, 
+			wildStrikes,
 			sweepAttack,
-			testCard1, 
-			testCard2, 
-			testCard4,
-			testCard5, 
-			testCard6, 
-			testCard7, 
-			testCard8, 
-			testCard9, 
-			testCard1, 
-			testCard2, 
-			testCard9, 
-			baseAttack, 
-			baseAttack, 
-			baseAttack,
-			baseDefend,
-			baseDefend,
-			baseDefend
+			strengthBuff, 
+			poisonCloud,
+			toughBuff, 
+			attackMark, 
+			buffStrenghTough, 
+			poisonSplash, 
+			bodySlam,
+			strengthIfMarked
 		]));
 		store.dispatch(setEnemies([
 			testEnemy1, 

@@ -136,6 +136,8 @@ export const enemyDefault = {
 	poison: 0,
 	maxPoison: 9999999999,
 	minPoison: 0,
+	keepDefenseThisTurn: false,
+	keepDefensePermanent: false,
 	actions: [quickStrikes, bigStrike],
 	isActive: false,
 	highlighted: false,
@@ -150,8 +152,11 @@ export const testEnemy1 = {
 	name: "Lil' Snek",
 	portrait: '/images/enemies/snake.png',
 	maxHp: 10,
-	defense: 0,
-	actions: [quickStrikes, quickStrikes, frenzy],
+	actions: [
+		// quickStrikes, 
+		// quickStrikes, 
+		frenzy
+	],
 };
 
 export const testEnemy2 = {
@@ -159,6 +164,10 @@ export const testEnemy2 = {
 	name: 'Big Beefo',
 	portrait: '/images/enemies/ogre.png',
 	maxHp: 12,
-	defense: 4,
-	actions: [bigStrike, bigStrike, warcry],
+	defense: 3,
+	actions: [
+		// bigStrike, 
+		// bigStrike, 
+		warcry
+	],
 };

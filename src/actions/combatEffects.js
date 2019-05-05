@@ -49,6 +49,14 @@ export const raiseDefense = (target, defense) => {
 	};
 };
 
+// KEEP DEFENSE ONCE
+export const keepDefenseOnce = (target) => {
+	return {
+		type: 'KEEP_DEFENSE_ONCE',
+		target,
+	};
+};
+
 // CLEAR DEFENSE
 export const clearDefense = (target) => {
 	return {

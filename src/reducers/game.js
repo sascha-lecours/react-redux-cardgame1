@@ -186,10 +186,41 @@ export default (state = gameReducerDefaultState, action) => {
 		return {
 			...state,
 			enemyGroup: state.enemyGroup.map((enemy) => {
-				if (enemy.id === action.target.id) {
+				if ((enemy.id === action.target.id) && !action.target.keepDefenseThisTurn && !action.target.keepDefensePermanent) {
 					return {
 						...action.target,
 						defense: 0,
+					};
+				} else {
+					return {
+						...enemy,
+						keepDefenseThisTurn: false,
+					};
+				}
+			}),
+			playerGroup: state.playerGroup.map((player) => {
+				if ((player.id === action.target.id) && !action.target.keepDefenseThisTurn && !action.target.keepDefensePermanent) {
+					return {
+						...action.target,
+						defense: 0,
+					};
+				} else {
+					return {
+						...player,
+						keepDefenseThisTurn: false,
+					};
+				}
+			}),
+		};
+	}
+	case 'KEEP_DEFENSE_ONCE': {
+		return {
+			...state,
+			enemyGroup: state.enemyGroup.map((enemy) => {
+				if (enemy.id === action.target.id) {
+					return {
+						...action.target,
+						keepDefenseThisTurn: true,
 					};
 				} else {
 					return enemy;
@@ -199,7 +230,7 @@ export default (state = gameReducerDefaultState, action) => {
 				if (player.id === action.target.id) {
 					return {
 						...action.target,
-						defense: 0,
+						keepDefenseThisTurn: true,
 					};
 				} else {
 					return player;
