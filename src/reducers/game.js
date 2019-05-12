@@ -191,10 +191,14 @@ export default (state = gameReducerDefaultState, action) => {
 						...action.target,
 						defense: 0,
 					};
+				} else if ((enemy.id === action.target.id) && action.target.keepDefenseThisTurn) {
+					return {
+						...action.target,
+						keepDefenseThisTurn: false,
+					};
 				} else {
 					return {
 						...enemy,
-						keepDefenseThisTurn: false,
 					};
 				}
 			}),
@@ -204,10 +208,14 @@ export default (state = gameReducerDefaultState, action) => {
 						...action.target,
 						defense: 0,
 					};
+				} else if ((player.id === action.target.id) && action.target.keepDefenseThisTurn) {
+					return {
+						...action.target,
+						keepDefenseThisTurn: false,
+					};
 				} else {
 					return {
 						...player,
-						keepDefenseThisTurn: false,
 					};
 				}
 			}),
@@ -648,6 +656,23 @@ export default (state = gameReducerDefaultState, action) => {
 		return {
 			...state,
 			playerCanPlayCards: false,
+		};
+	}
+	case 'ADD_TO_DISCARD': {
+		const newDiscard = state.discard.slice();
+		newDiscard.unshift(action.card);
+		return {
+			...state,
+			discard: newDiscard,
+		};
+	}
+	case 'ADD_TO_DECK': {
+		let newDeck = state.deck.slice();
+		newDeck.unshift(action.card);
+		newDeck = shuffle(newDeck);
+		return {
+			...state,
+			deck: newDeck,
 		};
 	}
 	// End of reducer switch (default case)

@@ -44,6 +44,7 @@ export class RenderCard extends React.Component {
 		return (
 			<div onClick={this.playOnClick} className={this.getClassName(card)}>
 				<div className="card__name">{`${card.name}`}</div>
+				<div className="card__portrait-box"><img className="card__portrait" alt={`${card.name}`} src={card.portrait} /></div>
 				<div className="card__type">{card.type}</div>
 				{card.specialText && <div className="card__special-text">
 					{card.specialText(card, player)}
@@ -51,7 +52,7 @@ export class RenderCard extends React.Component {
 				{card.banishedOnUse && <div className="card__keyword">Banished when played</div>}
 				{card.unplayedEffects.length > 0 && <div className={this.getUnplayedClassName(card)}>
 					{card.unplayedSpecialText && <div className="card__unplayed-special-text">
-						Unplayed: {card.unplayedSpecialText(card, player)
+						U: {card.unplayedSpecialText(card, player)
 					}</div>}
 				</div>}
 				{card.flavourText && <div className="card__flavour-text">{card.flavourText}</div>}

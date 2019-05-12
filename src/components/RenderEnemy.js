@@ -17,7 +17,7 @@ export class RenderEnemy extends React.Component {
 		return (
 			<div className={this.getClassName(enemy)}>
 				<div className="enemy__name">{`${enemy.name}`}</div>
-				<img className="enemy__portrait" alt={`${enemy.name}`} src={enemy.portrait} />
+				<div className="enemy__portrait-box"><img className="enemy__portrait" alt={`${enemy.name}`} src={enemy.portrait} /></div>
 				<div className="enemy__hp">{`HP: ${enemy.hp}/${enemy.maxHp}`}</div>
 				<div className="enemy__defense">{`Defense: ${enemy.defense}`}</div>
 				{

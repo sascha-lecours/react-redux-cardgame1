@@ -20,7 +20,14 @@ import {
 	poisonCloud,
 	bodySlam,
 	strengthIfMarked,
-	defenseKeep
+	toughnessMarked,
+	defenseKeep,
+	shieldBash,
+	damageSelfAttack,
+	poisonBlock,
+	blockSecondaryPoison,
+	exhaustion,
+	darkPact
 } from './cardList';
 import { 
 	setHand, 
@@ -41,7 +48,12 @@ import {
 	clearDefense, 
 	keepDefenseOnce
 } from '../actions/combatEffects';
-import { testEnemy1, testEnemy2 } from './enemyList';
+import {
+	lilSnek,
+	ogre,
+	zombie,
+	crawler
+} from './enemyList';
 import { warrior, bard } from './playerList';
 import useMove from './useMove';
 import useUnplayedCard from './useUnplayedCard';
@@ -79,7 +91,7 @@ class TurnController extends React.Component {
 
 	initializeCombat = () => {
 		store.dispatch(initializePlayer(warrior));
-		store.dispatch(setHand([defenseKeep, doubleShield]))
+		store.dispatch(setHand([wildStrikes]))
 		store.dispatch(setDeck([
 			baseAttack, 
 			baseAttack, 
@@ -98,12 +110,19 @@ class TurnController extends React.Component {
 			buffStrenghTough, 
 			poisonSplash, 
 			bodySlam,
-			strengthIfMarked
+			strengthIfMarked,
+			defenseKeep,
+			shieldBash,
+			damageSelfAttack,
+			poisonBlock,
+			blockSecondaryPoison,
+			toughnessMarked
 		]));
 		store.dispatch(setEnemies([
-			testEnemy1, 
-			testEnemy2, 
-			testEnemy1
+			zombie,
+			crawler,
+			lilSnek,
+			ogre
 		]));
 		this.props.forbidPlayerToPlayCards();
 		this.props.advancePhase();

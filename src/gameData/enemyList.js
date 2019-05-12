@@ -9,8 +9,12 @@ import {
 	defendOnce,
 	startBuffAnimation,
 	endBuffAnimation,
-	applyPoison 
+	applyPoison, 
+	animatedAddCardToDeck
 } from './helpers';
+import {
+	zomboHand
+} from './cardList';
 import targetPlayer from './targetPlayer';
 import { clearAllCosmeticEffects } from '../actions/cosmeticBattleEffects';
 
@@ -88,12 +92,26 @@ const poisonBite = {
 	],
 };
 
+const bullRush = {
+	type: 'attack',
+	name: 'Bull Rush',
+	attack: 3,
+	defense: 3,
+	damageString: (enemy, move) => (`${move.attack + enemy.strength}`),
+	effects: [
+		async (enemy, move) => {
+			await attackOnce(targetPlayer(), enemy, move.attack);
+			await defendOnce(enemy, enemy, move.defense);
+		},
+	],
+};
+
 const warcry = {
 	type: 'buff',
 	name: 'Warcry',
 	strength: 2,
 	effects: [
-		(enemy, move) => store.dispatch(raiseStrength(enemy, move.strength)),
+		async (enemy, move) => store.dispatch(raiseStrength(enemy, move.strength)),
 	],
 };
 
@@ -108,6 +126,58 @@ const bigStrike = {
 	],
 };
 
+const bite = {
+	type: 'attack',
+	name: 'Bite',
+	attack: 4,
+	numberOfHits: 1,
+	damageString: (enemy, move) => (`${move.attack + enemy.strength}`),
+	effects: [
+		async (enemy, move) => {attackOnce(targetPlayer(), enemy, move.attack)},
+	],
+};
+
+const shamble = {
+	type: 'attack',
+	name: 'Shamble',
+	attack: 3,
+	defense: 3,
+	damageString: (enemy, move) => (`${move.attack + enemy.strength}`),
+	effects: [
+		async (enemy, move) => {
+			await attackOnce(targetPlayer(), enemy, move.attack);
+			await defendOnce(enemy, enemy, move.defense);
+		},
+	],
+};
+
+const crawlCloser = {
+	type: 'buff',
+	name: 'Crawl Closer',
+	defense: 2,
+	strength: 1,
+	effects: [
+		async (enemy, move) => {
+			await defendOnce(enemy, enemy, move.defense);
+			await startBuffAnimation(enemy, enemy, move);
+			store.dispatch(raiseStrength(getCombatantById(enemy.id), move.strength));
+			await endBuffAnimation(getCombatantById(enemy.id), enemy, move);
+			await delay(pauseAfterCardEffect);
+		},
+	],
+};
+
+const detachHand = {
+	type: 'debuff',
+	name: 'Lend a Hand',
+	effects: [
+		async (enemy, move) => {
+			await animatedAddCardToDeck(zomboHand);
+			await delay(pauseAfterCardEffect);
+		},
+	],
+};
+
 export const moveDefault = {
 	type: undefined,
 	name: undefined,
@@ -116,6 +186,8 @@ export const moveDefault = {
 	effects: [],
 	damageString: (enemy, move) => (''),
 };
+
+// Enemy Stats
 
 export const enemyDefault = {
 	id: undefined,
@@ -147,27 +219,57 @@ export const enemyDefault = {
 	portrait: '/images/enemies/snake.png',
 };
 
-export const testEnemy1 = {
+export const lilSnek = {
 	id: 'placeholder1',
 	name: "Lil' Snek",
 	portrait: '/images/enemies/snake.png',
+	keepDefenseThisTurn: true,
 	maxHp: 10,
 	actions: [
-		// quickStrikes, 
-		// quickStrikes, 
+		quickStrikes, 
+		quickStrikes, 
+		quickStrikes, 
 		frenzy
 	],
 };
 
-export const testEnemy2 = {
-	id: 'placeholder2',
+export const ogre = {
 	name: 'Big Beefo',
 	portrait: '/images/enemies/ogre.png',
 	maxHp: 12,
 	defense: 3,
 	actions: [
-		// bigStrike, 
-		// bigStrike, 
+		bigStrike, 
+		bigStrike,
+		bullRush,
 		warcry
 	],
 };
+
+export const zombie = {
+	name: 'Zombo',
+	portrait: '/images/enemies/shambling-zombie.png',
+	maxHp: 13,
+	actions: [
+		bite,
+		bite,
+		detachHand,
+		shamble,
+		shamble,
+	],
+};
+
+export const crawler = {
+	name: 'Zombo Torso',
+	portrait: '/images/enemies/half-body-crawling.png',
+	maxHp: 7,
+	actions: [
+		detachHand,
+		detachHand,
+		detachHand,
+		bite,
+		crawlCloser,
+	],
+};
+
+// Enemy Groups

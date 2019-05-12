@@ -2,13 +2,23 @@
 	background-color: $card-background-1;
 	border: 1px solid black;
 	margin: $s-size;
-	width: 190px;
-	height: 250px;
+	width: $card-width;
+	height: $card-height;
 	padding: 5px;
 }
 
 .card:hover {
 	transform: scale(1.1);
+}
+
+.card__portrait-box {
+	background-color: black;
+	text-align: center;
+	width: 100%;
+}
+
+.card__portrait {
+	max-width: 40%;
 }
 
 .card__name {

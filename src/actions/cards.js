@@ -88,6 +88,32 @@ export const setDeck = (cards) => {
 	};
 };
 
+// ADD_TO_DECK
+export const addToDeck = (card) => {
+	const cardWithId = {
+		...cardDefault,
+		...card,
+		id: uuid.v4(),
+	};
+	return {
+		type: 'ADD_TO_DECK',
+		card: cardWithId,
+	};
+};
+
+// ADD_TO_DISCARD
+export const addToDiscard = (card) => {
+	const cardWithId = {
+		...cardDefault,
+		...card,
+		id: uuid.v4(),
+	};
+	return {
+		type: 'ADD_TO_DISCARD',
+		card: cardWithId,
+	};
+};
+
 // RESHUFFLE_DISCARDS
 
 export const reshuffleDiscards = () => {

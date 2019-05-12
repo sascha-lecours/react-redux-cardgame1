@@ -2,6 +2,7 @@ import { store } from '../app';
 import { dealDamage, raiseDefense, raisePoison } from '../actions/combatEffects';
 import { applyShaking, clearShaking, applyPulsing, clearPulsing } from '../actions/cosmeticBattleEffects';
 import { playerDefault } from './playerList';
+import { addToDiscard, addToDeck } from '../actions/cards';
 
 // universal timing costants for animation
 
@@ -111,4 +112,16 @@ export const startBuffAnimation = async (target, source = playerDefault, card) =
 export const endBuffAnimation = async (target, source = playerDefault, card) => {
 	await delay(durationhOfBuffAnimation);
 	store.dispatch(clearPulsing(target));
+};
+
+export const animatedAddCardToDiscard = async (card) => {
+	await delay(pauseBeforeBuff);
+	await store.dispatch(addToDiscard(card));
+	await delay(durationhOfBuffAnimation);
+};
+
+export const animatedAddCardToDeck= async (card) => {
+	await delay(pauseBeforeBuff);
+	await store.dispatch(addToDeck(card));
+	await delay(durationhOfBuffAnimation);
 };

@@ -12,7 +12,8 @@ import {
 		startBuffAnimation,
 		endBuffAnimation,
 		applyPoison,
-		getEnemyGroup
+		getEnemyGroup,
+		animatedAddCardToDiscard
 } from './helpers';
 import { applyHighlight, applyShaking, clearShaking, clearAllCosmeticEffects } from '../actions/cosmeticBattleEffects';
 import { playerDefault } from './playerList';
@@ -50,6 +51,7 @@ export const cardDefault = {
 	id: null,
 	name: '',
 	type: undefined,
+	portrait: '/images/cards/baseAttack.png',
 	attack: null,
 	defense: null,
 	strength: null,
@@ -63,6 +65,7 @@ export const cardDefault = {
 	unplayedAttack: null,
 	unplayedDefense: null,
 	unplayedMarked: 0,
+	selfDamage: null,
 	unplayedSpecialText: null,
 	unplayedEffects: [],
 	highlighted: false,
@@ -73,8 +76,9 @@ export const cardDefault = {
 // Base warrior cards
 
 export const baseAttack = {
-	name: 'Thrust',
+	name: 'Slash',
 	type: 'Attack',
+	portrait: '/images/cards/baseAttack.png',
 	attack: 5,
 	unplayedDefense: 2,
 	numberOfHits: 1,
@@ -106,6 +110,7 @@ export const baseAttack = {
 export const baseDefend = {
 	name: 'Block',
 	type: 'Defense',
+	portrait: '/images/cards/baseDefend.png',
 	defense: 6,
 	unplayedMarked: 2,
 	specialText: (card, player = playerDefault) => {return `Defend for ${card.defense + player.toughness}`},
@@ -135,6 +140,7 @@ export const baseDefend = {
 export const defenseKeep = {
 	name: 'Bodyguards',
 	type: 'Defense',
+	portrait: '/images/cards/defenseKeep.png',
 	defense: 12,
 	specialText: (card, player = playerDefault) => {return `Defend for ${card.defense + player.toughness}`},
 	effects: [
@@ -162,11 +168,56 @@ export const defenseKeep = {
 	],
 };
 
+export const shieldBash = {
+	name: 'Shield Bash',
+	type: 'Attack',
+	portrait: '/images/cards/shieldBash.png',
+	attack: 5,
+	defense: 5,
+	unplayedAttack: 1,
+	unplayedDefense: 1,
+	specialText: (card, player = playerDefault) => {return `Attack for ${card.attack + player.strength} and Defend for ${card.defense + player.toughness}`},
+	effects: [
+		async (player, card) => {
+			let target = targetRandomEnemy();
+			await delay(pauseBeforePlayingCard);
+			store.dispatch(applyHighlight(target));
+			await attackOnce(target, player, card.attack);
+			await delay(pauseAfterCardEffect);
+			store.dispatch(clearAllCosmeticEffects(target));
+			target = player;
+			await delay(pauseBeforePlayingCard);
+			await safeApplyHightlight(target);
+			await defendOnce(target, player, card.defense);
+			await delay(pauseAfterCardEffect);
+			store.dispatch(clearAllCosmeticEffects(target));
+		},
+		async (player, card) => cardFinished(card),
+	],
+	unplayedSpecialText: (card, player = playerDefault) => {return `Attack for ${card.unplayedAttack + player.strength} and Defend for ${card.unplayedDefense + player.toughness}`},
+	unplayedEffects: [
+		async (player, card) => {
+			let target = targetRandomEnemy();
+			await delay(pauseBeforeUnplayedCard);
+			await safeApplyHightlight(target);
+			await attackOnce(target, player, card.unplayedAttack);
+			await delay(pauseAfterUnplayedCardEffect);
+			target = player;
+			await delay(pauseBeforeUnplayedCard);
+			store.dispatch(applyHighlight(target));
+			await delay(pauseAfterUnplayedBuffHighlight);
+			await defendOnce(target, player, card.unplayedDefense);
+			await delay(pauseAfterUnplayedCardEffect);
+		}
+	],
+}
+
 // Defense stacking
 
 export const doubleShield = {
 	name: 'Flashing Shield',
 	type: 'Defense',
+	portrait: '/images/cards/doubleShield.png',
 	defense: 10,
 	unplayedAttack: 2,
 	specialText: (card, player = playerDefault) => {return `Defend for ${card.defense + player.toughness}, 2 times`},
@@ -197,6 +248,7 @@ export const doubleShield = {
 export const bodySlam = {
 	name: 'Backbreaker',
 	type: 'Attack',
+	portrait: '/images/cards/bodySlam.png',
 	attack: 4,
 	defense: 4,
 	specialText: (card, player = playerDefault) => {return `Attack for ${card.attack + player.strength} and Defend for ${card.defense + player.toughness}`},
@@ -234,8 +286,9 @@ export const bodySlam = {
 export const wildStrikes = {
 	name: 'Furious Slaughter',
 	type: 'Attack',
+	portrait: '/images/cards/wildStrikes.png',
 	attack: 3,
-	unplayedAttack: 3,
+	unplayedAttack: 4,
 	numberOfHits: 1,
 	specialText: (card, player = playerDefault) => {return `Attack random targets for ${card.attack + player.strength}, 3 times.`},
 	effects: [
@@ -259,22 +312,23 @@ export const wildStrikes = {
 		},
 		async (player, card) => cardFinished(card),
 	],
-	unplayedSpecialText: (card, player = playerDefault) => {return `Suffer ${card.unplayedAttack} damage`},
+	unplayedSpecialText: (card, player = playerDefault) => {return `Attack for ${card.unplayedAttack + player.strength} and add Exhaustion to discard.`},
 	unplayedEffects: [
 		async (player, card) => {
-			const target = targetPlayer();
+			const target = targetRandomEnemy();
 			await delay(pauseBeforeUnplayedCard);
-			store.dispatch(applyHighlight(target));
-			await attackOnce(target, playerDefault, card.unplayedAttack);
+			await safeApplyHightlight(target);
+			await attackOnce(target, player, card.unplayedAttack);
 			await delay(pauseAfterUnplayedCardEffect);
+			await animatedAddCardToDiscard(exhaustion);
 		}
 	],
-	flavourText: "You won't like me when I'm angry",
 };
 
 export const tripleStrike = {
 	name: 'Spear Jabs',
 	type: 'Attack',
+	portrait: '/images/cards/tripleStrike.png',
 	attack: 2,
 	unplayedDefense: 3,
 	numberOfHits: 1,
@@ -308,6 +362,7 @@ export const tripleStrike = {
 export const sweepAttack = {
 	name: 'Sweeping Blow',
 	type: 'Attack',
+	portrait: '/images/cards/sweepAttack.png',
 	attack: 3,
 	unplayedAttack: 3,
 	numberOfHits: 1,
@@ -339,11 +394,51 @@ export const sweepAttack = {
 	],
 };
 
+export const damageSelfAttack = {
+	name: 'Reckless Charge',
+	type: 'Attack',
+	portrait: '/images/cards/damageSelfAttack.png',
+	attack: 15,
+	unplayedAttack: 2,
+	selfDamage: 1,
+	numberOfHits: 1,
+	specialText: (card, player = playerDefault) => {return `Attack target for ${card.attack + player.strength} and suffer ${card.selfDamage} damage.`},
+	effects: [
+		async (player, card) => {
+			let target = targetRandomEnemy();
+			await delay(pauseBeforePlayingCard);
+			store.dispatch(applyHighlight(target));
+			await attackOnce(target, player, card.attack);
+			store.dispatch(clearAllCosmeticEffects(target));
+			target = targetPlayer();
+			await delay(pauseBeforePlayingCard);
+			store.dispatch(applyHighlight(target));
+			await attackOnce(target, playerDefault, card.selfDamage);
+			await delay(pauseAfterUnplayedCardEffect);
+			store.dispatch(clearAllCosmeticEffects(target));
+
+		},
+		async (player, card) => cardFinished(card),
+	],
+	unplayedSpecialText: (card, player = playerDefault) => {return `Attack for ${card.unplayedAttack + player.strength}`},
+	unplayedEffects: [
+		async (player, card) => {
+			const target = targetRandomEnemy();
+			await delay(pauseBeforeUnplayedCard);
+			await safeApplyHightlight(target);
+			await attackOnce(target, player, card.unplayedAttack);
+			await delay(pauseAfterUnplayedCardEffect);
+		}
+	],
+	flavourText: 'Your death is worth a little discomfort.',
+};
+
 // Buffs
 
 export const strengthBuff = {
 	name: 'Thirst for Vengeance',
 	type: 'Buff',
+	portrait: '/images/cards/strengthBuff.png',
 	strength: 2,
 	unplayedAttack: 3,
 	banishedOnUse: true,
@@ -376,6 +471,7 @@ export const strengthBuff = {
 export const toughBuff = {
 	name: 'Tenacity',
 	type: 'Buff',
+	portrait: '/images/cards/toughBuff.png',
 	toughness: 2,
 	unplayedPoison: 3,
 	banishedOnUse: true,
@@ -409,6 +505,7 @@ export const toughBuff = {
 export const buffStrenghTough = {
 	name: "Queen's Edict",
 	type: 'Buff',
+	portrait: '/images/cards/buffStrengthTough.png',
 	toughness: 1,
 	strength: 1,
 	defense: 5,
@@ -446,8 +543,9 @@ export const buffStrenghTough = {
 export const grief = {
 	name: 'Grief of Tomyris',
 	type: 'Buff',
+	portrait: '/images/cards/grief.png',
 	strength: 4,
-	unplayedAttack: 3, 
+	selfDamage: 3, 
 	banishedOnUse: true,
 	specialText: (card, player = playerDefault) => {return `Raise strength by ${card.strength}`},
 	effects: [
@@ -463,13 +561,13 @@ export const grief = {
 		},
 		async (player, card) => cardFinished(card),
 	],
-	unplayedSpecialText: (card, player = playerDefault) => {return `Suffer ${card.unplayedAttack} damage`},
+	unplayedSpecialText: (card, player = playerDefault) => {return `Suffer ${card.selfDamage} damage`},
 	unplayedEffects: [
 		async (player, card) => {
 			const target = targetPlayer();
 			await delay(pauseBeforeUnplayedCard);
 			store.dispatch(applyHighlight(target));
-			await attackOnce(target, playerDefault, card.unplayedAttack);
+			await attackOnce(target, playerDefault, card.selfDamage);
 			await delay(pauseAfterUnplayedCardEffect);
 		},
 	],
@@ -481,6 +579,7 @@ export const grief = {
 export const attackMark = {
 	name: 'Mark for Death',
 	type: 'Attack',
+	portrait: '/images/cards/attackMark.png',
 	attack: 3,
 	marked: 5,
 	unplayedMarked: 2,
@@ -513,6 +612,7 @@ export const attackMark = {
 export const strengthIfMarked = {
 	name: 'Hunter of the Guilty',
 	type: 'Attack',
+	portrait: '/images/cards/strengthIfMarked.png',
 	attack: 5,
 	strength: 1,
 	unplayedMarked: 2,
@@ -550,20 +650,69 @@ export const strengthIfMarked = {
 	],
 };
 
-// Poison keyword
-
-export const poisonSplash = {
-	name: 'Poison Splash',
-	type: 'Attack',
-	poison: 6,
-	unplayedDefense: 3,
-	specialText: (card, player = playerDefault) => {return `Poison a target for ${card.poison}`},
+export const toughnessMarked = {
+	name: "Warrior's Cunning",
+	type: 'Buff',
+	portrait: '/images/cards/toughnessMarked.png',
+	attack: 5,
+	toughness: 1,
+	unplayedMarked: 3,
+	specialText: (card, player = playerDefault) => {return `Attack for ${card.attack + player.strength}. If the target is marked, gain ${card.toughness} toughness.`},
 	effects: [
 		async (player, card) => {
 			const target = targetRandomEnemy();
 			await delay(pauseBeforePlayingCard);
 			store.dispatch(applyHighlight(target));
+			await attackOnce(target, player, card.attack);
+			await delay(pauseAfterCardEffect);
+			store.dispatch(clearAllCosmeticEffects(target));
+			if (target.marked > 0) {
+				const target = player;
+				await delay(pauseBeforePlayingCard);
+				store.dispatch(applyHighlight(target));
+				await startBuffAnimation(target, player, card);
+				store.dispatch(raiseToughness(targetPlayer(), card.toughness)),
+				await endBuffAnimation(target, player, card);
+				await delay(pauseAfterCardEffect);
+				store.dispatch(clearAllCosmeticEffects(target));
+			}
+		},
+		async (player, card) => cardFinished(card),
+	],
+	unplayedSpecialText: (card, player = playerDefault) => {return `Mark a target for ${card.unplayedMarked}`},
+	unplayedEffects: [
+		async (player, card) => {
+			const target = targetRandomEnemy();
+			await delay(pauseBeforeUnplayedCard);
+			store.dispatch(applyHighlight(target));
+			store.dispatch(raiseMarked(target, card.unplayedMarked)),
+			await delay(pauseAfterUnplayedCardEffect);
+		}
+	],
+};
+
+// Poison keyword
+
+export const poisonSplash = {
+	name: 'Poison Splash',
+	type: 'Defense',
+	portrait: '/images/cards/poisonSplash.png',
+	poison: 7,
+	defense: 2,
+	unplayedDefense: 3,
+	specialText: (card, player = playerDefault) => {return `Poison a target for ${card.poison}`},
+	effects: [
+		async (player, card) => {
+			let target = targetRandomEnemy();
+			await delay(pauseBeforePlayingCard);
+			store.dispatch(applyHighlight(target));
 			await applyPoison(target, player, card.poison);
+			await delay(pauseAfterCardEffect);
+			store.dispatch(clearAllCosmeticEffects(target));
+			target = player;
+			await delay(pauseBeforePlayingCard);
+			store.dispatch(applyHighlight(target));
+			await defendOnce(target, player, card.defense);
 			await delay(pauseAfterCardEffect);
 			store.dispatch(clearAllCosmeticEffects(target));
 		},
@@ -585,6 +734,7 @@ export const poisonSplash = {
 export const poisonCloud = {
 	name: 'Poison Mist',
 	type: 'Attack',
+	portrait: '/images/cards/poisonCloud.png',
 	poison: 4,
 	unplayedAttack: 3,
 	numberOfHits: 1,
@@ -616,6 +766,173 @@ export const poisonCloud = {
 	],
 	flavourText: 'This mist may harm friend and foe alike.'
 };
+
+export const poisonBlock = {
+	name: 'Poisoned darts',
+	type: 'Attack',
+	portrait: '/images/cards/poisonBlock.png',
+	poison: 5,
+	defense: 5,
+	unplayedDefense: 2,
+	unplayedPoison: 2,
+	specialText: (card, player = playerDefault) => {return `Poison a target for ${card.poison} and defend for ${card.defense + player.toughness}`},
+	effects: [
+		async (player, card) => {
+			let target = targetRandomEnemy();
+			await delay(pauseBeforePlayingCard);
+			store.dispatch(applyHighlight(target));
+			await applyPoison(target, player, card.poison);
+			await delay(pauseAfterCardEffect);
+			store.dispatch(clearAllCosmeticEffects(target));
+			target = targetPlayer();
+			await delay(pauseBeforeUnplayedCard);
+			store.dispatch(applyHighlight(player));
+			await delay(pauseAfterUnplayedBuffHighlight);
+			await defendOnce(target, player, card.defense);
+			store.dispatch(clearAllCosmeticEffects(target));
+		},
+		async (player, card) => cardFinished(card),
+	],
+	unplayedSpecialText: (card, player = playerDefault) => {return `Poison a target for ${card.unplayedPoison} and defend for ${card.unplayedDefense + player.toughness}`},
+	unplayedEffects: [
+		async (player, card) => {	
+			let target = targetRandomEnemy();
+			await delay(pauseBeforePlayingCard);
+			store.dispatch(applyHighlight(target));
+			await applyPoison(target, player, card.unplayedPoison);
+			await delay(pauseAfterCardEffect);
+			store.dispatch(clearAllCosmeticEffects(target));
+			target = player;
+			await delay(pauseBeforeUnplayedCard);
+			store.dispatch(applyHighlight(target));
+			await delay(pauseAfterUnplayedBuffHighlight);
+			await defendOnce(target, player, card.unplayedDefense);
+			await delay(pauseAfterUnplayedCardEffect);
+		}
+	],
+};
+
+export const blockSecondaryPoison = {
+	name: 'Cunning Tactic',
+	type: 'Attack',
+	portrait: '/images/cards/blockSecondaryPoison.png',
+	defense: 25,
+	banishedOnUse: true,
+	unplayedPoison: 4,
+	specialText: (card, player = playerDefault) => {return `Defend for ${card.defense + player.toughness}`},
+	effects: [
+		async (player, card) => {
+			const target = targetPlayer();
+			await delay(pauseBeforeUnplayedCard);
+			store.dispatch(applyHighlight(player));
+			await delay(pauseAfterUnplayedBuffHighlight);
+			await defendOnce(target, player, card.defense);
+			store.dispatch(clearAllCosmeticEffects(target));
+		},
+		async (player, card) => cardFinished(card),
+	],
+	unplayedSpecialText: (card, player = playerDefault) => {return `Poison a target for ${card.unplayedPoison}`},
+	unplayedEffects: [
+		async (player, card) => {	
+			const target = targetRandomEnemy();
+			await delay(pauseBeforePlayingCard);
+			store.dispatch(applyHighlight(target));
+			await applyPoison(target, player, card.unplayedPoison);
+			await delay(pauseAfterCardEffect);
+			store.dispatch(clearAllCosmeticEffects(target));
+		}
+	],
+};
+
+// Curse cards
+export const exhaustion = {
+	name: 'Exhaustion',
+	type: 'Curse',
+	defense: 2,
+	selfDamage: 2,
+	portrait: '/images/cards/exhaustion.png',
+	banishedOnUse: true,
+	specialText: (card, player = playerDefault) => {return `Raise defense by ${card.defense}.`},
+	effects: [
+		async (player, card) => {
+			const target = player;
+			await delay(pauseBeforePlayingCard);
+			store.dispatch(applyHighlight(target));
+			await defendOnce(target, player, card.defense);
+			await delay(pauseAfterCardEffect);
+			store.dispatch(clearAllCosmeticEffects(target));
+		},
+		async (player, card) => cardFinished(card),
+	],
+	unplayedSpecialText: (card, player = playerDefault) => {return `Suffer ${card.selfDamage} damage`},
+	unplayedEffects: [
+		async (player, card) => {
+			const target = targetPlayer();
+			await delay(pauseBeforeUnplayedCard);
+			store.dispatch(applyHighlight(target));
+			await attackOnce(target, playerDefault, card.selfDamage);
+			await delay(pauseAfterUnplayedCardEffect);
+		}
+	],
+};
+
+export const darkPact = {
+	name: 'Dark Pact',
+	type: 'Curse',
+	selfDamage: 20,
+	portrait: '/images/cards/darkPact.png',
+	specialText: (card, player = playerDefault) => {return `Does nothing`},
+	effects: [
+		async (player, card) => {
+			const target = player;
+			await delay(pauseBeforePlayingCard);
+			await delay(pauseAfterCardEffect);
+		},
+		async (player, card) => cardFinished(card),
+	],
+	unplayedSpecialText: (card, player = playerDefault) => {return `Suffer ${card.selfDamage} damage`},
+	unplayedEffects: [
+		async (player, card) => {
+			const target = targetPlayer();
+			await delay(pauseBeforeUnplayedCard);
+			store.dispatch(applyHighlight(target));
+			await attackOnce(target, playerDefault, card.selfDamage);
+			await delay(pauseAfterUnplayedCardEffect);
+		}
+	],
+};
+
+export const zomboHand = {
+	name: 'Zombo Hand!',
+	type: 'Curse',
+	attack: 1,
+	selfDamage: 4,
+	portrait: '/images/cards/zomboHand.png',
+	banishedOnUse: true,
+	specialText: (card, player = playerDefault) => {return `Attack for ${card.attack}.`},
+	effects: [
+		async (player, card) => {
+			const target = player;
+			await delay(pauseBeforePlayingCard);
+			store.dispatch(applyHighlight(target));
+			await defendOnce(target, player, card.defense);
+			await delay(pauseAfterCardEffect);
+			store.dispatch(clearAllCosmeticEffects(target));
+		},
+		async (player, card) => cardFinished(card),
+	],
+	unplayedSpecialText: (card, player = playerDefault) => {return `Suffer ${card.selfDamage} damage`},
+	unplayedEffects: [
+		async (player, card) => {
+			const target = targetPlayer();
+			await delay(pauseBeforeUnplayedCard);
+			store.dispatch(applyHighlight(target));
+			await attackOnce(target, playerDefault, card.selfDamage);
+			await delay(pauseAfterUnplayedCardEffect);
+		}
+	],
+};
+
 
 // (unused) Card Draw
 
