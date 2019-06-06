@@ -57,7 +57,7 @@ import {
 import { warrior, bard } from './playerList';
 import useMove from './useMove';
 import useUnplayedCard from './useUnplayedCard';
-import { savePlayer } from '../actions/campaign';
+import { campaignSetup, savePlayer } from '../actions/campaign';
 
 // A component that manages the game state
 // TODO: This may be best handled using a subscribe listener that checks for certain key changes in...
@@ -89,10 +89,10 @@ class TurnController extends React.Component {
 	// This may not be needed
 	lastPhase = null;
 
-	initializeCombat = () => {
-		store.dispatch(initializePlayer(warrior));
-		store.dispatch(setHand([wildStrikes]))
-		store.dispatch(setDeck([
+	initializeCombat = async () => {
+		await store.dispatch(initializePlayer(warrior));
+		await store.dispatch(setHand([]))
+		await store.dispatch(setDeck([
 			baseAttack, 
 			baseAttack, 
 			baseDefend,
@@ -118,14 +118,15 @@ class TurnController extends React.Component {
 			blockSecondaryPoison,
 			toughnessMarked
 		]));
-		store.dispatch(setEnemies([
+		await store.dispatch(setEnemies([
 			zombie,
 			crawler,
 			lilSnek,
 			ogre
 		]));
-		this.props.forbidPlayerToPlayCards();
-		this.props.advancePhase();
+		await this.props.forbidPlayerToPlayCards();
+		await this.props.savePlayer(this.props.game.playerGroup[0], this.props.game.deck); 
+		await this.props.advancePhase();
 		
 	};
 
@@ -236,7 +237,7 @@ class TurnController extends React.Component {
 			drawCard,
 			discardHand,
 			allowPlayerToPlayCards,
-			savePlayer,
+			savePlayer
 		} = this.props;
 
 
@@ -317,9 +318,8 @@ class TurnController extends React.Component {
 
 			} else if (phase === 11) {
 				// 11. Increment turn counter, start back at step 1.
-				// Save player to the "campaign" object
-				await savePlayer(this.props.game.playerGroup[0]); 
 				setPhase(1);
+				
 			};
 		})();
 	};
@@ -345,6 +345,7 @@ class TurnController extends React.Component {
 	advancePhase: () => dispatch(advancePhase()),
 	allowPlayerToPlayCards: () => dispatch(allowPlayerToPlayCards()),
 	applyIsActive: (target) => dispatch(applyIsActive(target)),
+	campaignSetup: (player, cards) => dispatch(campaignSetup(player, cards)),
 	clearAllCosmeticEffects: (target) => dispatch(clearAllCosmeticEffects(target)),
 	clearDefense: (target) => dispatch(clearDefense(target)),
 	clearHighlightCard: (card) => dispatch(clearHighlightCard(card)),
@@ -356,7 +357,7 @@ class TurnController extends React.Component {
 	killEnemy: (enemy) => dispatch(killEnemy(enemy)),
 	raiseMarked: (enemy, marked) => dispatch(raiseMarked(enemy, marked)),
 	raisePoison: (target, poison) => dispatch(raisePoison(target, poison)),
-	savePlayer: (savedPlayer) => dispatch(savePlayer(savedPlayer)),
+	savePlayer: (savedPlayer, deck) => dispatch(savePlayer(savedPlayer, deck)),
 	setPhase: (phase) => dispatch(setPhase(phase)),
 	setNewMoves: (enemyGroup) => { enemyGroup.forEach(element => {
 			dispatch(setNewMove(element));

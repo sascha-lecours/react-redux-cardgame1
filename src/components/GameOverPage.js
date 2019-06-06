@@ -1,10 +1,23 @@
 import React from 'react';
+import { connect } from 'react-redux';
 
-const GameOverPage = () => (
-	<div>
-		<p className="game-over">Alas, thou art slain!</p>
-		<button>Try Again(not yet implemented)</button>
-	</div>
-);
+export class GameOverPage extends React.Component {
 
-export default GameOverPage;
+	onClick = () => {
+		this.props.history.push('/');
+	  };
+
+	render() {
+		return (
+			<div>
+				<p className="game-over">Alas, thou art slain!</p>
+				<button onClick={this.onClick}>Try Again</button>
+			</div>
+		);
+	}
+};
+
+const mapDispatchToProps = (dispatch) => ({
+});
+
+export default connect(undefined, mapDispatchToProps)(GameOverPage);
