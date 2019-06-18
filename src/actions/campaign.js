@@ -30,3 +30,33 @@ export const campaignSetup = (player, cards) => {
 		savedDeck: shuffledCards,
 	};
 };
+
+// SET_POTENTIAL_NEW_CARDS
+export const setPotentialNewCards = (number, cardset) => {
+	const cardsWithIds = cardset.slice(0).map((card) => {
+		return {
+			...cardDefault,
+			...card,
+			id: uuid.v4(),
+		};
+	});
+
+	const arr = [];
+	while (arr.length < number) {
+		const r = Math.floor(Math.random() * cardsWithIds.length) + 1;
+		if (arr.indexOf(r) === -1) arr.push(cardsWithIds[r]);
+	}
+
+	return {
+		type: 'SET_POTENTIAL_NEW_CARDS',
+		potentialCards: arr,
+	};
+};
+
+// ADD_CARD_TO_CAMPAIGN_DECK
+export const addCardToCampaignDeck = (card) => {
+	return {
+		type: 'ADD_CARD_TO_CAMPAIGN_DECK',
+		card,
+	};
+};

@@ -947,3 +947,29 @@ export const testCard3 = {
 	],
 	specialText: 'Draw 2 cards',
 };
+
+// Array of cards for use when testing features drawing from card list
+
+export const testCards = [
+	tripleStrike,
+	doubleShield,
+	testCard3,
+	wildStrikes,
+	strengthBuff,
+	toughBuff,
+	attackMark,
+	buffStrenghTough,
+	poisonSplash,
+	baseAttack,
+	baseDefend,
+	sweepAttack,
+	poisonCloud,
+	bodySlam,
+	strengthIfMarked,
+	toughnessMarked,
+	defenseKeep,
+	shieldBash,
+	damageSelfAttack,
+	poisonBlock,
+	blockSecondaryPoison,
+];

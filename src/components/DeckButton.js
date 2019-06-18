@@ -22,8 +22,6 @@ export class DeckButton extends Component {
 	}
 }
 
-// Previously, this button also had: onClick={props.drawCard}
-
 const mapStateToProps = (state) => {
 	return {
 		deck: state.game.deck,

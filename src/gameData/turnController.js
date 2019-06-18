@@ -237,7 +237,6 @@ class TurnController extends React.Component {
 			drawCard,
 			discardHand,
 			allowPlayerToPlayCards,
-			savePlayer
 		} = this.props;
 
 

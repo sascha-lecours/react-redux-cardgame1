@@ -1,10 +1,38 @@
+import uuid from 'uuid';
 import { store } from '../app';
 import { dealDamage, raiseDefense, raisePoison } from '../actions/combatEffects';
 import { applyShaking, clearShaking, applyPulsing, clearPulsing } from '../actions/cosmeticBattleEffects';
 import { playerDefault } from './playerList';
 import { addToDiscard, addToDeck } from '../actions/cards';
+import { cardDefault } from './cardList'; 
 
-// universal timing costants for animation
+
+// The imports below are to generate cards to add to the deck - this may be moved later
+import {
+	tripleStrike,
+	doubleShield,
+	testCard3,
+	wildStrikes,
+	strengthBuff,
+	toughBuff,
+	attackMark,
+	buffStrenghTough,
+	poisonSplash,
+	baseAttack,
+	baseDefend,
+	sweepAttack,
+	poisonCloud,
+	bodySlam,
+	strengthIfMarked,
+	toughnessMarked,
+	defenseKeep,
+	shieldBash,
+	damageSelfAttack,
+	poisonBlock,
+	blockSecondaryPoison,
+} from './cardList';
+
+// Universal timing costants for animation
 
 const pauseBeforeAttack = 300;
 const durationhOfAttackShake = 130;
@@ -124,4 +152,22 @@ export const animatedAddCardToDeck= async (card) => {
 	await delay(pauseBeforeBuff);
 	await store.dispatch(addToDeck(card));
 	await delay(durationhOfBuffAnimation);
+};
+
+// This set of cards is for easy use when testing the below function.
+
+
+// Returns a number of cards from a given set as an array. Will not contain duplicates (unless cardset does). Adds IDs to cards.
+export const getNewCards = (number, cardset) => {
+	const cardsWithIds = cardset.slice(0).map((card) => {
+		return { ...cardDefault, ...card, id: uuid.v4() };
+	});
+
+	const arr = []
+	while(arr.length < number){
+    	const r = Math.floor(Math.random()*cardsWithIds.length) + 1;
+    	if(arr.indexOf(r) === -1) arr.push(cardsWithIds[r]);
+	}
+	console.log(`First possible card is: ${arr[0].name}`);
+	return arr;
 };

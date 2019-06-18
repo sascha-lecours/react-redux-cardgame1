@@ -1,6 +1,7 @@
 const campaignDefaultState = {
 	playerSave: null,
 	deckSave: [],
+	potentialCards: [],
 };
 
 export default (state = campaignDefaultState, action) => {
@@ -16,6 +17,10 @@ export default (state = campaignDefaultState, action) => {
 		return {
 			playerSave: action.savedPlayer,
 			deckSave: action.savedDeck,
+		};
+	case 'SET_POTENTIAL_NEW_CARDS':
+		return {
+			potentialCards: action.potentialCards,
 		};
 	default:
 		return state;
