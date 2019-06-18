@@ -42,9 +42,13 @@ export const setPotentialNewCards = (number, cardset) => {
 	});
 
 	const arr = [];
+	const usedNums = [];
 	while (arr.length < number) {
-		const r = Math.floor(Math.random() * cardsWithIds.length) + 1;
-		if (arr.indexOf(r) === -1) arr.push(cardsWithIds[r]);
+		const r = Math.floor(Math.random() * cardsWithIds.length)/* + 1 */;
+		if (usedNums.indexOf(r) === -1) {
+			arr.push(cardsWithIds[r]);
+			usedNums.push(r);
+		}
 	}
 
 	return {

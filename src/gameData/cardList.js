@@ -953,7 +953,6 @@ export const testCard3 = {
 export const testCards = [
 	tripleStrike,
 	doubleShield,
-	testCard3,
 	wildStrikes,
 	strengthBuff,
 	toughBuff,

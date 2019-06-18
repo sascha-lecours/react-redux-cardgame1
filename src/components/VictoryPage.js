@@ -8,7 +8,7 @@ import { testCards } from '../gameData/cardList';
 export class VictoryPage extends React.Component {
 
 	componentDidMount() {
-		this.props.setPotentialNewCards(3, testCards);
+		this.props.setPotentialNewCards(5, testCards);
 	}
 
 	render() {

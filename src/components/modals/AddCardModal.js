@@ -10,11 +10,11 @@ class AddCardModal extends Component {
 		return (
 			<Modal show={show} onHide={handleHide}>
 				<Modal.Header>
-					<Modal.Title className="addCard__modal__title">Add a new card!</Modal.Title>
+					<Modal.Title className="add-card__modal__title">Add a new card!</Modal.Title>
 				</Modal.Header>
 
 				<Modal.Body>
-					<div className="addCard__modal">
+					<div className="add-card__modal">
 						{
 							potentialCards.length === 0 ? (
 								<div>

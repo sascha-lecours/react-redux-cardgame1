@@ -1,10 +1,10 @@
-.deck__modal, .discard__modal{
+.deck__modal, .discard__modal, .add-card__modal{
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
 }
 
-.discard__modal__title, .deck__modal__title {
+.discard__modal__title, .deck__modal__title, .add-card__modal__title {
 	font-weight: bold;
 }
 
