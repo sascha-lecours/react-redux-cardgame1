@@ -1,7 +1,5 @@
-# Git Commands
+#React Deckbuilding Cardgame
 
-git init - Create a new git repo
-git status - view changes to project code
-git add - add files to staging area
-git commit - creates a new commit with files from staging area
-git log - view recent commits
+A browser-based deck-building RPG in the style of Slay the Spire. 
+
+Play as Queen Tomyris of Scythia as you carefully curate and play a deck of attack and defense cards.
