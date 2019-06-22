@@ -32,7 +32,7 @@ export const campaignSetup = (player, cards) => {
 };
 
 // SET_POTENTIAL_NEW_CARDS
-export const setPotentialNewCards = (number, cardset) => {
+export const setPotentialNewCards = (number, cardset, slot) => {
 	const cardsWithIds = cardset.slice(0).map((card) => {
 		return {
 			...cardDefault,
@@ -54,13 +54,15 @@ export const setPotentialNewCards = (number, cardset) => {
 	return {
 		type: 'SET_POTENTIAL_NEW_CARDS',
 		potentialCards: arr,
+		slot,
 	};
 };
 
 // ADD_CARD_TO_CAMPAIGN_DECK
-export const addCardToCampaignDeck = (card) => {
+export const addCardToCampaignDeck = (card, slot) => {
 	return {
 		type: 'ADD_CARD_TO_CAMPAIGN_DECK',
 		card,
+		slot,
 	};
 };

@@ -4,20 +4,21 @@ import { Button, Modal } from 'react-bootstrap';
 import { connectModal } from 'redux-modal';
 import { RenderCard } from '../RenderCard';
 import { store } from '../../app';
-import { addCardToCampaignDeck } from '../../actions/campaign'
+import { addCardToCampaignDeck } from '../../actions/campaign';
 
 
 class AddCardModal extends Component {
-	dispatchAddCard = (card) => {
-		store.dispatch(addCardToCampaignDeck(card));
+	dispatchAddCard = (card, slot) => {
+		store.dispatch(addCardToCampaignDeck(card, slot));
 	}
+
 	render() {
 		const { show, handleHide, potentialCards } = this.props;
 
 		return (
 			<Modal show={show} onHide={handleHide}>
 				<Modal.Header>
-					<Modal.Title className="add-card__modal__title">Add a new card!</Modal.Title>
+					<Modal.Title className="add-card__modal__title">Add a new card! {this.props.slot}</Modal.Title>
 				</Modal.Header>
 
 				<Modal.Body>
@@ -29,7 +30,10 @@ class AddCardModal extends Component {
 								</div>
 							) : (
 								potentialCards.map((card) => {
-									return <div onClick={() => { this.dispatchAddCard(card); }} key={uuid()}>
+									return <div onClick={() => {
+										this.dispatchAddCard(card, this.props.slot); 
+										handleHide(); 
+									}} key={uuid()}>
 										<RenderCard card={card} key={card.id} />
 									</div>;
 								})
@@ -46,4 +50,7 @@ class AddCardModal extends Component {
 	}
 }
 
-export default connectModal({ name: 'addCard' })(AddCardModal);
+export const AddCardModal1 = connectModal({ name: 'addCard1' })(AddCardModal);
+export const AddCardModal2 = connectModal({ name: 'addCard2' })(AddCardModal);
+
+// export default connectModal({ name: 'addCard1' })(AddCardModal);

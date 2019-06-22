@@ -5,15 +5,20 @@ import { Button } from 'react-bootstrap';
 
 export class AddCardButton extends Component {
 
-	handleAddCardOpen = (name, potentialCards) => () => {
-		this.props.show(name, {potentialCards})
+
+	handleAddCardOpen = (name, slot) => () => {
+		if (slot===1) {
+			this.props.show(name, {potentialCards: this.props.potentialCards1});
+		} else if (slot === 2) {
+			this.props.show(name, {potentialCards: this.props.potentialCards2});
+		}
 	};
 
 	render() {
 		return (
 			<div>
-				<Button bsstyle="primary" onClick={this.handleAddCardOpen('addCard', this.props.potentialCards)}>
-					Add new card!
+				<Button bsstyle="primary" onClick={this.handleAddCardOpen(`addCard${this.props.slot}`, this.props.slot)}>
+					{`Add a new card! ${this.props.slot}`}
 				</Button>
 			</div>
 		);
@@ -22,7 +27,8 @@ export class AddCardButton extends Component {
 
 const mapStateToProps = (state) => {
 	return {
-		potentialCards: state.campaign.potentialCards,
+		potentialCards1: state.campaign.potentialCards1,
+		potentialCards2: state.campaign.potentialCards2,
 	};
 };
 
