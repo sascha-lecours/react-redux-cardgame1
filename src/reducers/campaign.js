@@ -26,7 +26,8 @@ export default (state = campaignDefaultState, action) => {
 			potentialCards: action.potentialCards,
 		};
 	case 'ADD_CARD_TO_CAMPAIGN_DECK': {
-		const newDeck = state.campaign.deckSave.slice().push(action.card);
+		const newDeck = state.deckSave.slice();
+		newDeck.push(action.card);
 		return {
 			...state,
 			deckSave: newDeck,

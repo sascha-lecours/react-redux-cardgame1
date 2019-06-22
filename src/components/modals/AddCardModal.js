@@ -1,9 +1,16 @@
+import uuid from 'uuid';
 import React, { Component } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import { connectModal } from 'redux-modal';
 import { RenderCard } from '../RenderCard';
+import { store } from '../../app';
+import { addCardToCampaignDeck } from '../../actions/campaign'
+
 
 class AddCardModal extends Component {
+	dispatchAddCard = (card) => {
+		store.dispatch(addCardToCampaignDeck(card));
+	}
 	render() {
 		const { show, handleHide, potentialCards } = this.props;
 
@@ -22,7 +29,9 @@ class AddCardModal extends Component {
 								</div>
 							) : (
 								potentialCards.map((card) => {
-									return <RenderCard card={card} key={card.id} />;
+									return <div onClick={() => { this.dispatchAddCard(card); }} key={uuid()}>
+										<RenderCard card={card} key={card.id} />
+									</div>;
 								})
 							)
 						}
