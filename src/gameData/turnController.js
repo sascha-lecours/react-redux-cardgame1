@@ -4,31 +4,6 @@ import { store } from '../app';
 import { advancePhase, setPhase } from '../actions/turn';
 import { applyIsActive, clearAllCosmeticEffects } from '../actions/cosmeticBattleEffects';
 import { delay } from './helpers';
-import {
-	tripleStrike,
-	doubleShield,
-	testCard3,
-	wildStrikes,
-	strengthBuff,
-	toughBuff,
-	attackMark,
-	buffStrenghTough,
-	poisonSplash,
-	baseAttack,
-	baseDefend,
-	sweepAttack,
-	poisonCloud,
-	bodySlam,
-	strengthIfMarked,
-	toughnessMarked,
-	defenseKeep,
-	shieldBash,
-	damageSelfAttack,
-	poisonBlock,
-	blockSecondaryPoison,
-	exhaustion,
-	darkPact
-} from './cardList';
 import { 
 	setHand, 
 	setDeck, 
@@ -46,7 +21,6 @@ import {
 	raisePoison, 
 	dealDamage, 
 	clearDefense, 
-	keepDefenseOnce
 } from '../actions/combatEffects';
 import {
 	lilSnek,
@@ -90,34 +64,9 @@ class TurnController extends React.Component {
 	lastPhase = null;
 
 	initializeCombat = async () => {
-		await store.dispatch(initializePlayer(warrior));
+		await store.dispatch(initializePlayer(this.props.campaign.playerSave));
 		await store.dispatch(setHand([]))
-		await store.dispatch(setDeck([
-			baseAttack, 
-			baseAttack, 
-			baseDefend,
-			baseDefend,
-			tripleStrike,
-			tripleStrike,
-			doubleShield,
-			doubleShield, 
-			wildStrikes,
-			sweepAttack,
-			strengthBuff, 
-			poisonCloud,
-			toughBuff, 
-			attackMark, 
-			buffStrenghTough, 
-			poisonSplash, 
-			bodySlam,
-			strengthIfMarked,
-			defenseKeep,
-			shieldBash,
-			damageSelfAttack,
-			poisonBlock,
-			blockSecondaryPoison,
-			toughnessMarked
-		]));
+		await store.dispatch(setDeck(this.props.campaign.deckSave));
 		await store.dispatch(setEnemies([
 			zombie,
 			crawler,
@@ -130,7 +79,10 @@ class TurnController extends React.Component {
 		
 	};
 
+	// Checks both victory and defeat and directs to relevant page (todo: opens relevant modal?)
+	checkCombatOver = async () => {
 
+	};
 
 	enemiesTakeTurn = async () => {
 		await delay(this.pauseBeforeEnemyTurn);
@@ -306,6 +258,7 @@ class TurnController extends React.Component {
 			} else if (phase === 9) {
 				// 9. Enemy actions resolve, up through array, checking for combat-over
 					await this.enemiesTakeTurn();
+					// then check for combat over
 					advancePhase();
 
 			} else if (phase === 10) {
@@ -338,6 +291,7 @@ class TurnController extends React.Component {
   const mapStateToProps = (state, props) => ({
 	game: state.game,
 	turn: state.turn,
+	campaign: state.campaign,
   });
   
   const mapDispatchToProps = (dispatch, props) => ({
