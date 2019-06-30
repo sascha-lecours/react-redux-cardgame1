@@ -948,6 +948,41 @@ export const testCard3 = {
 	specialText: 'Draw 2 cards',
 };
 
+export const instantKill = {
+	name: 'Za Warudo',
+	type: 'Attack',
+	portrait: '/images/cards/sweepAttack.png',
+	attack: 99999,
+	unplayedAttack: 3,
+	numberOfHits: 1,
+	specialText: (card, player = playerDefault) => {return `Attack all enemies for ${card.attack + player.strength} damage`},
+	effects: [
+		async (player, card) => {
+			const enemies = getEnemyGroup();
+			if (enemies == null) return;
+			for (const enemy of enemies) {
+				const target = enemy;
+				await delay(pauseBeforePlayingCard);
+				store.dispatch(applyHighlight(target));
+				await attackOnce(target, player, card.attack);
+				await delay(pauseAfterCardEffect);
+				store.dispatch(clearAllCosmeticEffects(target));
+			}
+		},
+		async (player, card) => cardFinished(card),
+	],
+	unplayedSpecialText: (card, player = playerDefault) => {return `Attack for ${card.unplayedAttack + player.strength}`},
+	unplayedEffects: [
+		async (player, card) => {
+			const target = targetRandomEnemy();
+			await delay(pauseBeforeUnplayedCard);
+			await safeApplyHightlight(target);
+			await attackOnce(target, player, card.unplayedAttack);
+			await delay(pauseAfterUnplayedCardEffect);
+		}
+	],
+};
+
 // Array of cards for use when testing features drawing from card list
 
 export const testCards = [

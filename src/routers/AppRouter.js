@@ -6,6 +6,7 @@ import NotFoundPage from '../components/NotFoundPage';
 import LoginPage from '../components/LoginPage';
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
+import CombatContainer from '../components/CombatContainer';
 import GameOverPage from '../components/GameOverPage';
 import VictoryPage from '../components/VictoryPage';
 
@@ -17,7 +18,7 @@ const AppRouter = () => (
 		<div>
 			<Switch>
 				<PublicRoute exact path="/" component={LoginPage} />
-				<PrivateRoute path="/dashboard" component={DashboardPage} />
+				<PrivateRoute path="/combat" component={CombatContainer} />
 				<PrivateRoute path="/gameover" component={GameOverPage} />
 				<PrivateRoute path="/victory" component={VictoryPage} />
 				<Route component={NotFoundPage} />

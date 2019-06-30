@@ -1,9 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { store } from '../app';
+import { withRouter } from 'react-router-dom';
 import { advancePhase, setPhase } from '../actions/turn';
 import { applyIsActive, clearAllCosmeticEffects } from '../actions/cosmeticBattleEffects';
 import { delay } from './helpers';
+import { instantKill } from './cardList';
 import { 
 	setHand, 
 	setDeck, 
@@ -32,6 +34,7 @@ import { warrior, bard } from './playerList';
 import useMove from './useMove';
 import useUnplayedCard from './useUnplayedCard';
 import { campaignSetup, savePlayer } from '../actions/campaign';
+import EnemiesArea from '../components/EnemiesArea';
 
 // A component that manages the game state
 // TODO: This may be best handled using a subscribe listener that checks for certain key changes in...
@@ -65,7 +68,7 @@ class TurnController extends React.Component {
 
 	initializeCombat = async () => {
 		await store.dispatch(initializePlayer(this.props.campaign.playerSave));
-		await store.dispatch(setHand([]))
+		await store.dispatch(setHand([instantKill]));
 		await store.dispatch(setDeck(this.props.campaign.deckSave));
 		await store.dispatch(setEnemies([
 			zombie,
@@ -79,9 +82,24 @@ class TurnController extends React.Component {
 		
 	};
 
+	goToVictory = () => {
+		// Save current player HP - don't modify saved deck
+		this.props.savePlayer(this.props.game.playerGroup[0], this.props.campaign.deckSave);
+		this.props.history.push('/victory');
+	};
+
+	goToDefeat = () => {
+
+	};
+
 	// Checks both victory and defeat and directs to relevant page (todo: opens relevant modal?)
 	checkCombatOver = async () => {
-
+		if(this.props.game.playerGroup[0].hp < 1) {
+			// if player HP is 0, go to defeat.
+		}
+		if(this.props.game.enemyGroup.length === 0){
+			this.goToVictory();
+		};
 	};
 
 	enemiesTakeTurn = async () => {
@@ -191,6 +209,10 @@ class TurnController extends React.Component {
 			allowPlayerToPlayCards,
 		} = this.props;
 
+		const {
+			checkCombatOver
+		} = this;
+
 
 
 		const { phase } = this.props.turn;
@@ -216,7 +238,7 @@ class TurnController extends React.Component {
 
 			} else if (phase === 3) {
 				// 3. Player start-of-turn effects, checking for combat-over
-					//TODO: implement
+					checkCombatOver();
 					this.playerStartOfTurn();
 					this.resolvePlayerPoison();
 					advancePhase();
@@ -229,7 +251,7 @@ class TurnController extends React.Component {
 				// 5. Resolve all card effects, including visuals/sound and checking for combat-over
 					
 					await this.killZeroHpEnemies();
-					//TODO: check for combat over
+					checkCombatOver();
 					advancePhase();
 
 			} else if (phase === 6) {
@@ -252,19 +274,19 @@ class TurnController extends React.Component {
 					await this.resolveEnemyPoison();
 					await this.killZeroHpEnemies();
 					await this.clearAllEnemyDefense();
-					// then check for combat over
+					checkCombatOver();
 					advancePhase();
 
 			} else if (phase === 9) {
 				// 9. Enemy actions resolve, up through array, checking for combat-over
 					await this.enemiesTakeTurn();
-					// then check for combat over
+					checkCombatOver();
 					advancePhase();
 
 			} else if (phase === 10) {
 				// 10. Enemy end-of-turn effects, checking for combat-over
 					await this.killZeroHpEnemies();
-					//TODO: check for combat over
+					checkCombatOver();
 					await delay(this.pauseAfterEnemyTurn);
 					advancePhase();
 
@@ -318,4 +340,4 @@ class TurnController extends React.Component {
 	},
   });
   
-  export default connect(mapStateToProps, mapDispatchToProps)(TurnController);
+  export default connect(mapStateToProps, mapDispatchToProps)(withRouter(TurnController));
