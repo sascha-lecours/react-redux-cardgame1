@@ -13,7 +13,8 @@ import {
 	animatedAddCardToDeck
 } from './helpers';
 import {
-	zomboHand
+	zomboHand,
+	webbing,
 } from './cardList';
 import targetPlayer from './targetPlayer';
 import { clearAllCosmeticEffects } from '../actions/cosmeticBattleEffects';
@@ -65,8 +66,6 @@ const frenzy = {
 			await delay(pauseAfterCardEffect);
 			// await clearAllCosmeticEffects(enemy);
 		},
-		// async (enemy, move) => {return},
-		// TDOD: Why is the next move starting before this one is fully finished? Could it be ebcause enemy movesets don't have a second 'card finished' element?
 	],
 };
 
@@ -137,6 +136,22 @@ const bite = {
 	],
 };
 
+const roots = {
+	type: 'attack',
+	name: 'Crawling Roots',
+	attack: 2,
+	defense: 4,
+	numberOfHits: 2,
+	damageString: (enemy, move) => (`${move.numberOfHits} x ${move.attack + enemy.strength}`),
+	effects: [
+		async (enemy, move) => {
+			await attackOnce(targetPlayer(), enemy, move.attack);
+			await attackOnce(targetPlayer(), enemy, move.attack);
+			await defendOnce(enemy, enemy, move.defense);
+		},
+	],
+}
+
 const shamble = {
 	type: 'attack',
 	name: 'Shamble',
@@ -177,6 +192,42 @@ const detachHand = {
 		},
 	],
 };
+
+const spitWebs = {
+	type: 'debuff',
+	name: 'Spit Webs',
+	effects: [
+		async (enemy, move) => {
+			await animatedAddCardToDeck(webbing);
+			await delay(pauseAfterCardEffect);
+		},
+	],
+};
+
+const haunt = {
+	type: 'attack',
+	name: 'Haunt',
+	attack: 2,
+	defense: 3,
+	damageString: (enemy, move) => (`${move.attack + enemy.strength}`),
+	effects: [
+		async (enemy, move) => {
+			await attackOnce(targetPlayer(), enemy, move.attack);
+			await defendOnce(enemy, enemy, move.defense);
+		},
+	],
+};
+
+const fadeAway = {
+	type: 'defense',
+	name: 'Fade Away',
+	defense: 10,
+	effects: [
+		async (enemy, move) => {
+			await defendOnce(enemy, enemy, move.defense);
+		},
+	],
+}
 
 export const moveDefault = {
 	type: undefined,
@@ -233,6 +284,33 @@ export const lilSnek = {
 	],
 };
 
+export const spider = {
+	name: 'Recluse',
+	portrait: '/images/enemies/masked-spider.png',
+	maxHp: 8,
+	actions: [
+		bite,
+		bite,
+		spitWebs,
+		spitWebs,
+		spitWebs,
+	],
+};
+
+export const treant = {
+	name: 'Old Man Willow',
+	portrait: '/images/enemies/evil-tree.png',
+	maxHp: 20,
+	actions: [
+		roots,
+		roots,
+		roots,
+		roots, 
+		bigStrike,
+	],
+};
+
+
 export const ogre = {
 	name: 'Big Beefo',
 	portrait: '/images/enemies/ogre.png',
@@ -272,4 +350,39 @@ export const crawler = {
 	],
 };
 
+export const ghost = {
+	name: 'Ghosty Goo',
+	portrait: '/images/enemies/ghost.png',
+	maxHp: 9,
+	actions: [
+		haunt,
+		haunt,
+		haunt,
+		fadeAway,
+		fadeAway,
+	],
+};
+
+
+
 // Enemy Groups
+
+const easyUndead1 = [ghost, crawler, ghost];
+const easyUndead2 = [zombie, crawler];
+const easyUndead3 = [ghost, zombie];
+const mediumUndead1 = [crawler, zombie, crawler];
+const mediumUndead2 = [ghost, zombie, zombie];
+const mediumUndead3 = [ghost, crawler, crawler, ghost];
+
+const easyForest1 = [lilSnek, lilSnek];
+const easyForest2 = [spider, lilSnek];
+const easyForest3 = [spider, spider];
+const mediumForest1 = [treant];
+const mediumForest2 = [lilSnek, spider, lilSnek];
+const mediumForest3 = [spider, lilSnek, spider];
+
+// Meta groups
+
+const easyEncounters = [easyUndead1, easyUndead2, easyUndead3, easyForest1, easyForest2, easyForest3];
+const mediumEncounters = [mediumUndead1, mediumUndead2, mediumUndead3, mediumForest1, mediumForest2, mediumForest3];
+

@@ -905,17 +905,17 @@ export const darkPact = {
 export const zomboHand = {
 	name: 'Zombo Hand!',
 	type: 'Curse',
-	attack: 1,
+	attack: 4,
 	selfDamage: 4,
 	portrait: '/images/cards/zomboHand.png',
 	banishedOnUse: true,
 	specialText: (card, player = playerDefault) => {return `Attack for ${card.attack}.`},
 	effects: [
 		async (player, card) => {
-			const target = player;
+			const target = targetRandomEnemy();
 			await delay(pauseBeforePlayingCard);
 			store.dispatch(applyHighlight(target));
-			await defendOnce(target, player, card.defense);
+			await attackOnce(target, player, card.attack);
 			await delay(pauseAfterCardEffect);
 			store.dispatch(clearAllCosmeticEffects(target));
 		},
@@ -928,6 +928,38 @@ export const zomboHand = {
 			await delay(pauseBeforeUnplayedCard);
 			store.dispatch(applyHighlight(target));
 			await attackOnce(target, playerDefault, card.selfDamage);
+			await delay(pauseAfterUnplayedCardEffect);
+		}
+	],
+};
+
+export const webbing = {
+	name: 'Ew, Webs!',
+	type: 'Curse',
+	defense: 5,
+	unplayedDefense: 1,
+	portrait: '/images/cards/webbed.png',
+	banishedOnUse: true,
+	specialText: (card, player = playerDefault) => {return `Defend for ${card.defense}.`},
+	effects: [
+		async (player, card) => {
+			const target = player;
+			await delay(pauseBeforePlayingCard);
+			store.dispatch(applyHighlight(target));
+			await defendOnce(target, player, card.defense);
+			await delay(pauseAfterCardEffect);
+			store.dispatch(clearAllCosmeticEffects(target));
+		},
+		async (player, card) => cardFinished(card),
+	],
+	unplayedSpecialText: (card, player = playerDefault) => {return `Defend for ${card.defense}`},
+	unplayedEffects: [
+		async (player, card) => {
+			const target = player;
+			await delay(pauseBeforeUnplayedCard);
+			store.dispatch(applyHighlight(player));
+			await delay(pauseAfterUnplayedBuffHighlight);
+			await defendOnce(target, player, card.unplayedDefense);
 			await delay(pauseAfterUnplayedCardEffect);
 		}
 	],
@@ -947,6 +979,8 @@ export const testCard3 = {
 	],
 	specialText: 'Draw 2 cards',
 };
+
+// Instant enemy kill, for testing
 
 export const instantKill = {
 	name: 'Za Warudo',

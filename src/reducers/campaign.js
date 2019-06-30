@@ -56,6 +56,9 @@ const campaignDefaultState = {
 	potentialCards2: [],
 	card1ToAdd: true,
 	card2ToAdd: true,
+	currentLevel: 0,
+	totalLevels: 5,
+	easyLevels: 2,
 };
 
 export default (state = campaignDefaultState, action) => {
