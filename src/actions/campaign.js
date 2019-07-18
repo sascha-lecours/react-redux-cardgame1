@@ -66,3 +66,10 @@ export const addCardToCampaignDeck = (card, slot) => {
 		slot,
 	};
 };
+
+// ADVANCE_CAMPAIGN
+export const advanceCampaign = () => {
+	return {
+		type: 'ADVANCE_CAMPAIGN',
+	};
+};

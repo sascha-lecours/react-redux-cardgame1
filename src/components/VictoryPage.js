@@ -19,7 +19,7 @@ export class VictoryPage extends React.Component {
 				{this.props.campaign.card1ToAdd && <AddCardButton slot={1} /> }
 				<AddCardModal1 slot={1} />
 				{this.props.campaign.card2ToAdd && <AddCardButton slot={2} /> }
-				<AddCardModal2 slot={2} /> 
+				<AddCardModal2 slot={2} />
 			</div>
 		);
 	}

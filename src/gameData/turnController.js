@@ -31,7 +31,7 @@ import {
 import { warrior, bard } from './playerList';
 import useMove from './useMove';
 import useUnplayedCard from './useUnplayedCard';
-import { campaignSetup, savePlayer } from '../actions/campaign';
+import { campaignSetup, savePlayer, advanceCampaign } from '../actions/campaign';
 import EnemiesArea from '../components/EnemiesArea';
 
 // A component that manages the game state
@@ -68,7 +68,7 @@ class TurnController extends React.Component {
 		await store.dispatch(initializePlayer(this.props.campaign.playerSave));
 		await store.dispatch(setHand([instantKill]));
 		await store.dispatch(setDeck(this.props.campaign.deckSave));
-		await store.dispatch(setEnemies(getRandomEasyEnemies));
+		await (this.props.campaign.currentLevel < this.props.campaign.easyLevels) ? store.dispatch(setEnemies(getRandomEasyEnemies)) : store.dispatch(setEnemies(getRandomMediumEnemies));
 		await this.props.forbidPlayerToPlayCards();
 		await this.props.savePlayer(this.props.game.playerGroup[0], this.props.game.deck); 
 		await this.props.advancePhase();
@@ -82,7 +82,8 @@ class TurnController extends React.Component {
 	};
 
 	goToDefeat = () => {
-
+		// TODO: Possibly run a function here to 'reset' combat variables etc. ?
+		this.props.history.push('/gameover');
 	};
 
 	// Checks both victory and defeat and directs to relevant page (todo: opens relevant modal?)
@@ -91,6 +92,7 @@ class TurnController extends React.Component {
 			// if player HP is 0, go to defeat.
 		}
 		if(this.props.game.enemyGroup.length === 0){
+			this.props.advanceCampaign();
 			this.goToVictory();
 		};
 	};
@@ -310,6 +312,7 @@ class TurnController extends React.Component {
   });
   
   const mapDispatchToProps = (dispatch, props) => ({
+	advanceCampaign: () => dispatch(advanceCampaign()),
 	advancePhase: () => dispatch(advancePhase()),
 	allowPlayerToPlayCards: () => dispatch(allowPlayerToPlayCards()),
 	applyIsActive: (target) => dispatch(applyIsActive(target)),

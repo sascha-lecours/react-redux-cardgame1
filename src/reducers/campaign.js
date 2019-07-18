@@ -109,6 +109,15 @@ export default (state = campaignDefaultState, action) => {
 			card2ToAdd,
 		};
 	}
+	case 'ADVANCE_CAMPAIGN': {
+		const newLevel = (state.currentLevel + 1);
+		return {
+			...state,
+			currentLevel: newLevel,
+			card1ToAdd: true,
+			card2ToAdd: true,
+		};
+	}
 	default:
 		return state;
 	}
