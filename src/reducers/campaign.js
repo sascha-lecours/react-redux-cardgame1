@@ -49,6 +49,11 @@ const starterDeck = [
 	toughnessMarked,
 ];
 
+// These constants determine how many levels the game will contain in total,
+// ...and how many encounters will be drawn from the 'easy' pool at the start.
+const defaultTotalLevels = 5;
+const defaultEasyLevels = 2;
+
 const campaignDefaultState = {
 	playerSave: warrior,
 	deckSave: starterDeck,
@@ -57,8 +62,8 @@ const campaignDefaultState = {
 	card1ToAdd: true,
 	card2ToAdd: true,
 	currentLevel: 0,
-	totalLevels: 5,
-	easyLevels: 2,
+	totalLevels: defaultTotalLevels,
+	easyLevels: defaultEasyLevels,
 };
 
 export default (state = campaignDefaultState, action) => {
@@ -69,6 +74,9 @@ export default (state = campaignDefaultState, action) => {
 			...state,
 			playerSave: action.savedPlayer,
 			deckSave: action.savedDeck,
+			currentLevel: 0,
+			totalLevels: action.totalLevels,
+			easyLevels: action.easyLevels,
 		};
 
 	case 'SAVE_PLAYER':

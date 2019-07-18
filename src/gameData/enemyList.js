@@ -19,7 +19,7 @@ import {
 import targetPlayer from './targetPlayer';
 import { clearAllCosmeticEffects } from '../actions/cosmeticBattleEffects';
 
-// Animation constants and functions - possibly to be moved later
+// Animation constants and funcions - possibly to be moved later
 const pauseBeforePlayingCard = 100;
 const pauseAfterBuffHighlight = 220;
 const pauseAfterCardEffect = 220;
@@ -221,7 +221,18 @@ const haunt = {
 const fadeAway = {
 	type: 'defense',
 	name: 'Fade Away',
-	defense: 10,
+	defense: 7,
+	effects: [
+		async (enemy, move) => {
+			await defendOnce(enemy, enemy, move.defense);
+		},
+	],
+};
+
+const scamper = {
+	type: 'defense',
+	name: 'Scamper',
+	defense: 4,
 	effects: [
 		async (enemy, move) => {
 			await defendOnce(enemy, enemy, move.defense);
@@ -270,6 +281,8 @@ export const enemyDefault = {
 	portrait: '/images/enemies/snake.png',
 };
 
+// Forest enemies
+
 export const lilSnek = {
 	id: 'placeholder1',
 	name: "Lil' Snek",
@@ -311,6 +324,35 @@ export const treant = {
 };
 
 
+// Brutes
+
+export const gnome = {
+	name: 'Gnomester',
+	portrait: '/images/enemies/bad-gnome.png',
+	maxHp: 3,
+	actions: [
+		quickStrikes,
+		quickStrikes,
+		scamper,
+		scamper,
+		frenzy
+	],
+};
+
+export const goblin = {
+	name: 'Gobster',
+	portrait: '/images/enemies/goblin.png',
+	maxHp: 7,
+	defense: 1,
+	actions: [
+		quickStrikes,
+		quickStrikes,
+		quickStrikes,
+		bigStrike,
+		frenzy
+	],
+};
+
 export const ogre = {
 	name: 'Big Beefo',
 	portrait: '/images/enemies/ogre.png',
@@ -323,6 +365,8 @@ export const ogre = {
 		warcry
 	],
 };
+
+// Undead
 
 export const zombie = {
 	name: 'Zombo',
@@ -381,8 +425,22 @@ const mediumForest1 = [treant];
 const mediumForest2 = [lilSnek, spider, lilSnek];
 const mediumForest3 = [spider, lilSnek, spider];
 
+const easyBrutes1 = [gnome, gnome, goblin];
+const easyBrutes2 = [ogre];
+const mediumBrutes1 = [goblin, ogre];
+
 // Meta groups
 
-const easyEncounters = [easyUndead1, easyUndead2, easyUndead3, easyForest1, easyForest2, easyForest3];
-const mediumEncounters = [mediumUndead1, mediumUndead2, mediumUndead3, mediumForest1, mediumForest2, mediumForest3];
+const easyEncounters = [easyUndead1, easyUndead2, easyUndead3, easyForest1, easyForest2, easyForest3, easyBrutes1, easyBrutes2];
+const mediumEncounters = [mediumUndead1, mediumUndead2, mediumUndead3, mediumForest1, mediumForest2, mediumForest3, mediumBrutes1];
+
+const selectGroupFromSet = (enemyEncounterSet) => {
+	const r = Math.floor(Math.random() * enemyEncounterSet.length);
+	return enemyEncounterSet[r];
+}
+
+export const getRandomEasyEnemies = selectGroupFromSet(easyEncounters);
+export const getRandomMediumEnemies = selectGroupFromSet(easyEncounters);
+
+// TODO: Add exported functions here that will select random encounter at given difficulty level
 

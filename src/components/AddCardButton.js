@@ -18,7 +18,7 @@ export class AddCardButton extends Component {
 		return (
 			<div>
 				<Button bsstyle="primary" onClick={this.handleAddCardOpen(`addCard${this.props.slot}`, this.props.slot)}>
-					{`Add a new card! ${this.props.slot}`}
+					{`Add a new card!`}
 				</Button>
 			</div>
 		);

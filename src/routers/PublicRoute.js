@@ -7,9 +7,10 @@ export const PublicRoute = ({
 	component: Component,
 	...rest
 }) => (
+	// TODO: the default redirect should be some sort of title screen, not "combat" in the final version
 	<Route {...rest} component={(props) => (
 		isAuthenticated ? (
-			<Redirect to="/dashboard" />
+			<Redirect to="/combat" />
 		) : (
 			<Component {...props} />
 		)

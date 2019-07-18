@@ -430,7 +430,7 @@ export const damageSelfAttack = {
 			await delay(pauseAfterUnplayedCardEffect);
 		}
 	],
-	flavourText: 'Your death is worth a little discomfort.',
+	flavourText: 'Killing you is worth a little discomfort.',
 };
 
 // Buffs

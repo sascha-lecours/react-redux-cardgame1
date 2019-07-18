@@ -18,7 +18,7 @@ class AddCardModal extends Component {
 		return (
 			<Modal show={show} onHide={handleHide}>
 				<Modal.Header>
-					<Modal.Title className="add-card__modal__title">Add a new card! {this.props.slot}</Modal.Title>
+					<Modal.Title className="add-card__modal__title">Add a new card!</Modal.Title>
 				</Modal.Header>
 
 				<Modal.Body>

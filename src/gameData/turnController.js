@@ -25,10 +25,8 @@ import {
 	clearDefense, 
 } from '../actions/combatEffects';
 import {
-	lilSnek,
-	ogre,
-	zombie,
-	crawler
+	getRandomEasyEnemies,
+	getRandomMediumEnemies 
 } from './enemyList';
 import { warrior, bard } from './playerList';
 import useMove from './useMove';
@@ -70,12 +68,7 @@ class TurnController extends React.Component {
 		await store.dispatch(initializePlayer(this.props.campaign.playerSave));
 		await store.dispatch(setHand([instantKill]));
 		await store.dispatch(setDeck(this.props.campaign.deckSave));
-		await store.dispatch(setEnemies([
-			zombie,
-			crawler,
-			lilSnek,
-			ogre
-		]));
+		await store.dispatch(setEnemies(getRandomEasyEnemies));
 		await this.props.forbidPlayerToPlayCards();
 		await this.props.savePlayer(this.props.game.playerGroup[0], this.props.game.deck); 
 		await this.props.advancePhase();
