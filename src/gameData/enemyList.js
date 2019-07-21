@@ -442,5 +442,3 @@ const selectGroupFromSet = (enemyEncounterSet) => {
 export const getRandomEasyEnemies = selectGroupFromSet(easyEncounters);
 export const getRandomMediumEnemies = selectGroupFromSet(mediumEncounters);
 
-// TODO: Add exported functions here that will select random encounter at given difficulty level
-

@@ -66,12 +66,13 @@ class TurnController extends React.Component {
 
 	initializeCombat = async () => {
 		await store.dispatch(initializePlayer(this.props.campaign.playerSave));
+		// TODO: this 'instant kill' card always being in opening hand is a testing-only measure
 		await store.dispatch(setHand([instantKill]));
 		await store.dispatch(setDeck(this.props.campaign.deckSave));
 		await (this.props.campaign.currentLevel < this.props.campaign.easyLevels) ? store.dispatch(setEnemies(getRandomEasyEnemies)) : store.dispatch(setEnemies(getRandomMediumEnemies));
 		await this.props.forbidPlayerToPlayCards();
 		await this.props.savePlayer(this.props.game.playerGroup[0], this.props.game.deck); 
-		await this.props.advancePhase();
+		await this.props.setPhase(1);
 		
 	};
 
@@ -89,9 +90,11 @@ class TurnController extends React.Component {
 	// Checks both victory and defeat and directs to relevant page (todo: opens relevant modal?)
 	checkCombatOver = async () => {
 		if(this.props.game.playerGroup[0].hp < 1) {
-			// if player HP is 0, go to defeat.
+			this.props.setPhase(0);
+			this.goToDefeat();
 		}
 		if(this.props.game.enemyGroup.length === 0){
+			this.props.setPhase(0);
 			this.props.advanceCampaign();
 			this.goToVictory();
 		};
@@ -214,6 +217,9 @@ class TurnController extends React.Component {
 
 		if (phase != 1 && (phase === this.lastPhase)) return;
 		this.lastPhase = phase;
+		if (phase == 0) {
+			this.initializeCombat();
+		};
 
 		(async () => {
 				if (phase === 1) {
