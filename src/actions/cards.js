@@ -88,6 +88,23 @@ export const setDeck = (cards) => {
 	};
 };
 
+
+// SET_DISCARDS
+export const setDiscards = (cards) => {
+	const cardsWithIds = cards.slice(0).map((card) => {
+		return {
+			...cardDefault,
+			...card,
+			id: uuid.v4(),
+		};
+	});
+	const shuffledCards = shuffle(cardsWithIds);
+	return {
+		type: 'SET_DISCARDS',
+		discard: shuffledCards,
+	};
+};
+
 // ADD_TO_DECK
 export const addToDeck = (card) => {
 	const cardWithId = {

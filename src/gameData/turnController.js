@@ -9,6 +9,7 @@ import { instantKill } from './cardList';
 import { 
 	setHand, 
 	setDeck, 
+	setDiscards,
 	initializePlayer, 
 	drawCard, 
 	discardHand, 
@@ -68,10 +69,12 @@ class TurnController extends React.Component {
 		await store.dispatch(initializePlayer(this.props.campaign.playerSave));
 		// TODO: this 'instant kill' card always being in opening hand is a testing-only measure
 		await store.dispatch(setHand([instantKill]));
+		// -
 		await store.dispatch(setDeck(this.props.campaign.deckSave));
+		await store.dispatch(setDiscards([]));
 		await (this.props.campaign.currentLevel < this.props.campaign.easyLevels) ? store.dispatch(setEnemies(getRandomEasyEnemies)) : store.dispatch(setEnemies(getRandomMediumEnemies));
 		await this.props.forbidPlayerToPlayCards();
-		await this.props.savePlayer(this.props.game.playerGroup[0], this.props.game.deck); 
+		// await this.props.savePlayer(this.props.game.playerGroup[0], this.props.game.deck); 
 		await this.props.setPhase(1);
 		
 	};

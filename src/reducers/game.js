@@ -136,6 +136,11 @@ export default (state = gameReducerDefaultState, action) => {
 			...state,
 			deck: action.deck,
 		};
+	case 'SET_DISCARDS':
+		return {
+			...state,
+			discard: action.discard,
+		};
 	case 'SET_HAND':
 		return {
 			...state,
